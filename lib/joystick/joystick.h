@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include "config.h"
+#include "driver.h"
 // Declaramos que las variables existen en otro lado
 extern float valorX;
 extern float valorY;

@@ -1,6 +1,5 @@
 #include "config.h"
 
-// Definiciones reales de los valores
 const char* ssid = "gusgus";
 const char* password = "gusgus19++";
 const char* mqtt_server = "broker.hivemq.com";

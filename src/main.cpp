@@ -1,11 +1,11 @@
 #include <Arduino.h>
 
 // Librerías propias
-#include "config.h"  
-#include "reconnect.h"  
-#include "joystick.h"
-#include "callback.h"
-#include "setup_wifi.h"
+#include "config.h"  // Variables globales de configuración
+#include "reconnect.h"  // Función para reconectar al broker MQTT
+#include "joystick.h" // Funciones para configurar y leer el joystick
+#include "callback.h" // Función de callback para manejar mensajes MQTT entrantes
+#include "setup_wifi.h" // Función para configurar la conexión WiFi
 
 void setup() {
 
