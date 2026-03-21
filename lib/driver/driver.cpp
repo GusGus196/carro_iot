@@ -15,23 +15,17 @@ void driver(int valorX, int valorY){
 
   // --- CALIBRACIÓN DE ARRANQUE (Aumentamos de 90 a 115) ---
   // Si con 115 sale muy disparado, baja a 100. Si sigue sin moverse, sube a 130.
-  if (abs(motorIzquierdo) > 0.1) {
-    velocidadA = map(abs(motorIzquierdo * 100), 10, 100, 115, 255); 
-  }
-  
-  if (abs(motorDerecho) > 0.1) {
-    velocidadB = map(abs(motorDerecho * 100), 10, 100, 115, 255);
-  }
+  velocidadA = calibracionmotor(motorIzquierdo);
+  velocidadB = calibracionmotor(motorDerecho);
 
   // --- COMPENSACIÓN DE MOTORES ---
   // Si el motor Derecho (B) es más débil, le multiplicamos por un factor (ej: 1.15)
   // OJO: Ajusta este número hasta que el carro camine recto.
   float compensacionDerecha = 1.20; 
-  velocidadB = constrain(velocidadB * compensacionDerecha, 0, 255);
-
   float compensacionIzquierda = 1.20; 
-  velocidadA = constrain(velocidadA * compensacionIzquierda, 0, 255);
-    
+  velocidadB = compensacionMotor(compensacionDerecha, velocidadB);
+  velocidadA = compensacionMotor(compensacionIzquierda, velocidadA);
+
   // MOTOR IZQUIERDO (A)
   if (motorIzquierdo > 0.1) {
     valorA1 = 0;    valorA2 = velocidadA;
@@ -50,4 +44,17 @@ void driver(int valorX, int valorY){
   ledcWrite(canalA2, valorA2);
   ledcWrite(canalB1, valorB1);
   ledcWrite(canalB2, valorB2);
+}
+
+int calibracionmotor(float motor){
+  motor =abs(motor);
+  int velocidad = 0;
+  if (motor > 0.1) {
+    velocidad = map(motor * 100, 10, 100, 115, 255); 
+  }
+  return velocidad;
+}
+
+int compensacionMotor(float compensacion, int velocidad){
+  return constrain(velocidad * compensacion, 0, 255);
 }

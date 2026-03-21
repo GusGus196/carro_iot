@@ -4,5 +4,6 @@
 #include "config.h"
 
 void driver(int valorX, int valorY);
-
+int calibracionmotor(float motor);
+int compensacionMotor(float compensacion, int velocidad);
 #endif
