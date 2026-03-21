@@ -6,4 +6,5 @@
 void driver(int valorX, int valorY);
 int calibracionmotor(float motor);
 int compensacionMotor(float compensacion, int velocidad);
+void aplicarGiroYPotencia(float lecturaJoystick, int velocidad, int canal1, int canal2);
 #endif

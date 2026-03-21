@@ -1,5 +1,6 @@
 #include "callback.h"
 
+//CORREGIR VA MAMAR LA MEMORIA
 char* modo = "vacio"; // Valor por defecto
 
 void callback(char* topic, uint8_t* payload, unsigned int length) {
