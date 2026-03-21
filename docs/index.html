@@ -1,29 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-    
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Control Carrito MQTT</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
+
 </head>
-<body>
+<body>  
+  <div class="header-nav">
+    <select id="modeSelect">
+      <option value="0" disabled selected>Elige un modo</option>
+      <option value="1">Control Manual (Joystick)</option>
+      <option value="2">Seguidor de Línea</option>
+        <option value="3">Modo GPS</option>
+      </select>
+  </div>
 
-    
-    <div id="joystick-container">
-        <div id="joystick-puck"></div>
-    </div>
+  <div id="interfaceSpace">
+    <p class="placeholder-text">Selecciona un modo para comenzar</p>
+  </div>
 
-    <div class="stats">
-        X: <span id="valX">0</span> | Y: <span id="valY">0</span>
-    </div> <br>
-
-    <div>
-        <button id="btnClaxon" type="button">Claxon</button>
-        <button>Mambiar modo</button>
-    </div>
-
-    <script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
