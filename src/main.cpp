@@ -6,6 +6,7 @@
 #include "joystick.h" // Funciones para configurar y leer el joystick
 #include "callback.h" // Función de callback para manejar mensajes MQTT entrantes
 #include "setup_wifi.h" // Función para configurar la conexión WiFi
+#include "seguidor_linea.h" // Funciones para configurar y ejecutar el seguidor de línea
 
 void setup() {
 
@@ -38,7 +39,7 @@ void loop() {
     }
   } 
   else if (modo == "linea") {
-     // Esta función leería sensores 
+    ejecutarSeguidorLinea();
   } 
   else if (modo == "gps") {
     // Esta función leería el GPS 

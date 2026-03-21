@@ -26,4 +26,7 @@ extern const int resolucion;
 extern String modo;
 extern unsigned long ultimaVezRecibido;
 
+// Sensores de linea
+extern const int pinS1, pinS2, pinS3, pinS4, pinS5;
+
 #endif
