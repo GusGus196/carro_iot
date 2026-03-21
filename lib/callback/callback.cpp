@@ -1,6 +1,6 @@
 #include "callback.h"
 
-char* modo; // Valor por defecto
+String modo; // Valor por defecto
 
 void callback(char* topic, uint8_t* payload, unsigned int length) {
   Serial.print("Mensaje recibido en topic: ");
@@ -22,7 +22,7 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
   }
 
   if(strcmp(topic, "proyecto/carrito/control/modo") == 0){
-    modo = mensajeChar;
+    modo = String(mensajeChar);
     Serial.print("Modo cambiado a: ");
     Serial.println(modo);         
   }

@@ -32,15 +32,15 @@ void loop() {
   client.loop();
 
   // Ejecutar lógica según el modo
-  if (strcmp(modo, "control") == 0) {
+  if (modo == "control"){
     if (millis() - ultimaVezRecibido > 500) {
       driver(0, 0);
     }
   } 
-  else if (strcmp(modo, "linea") == 0) {
+  else if (modo == "linea") {
      // Esta función leería sensores 
   } 
-  else if (strcmp(modo, "gps") == 0) {
+  else if (modo == "gps") {
     // Esta función leería el GPS 
   }
 }
