@@ -23,5 +23,7 @@ extern const int canalB2;
 extern const int freq;
 extern const int resolucion;
 
+extern char* modo;
+extern unsigned long ultimaVezRecibido;
 
 #endif

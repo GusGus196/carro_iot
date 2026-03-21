@@ -42,7 +42,7 @@ modeSelect.addEventListener('change', () => {
   }
 });
 
-// --- FUNCIÓN JOYSTICK ---
+// JOYSTICK
 function initJoystick() {
     const container = document.getElementById('joystick-container');
     const puck = document.getElementById('joystick-puck');

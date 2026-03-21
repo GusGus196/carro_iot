@@ -4,6 +4,8 @@
 float valorX = 0;
 float valorY = 0;
 
+unsigned long ultimaVezRecibido;
+
 void iniciarJoystick() {
   ledcSetup(canalA1, freq, resolucion);
   ledcSetup(canalA2, freq, resolucion);
@@ -17,6 +19,7 @@ void iniciarJoystick() {
 }
 
 void joystick(char* mensaje){ 
+  ultimaVezRecibido = millis();
   char* ptr = strtok(mensaje, ",");
 
   if (ptr != NULL) {

@@ -1,6 +1,6 @@
 #include "callback.h"
 
-char* modo = "vacio"; // Valor por defecto
+char* modo; // Valor por defecto
 
 void callback(char* topic, uint8_t* payload, unsigned int length) {
   Serial.print("Mensaje recibido en topic: ");
