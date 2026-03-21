@@ -31,7 +31,8 @@ modeSelect.addEventListener('change', () => {
     <div class="controls">
       <button id="btnClaxon" class="btn-action">CLAXON</button>
     </div>`;
-      initJoystick(); // Re-inicializar eventos cada vez que se crea el HTML
+      send("proyecto/carrito/control/modo", "control");
+      initJoystick(); 
   } else if (val == "2") {
     interfaceSpace.innerHTML = `<div class="mode-card"><h3>Modo Seguidor de Línea</h3><p>Activado</p></div>`;
       send("proyecto/carrito/control/modo", "linea");

@@ -1,5 +1,6 @@
 #include "callback.h"
 
+char* modo = "vacio"; // Valor por defecto
 
 void callback(char* topic, uint8_t* payload, unsigned int length) {
   Serial.print("Mensaje recibido en topic: ");
@@ -18,6 +19,12 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
     digitalWrite(pinBuzzer, HIGH);            
     delay(1000);
     digitalWrite(pinBuzzer, LOW);            
+  }
+
+  if(strcmp(topic, "proyecto/carrito/control/modo") == 0){
+    modo = mensajeChar;
+    Serial.print("Modo cambiado a: ");
+    Serial.println(modo);         
   }
 
   Serial.println(mensajeChar);
