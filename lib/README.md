@@ -5,7 +5,8 @@
   ("lib/your_library_name/[Code]").
 
   For example, see the structure of the following example libraries `Foo` and `Bar`:
-
+  
+  ```
   |--lib
   |  |
   |  |--Bar
@@ -25,16 +26,16 @@
   |- platformio.ini
   |--src
     |- main.c
-
-  Example contents of `src/main.c` using Foo and Bar:
   ```
+  Example contents of `src/main.c` using Foo and Bar:
+
+  ```cpp
   #include <Foo.h>
   #include <Bar.h>
 
   int main (void) {
     ...
   }
-
   ```
 
   The PlatformIO Library Dependency Finder will find automatically dependent
