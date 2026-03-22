@@ -23,6 +23,7 @@ void setup() {
 
   pinMode(pinBuzzer, OUTPUT);
 
+  iniciarSeguidor(); // Configuración de los sensores de línea
   iniciarJoystick(); // Configuración de los motores
 }
 
