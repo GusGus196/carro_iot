@@ -33,4 +33,9 @@ extern unsigned long ultimaVezRecibido;
 // Sensores de linea
 extern const int pinS1, pinS2, pinS3, pinS4, pinS5;
 
+extern const int gpsRX; // Pin 16
+extern const int gpsTX; // Pin 17
+
+extern float velocidadConstante;
+
 #endif

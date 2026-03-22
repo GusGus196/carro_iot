@@ -1,6 +1,4 @@
-// Elementos del HTML
-const modeSelect = document.getElementById('modeSelect');
-const interfaceSpace = document.getElementById('interfaceSpace');
+let map, marker;
 
 // Conexión MQTT
 const clientId = 'web_joystick_' + Math.random().toString(16).substr(2, 8); // Genera un ID de cliente único para el navegador
@@ -9,7 +7,10 @@ const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt', { // Conecta al
     clean: true
 });
 
-client.on('connect', () => console.log("MQTT Conectado")); // Confirmación de la conexión
+client.on('connect', () => {
+  console.log("MQTT Conectado");
+  client.subscribe("proyecto/carrito/estado/ubicacion");
+});
 
 // Función para enviar mensajes al broker
 function send(topic, message) {
@@ -36,11 +37,23 @@ modeSelect.addEventListener('change', () => {
       send("proyecto/carrito/control/modo", "control");
       initJoystick(); 
   } else if (val == "2") { // Modo seguidor de línea
-    interfaceSpace.innerHTML = `<div class="mode-card"><h3>Modo Seguidor de Línea</h3><p>Activado</p></div>`;
-      send("proyecto/carrito/control/modo", "linea");
-  } else if (val == "3") { // Modo GPS
-    interfaceSpace.innerHTML = `<div class="mode-card"><h3>Modo GPS</h3><p>Esperando coordenadas...</p></div>`;
+    interfaceSpace.innerHTML = `
+    <div class="mode-card">
+        <h3>Modo Seguidor de Línea</h3> <button id="btnSensor" type="button" class="btn-action">Activar</button>
+    </div>`;
+    send("proyecto/carrito/control/modo", "linea");
+    sensor();
+  } else if (val == "3") {
+    interfaceSpace.innerHTML = `
+        <div class="mode-card">
+            <h3>Navegación GPS</h3>
+            <div id="map" style="width: 100%; height: 400px; border-radius: 10px;"></div>
+            <div class="stats">
+              Lat: <span id="lat">---</span> | Lon: <span id="lon">---</span>
+            </div>
+        </div>`;
       send("proyecto/carrito/control/modo", "gps");
+      initMap();
   }
 });
 
@@ -140,4 +153,53 @@ function initJoystick() {
 
     // Evento del botón claxon
     btnClaxon.addEventListener("click", () => send("proyecto/carrito/control/claxon", "1"));
+}
+
+function initMap() {
+    // Inicializar el mapa centrado en una posición inicial (ej. tu ciudad)
+    map = L.map('map').setView([19.249115150377094, -103.6975702080577], 15); 
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    // Crear el marcador del carrito
+    marker = L.marker([19.249115150377094, -103.6975702080577]).addTo(map)
+        .bindPopup('Mi Carrito')
+        .openPopup();
+}
+
+client.on('message', (topic, message) => {
+    if (topic === "proyecto/carrito/estado/ubicacion") {
+        const data = message.toString().split(',');
+        const lat = parseFloat(data[0]);
+        const lon = parseFloat(data[1]);
+
+        // Actualizar UI
+        document.getElementById('lat').innerText = lat.toFixed(6);
+        document.getElementById('lon').innerText = lon.toFixed(6);
+
+        // Actualizar Mapa
+        if (marker) {
+            const newPos = [lat, lon];
+            marker.setLatLng(newPos);
+            map.panTo(newPos); // Seguir al carrito
+        }
+    }
+});
+
+function sensor(){
+  const btnSensor = document.getElementById('btnSensor');
+
+  btnSensor.addEventListener("click", () => {
+  btnSensor.classList.toggle('btn-action');
+  btnSensor.classList.toggle('btn-desactivado');
+
+  btnSensor.textContent = 
+    btnSensor.classList.contains('btn-action') 
+      ? "Activar" 
+      : "Desactivar";
+  });
+
+  send("proyecto/carrito/control/sensor", btnSensor.classList.contains('btn-action') ? "1" : "0");  
 }

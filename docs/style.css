@@ -92,12 +92,28 @@ body {
   box-shadow: 0 4px 0 #59161b;
 }
 
+.btn-desactivado{
+  padding: 15px 40px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  background-color: #494041;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #000000;
+}
+
 /* Efecto al pulsar el botón */
 .btn-action:active {
   transform: translateY(3px);
   box-shadow: none;
 }
 
+.btn-desactivado:active {
+  transform: translateY(3px);
+  box-shadow: none;
+}
 /* Tarjetas de modo (Línea / GPS) */
 .mode-card {
   text-align: center;

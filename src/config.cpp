@@ -19,5 +19,10 @@ const int pinBuzzer = 5;
 const int freq = 5000;
 const int resolucion = 8;
 
+const int gpsRX = 16;
+const int gpsTX = 17;
+
 String modo = "indefinida";
 unsigned long ultimaVezRecibido = 0;
+
+float velocidadConstante = 0.00;

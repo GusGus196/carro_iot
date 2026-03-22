@@ -17,6 +17,8 @@ void reconnect() {
         client.subscribe("proyecto/carrito/control/joystick");
         client.subscribe("proyecto/carrito/control/claxon");
         client.subscribe("proyecto/carrito/control/modo");
+        client.subscribe("proyecto/carrito/estado/ubicacion");
+        client.subscribe("proyecto/carrito/control/sensor");
       }
     }
   }
