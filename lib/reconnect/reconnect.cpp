@@ -10,8 +10,10 @@ void reconnect() {
 
     if (ahora - ultimaReconexion > 5000) { 
       ultimaReconexion = ahora;
-    
-      if (client.connect("ESP32Client")) {
+
+      String clientId = "ESP32Client_" + String((uint32_t)ESP.getEfuseMac(), HEX);
+
+      if (client.connect(clientId.c_str())) {
         client.subscribe("proyecto/carrito/control/joystick");
         client.subscribe("proyecto/carrito/control/claxon");
         client.subscribe("proyecto/carrito/control/modo");

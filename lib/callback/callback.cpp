@@ -1,6 +1,7 @@
 #include "callback.h"
 
 void callback(char* topic, uint8_t* payload, unsigned int length) {
+  Serial.println(">> Mensaje recibido");
 
   char mensajeChar[length + 1]; 
   memcpy(mensajeChar, payload, length);
