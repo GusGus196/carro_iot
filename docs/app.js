@@ -55,6 +55,10 @@ function initJoystick() {
     let dragging = false; // Indica si el joystick está siendo arrastrado
     const radius = container.offsetWidth / 2; // Radio máximo de movimiento del puck
 
+    let latestMsg = "0.00,0.00"; 
+    let sendInterval = null;
+    const FRECUENCIA_MS = 50;
+
     // Función para mover el joystick
     const moveJoystick = (e) => {
         if (!dragging) return;
@@ -86,8 +90,7 @@ function initJoystick() {
         const normX = (dx / radius).toFixed(2);
         const normY = ((dy / radius) * -1).toFixed(2); // Invertido Y para que arriba se positivo arriba
 
-        console.log("Enviando:", `${normX},${normY}`); // Visualizar en consola los envíos
-        send("proyecto/carrito/control/joystick",`${normX},${normY}`);
+        latestMsg = `${normX},${normY}`;
         valX.innerText = normX;
         valY.innerText = normY;
     };
@@ -97,16 +100,39 @@ function initJoystick() {
         if (!dragging) return;
         dragging = false;
 
+        clearInterval(sendInterval);
+        sendInterval = null;
+
         // Centrar puck y reiniciar valores
         puck.style.transform = `translate(-50%, -50%)`;
         valX.innerText = "0.00";
         valY.innerText = "0.00";
+
         send("proyecto/carrito/control/joystick","0.00,0.00"); // Enviar posición 0
     };
 
     // Eventos del Joystick
-    puck.addEventListener('mousedown', () => dragging = true); // Inicio del arrastre con mouse
-    puck.addEventListener('touchstart', (e) => { dragging = true; e.preventDefault(); }, {passive: false}); // Inicio del arrastre con touch
+    puck.addEventListener('mousedown', () => {
+        dragging = true;
+        // Inicia el envío constante a 20Hz
+        if(!sendInterval) {
+            sendInterval = setInterval(() => {
+                send("proyecto/carrito/control/joystick", latestMsg);
+            }, FRECUENCIA_MS);
+        }
+    });
+
+    puck.addEventListener('touchstart', (e) => { 
+        dragging = true; 
+        e.preventDefault(); 
+        if(!sendInterval) {
+            sendInterval = setInterval(() => {
+                send("proyecto/carrito/control/joystick", latestMsg);
+            }, FRECUENCIA_MS);
+        }
+    }, {passive: false});
+    
+
     window.addEventListener('mousemove', moveJoystick);
     window.addEventListener('touchmove', moveJoystick, { passive: false });
     window.addEventListener('mouseup', stopJoystick);

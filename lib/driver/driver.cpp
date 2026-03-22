@@ -45,6 +45,7 @@ void driver(float valorX, float valorY){
     valorB1 = velocidadB;
     valorB2 = 0;
   }
+  
 
   ledcWrite(canalA1, valorA1);
   ledcWrite(canalA2, valorA2);

@@ -1,7 +1,7 @@
 #include "config.h"
 
-const char* ssid = "ARRIS-9548";
-const char* password = "109397DA9548";
+const char* ssid = "gusgus";
+const char* password = "gusgus19++";
 const char* mqtt_server = "broker.hivemq.com";
 
 const int motorA1 = 18;
