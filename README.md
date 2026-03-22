@@ -4,6 +4,8 @@ Proyecto final de sistemas embebidos.
 
 Prótocolo utilizado: MQTT
 
+[Tutorial de funcionamiento](https://www.youtube.com/watch?v=EIxdz-2rhLs)
+
 Características:
 
 1. Modo manual.
@@ -21,3 +23,9 @@ Material:
 - ⁠⁠ESP32 con shield.
 - 5 sensores de reflexión TCRT5000.
 - ⁠⁠Sensor ultrasónico HC-SR04.
+
+Estructura:
+
+- **include/**: libreria de definiciones y constantes.
+- **lib/**: librerias del proyecto (propias).
+- **src/**: programa principal.

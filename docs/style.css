@@ -1,3 +1,4 @@
+/* Estilo general del body */
 body {
     display: flex;
     flex-direction: column;
@@ -10,7 +11,7 @@ body {
     overflow: hidden;
 }
 
-/* Contenedor del Select Superior */
+/* Contenedor del selector de modo */
 .header-nav {
     width: 100%;
     padding: 20px 0;
@@ -21,6 +22,7 @@ body {
     margin-bottom: 30px;
 }
 
+/* selector de modo */
 #modeSelect {
     padding: 12px 20px;
     font-size: 16px;
@@ -37,6 +39,7 @@ body {
     background-color: #48596b;
 }
 
+/* Contenedor de la interfaz dinámica */
 #interfaceSpace {
     display: flex;
     flex-direction: column;
@@ -44,7 +47,7 @@ body {
     width: 100%;
 }
 
-/* Joystick */
+/* Contenedor del joystick */
 #joystick-container {
     width: 220px;
     height: 220px;
@@ -54,6 +57,7 @@ body {
     border: 6px solid #444;
 }
 
+/* Puck del joystick */
 #joystick-puck {
     width: 70px;
     height: 70px;
@@ -67,7 +71,7 @@ body {
     touch-action: none;
 }
 
-/* Botones y Stats */
+/* Estadísticas del joystick (valores X/Y) */
 .stats {
   margin: 20px 0;
   font-family: 'Courier New', Courier, monospace;
@@ -75,6 +79,7 @@ body {
   color: #00ff88;
 }
 
+/* Botón de acción (Claxon) */
 .btn-action {
   padding: 15px 40px;
   font-size: 18px;
@@ -87,11 +92,13 @@ body {
   box-shadow: 0 4px 0 #59161b;
 }
 
+/* Efecto al pulsar el botón */
 .btn-action:active {
   transform: translateY(3px);
   box-shadow: none;
 }
 
+/* Tarjetas de modo (Línea / GPS) */
 .mode-card {
   text-align: center;
   padding: 40px;

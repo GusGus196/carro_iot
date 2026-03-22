@@ -1,31 +1,28 @@
 #include "callback.h"
 
-String modo; // Valor por defecto
-
 void callback(char* topic, uint8_t* payload, unsigned int length) {
-  Serial.print("Mensaje recibido en topic: ");
-  Serial.println(topic);
-  Serial.print(" Mensaje: ");
-    
+
   char mensajeChar[length + 1]; 
   memcpy(mensajeChar, payload, length);
   mensajeChar[length] = '\0';
 
+  Serial.print("Topic: "); Serial.print(topic);
+  Serial.print(" Mensaje: "); Serial.println(mensajeChar);
+  
   if (strcmp(topic, "proyecto/carrito/control/joystick") == 0) {
-    joystick(mensajeChar);
+    joystick(mensajeChar); 
   }
 
-  if(strcmp(topic, "proyecto/carrito/control/claxon") == 0){
-    digitalWrite(pinBuzzer, HIGH);            
-    delay(1000);
-    digitalWrite(pinBuzzer, LOW);            
+  if(strcmp(topic, "proyecto/carrito/control/claxon") == 0) {
+    digitalWrite(pinBuzzer, HIGH);             
+    delay(200);
+    digitalWrite(pinBuzzer, LOW);             
   }
 
   if(strcmp(topic, "proyecto/carrito/control/modo") == 0){
     modo = String(mensajeChar);
-    Serial.print("Modo cambiado a: ");
-    Serial.println(modo);         
-  }
 
-  Serial.println(mensajeChar);
+    Serial.print("Modo actualizado: ");
+    Serial.println(modo);
+  }
 }

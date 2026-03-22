@@ -1,10 +1,7 @@
 #include "joystick.h"
 
-// Valores de motores desde el joystick
 float valorX = 0;
 float valorY = 0;
-
-unsigned long ultimaVezRecibido;
 
 void iniciarJoystick() {
   ledcSetup(canalA1, freq, resolucion);
@@ -18,15 +15,18 @@ void iniciarJoystick() {
   ledcAttachPin(motorB2, canalB2);
 }
 
-void joystick(char* mensaje){ 
+void joystick(char* mensaje) {
   ultimaVezRecibido = millis();
   char* ptr = strtok(mensaje, ",");
 
   if (ptr != NULL) {
-    valorX = atof(ptr); 
+    valorX = atof(ptr);
+    
     ptr = strtok(NULL, ",");
-    if (ptr != NULL) valorY = atof(ptr);
+    if (ptr != NULL) {
+      valorY = atof(ptr);
+    };
   }
-  
+
   driver(valorX, valorY);
 }

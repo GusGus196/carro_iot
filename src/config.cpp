@@ -1,10 +1,8 @@
 #include "config.h"
 
-const char* ssid = "gusgus";
-const char* password = "gusgus19++";
+const char* ssid = "ARRIS-9548";
+const char* password = "109397DA9548";
 const char* mqtt_server = "broker.hivemq.com";
-
-const int pinBuzzer = 5;
 
 const int motorA1 = 18;
 const int motorA2 = 19;
@@ -16,5 +14,10 @@ const int canalA2 = 1;
 const int canalB1 = 2;
 const int canalB2 = 3;
 
-const int freq = 5000;
+const int pinBuzzer = 5;
+
+const int freq = 1000;
 const int resolucion = 8;
+
+String modo = "indefinida";
+unsigned long ultimaVezRecibido = 0;
