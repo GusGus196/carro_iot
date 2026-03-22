@@ -22,7 +22,7 @@ void ejecutarSeguidorLinea() {
     int s5 = digitalRead(pinS5);
 
     float sumaLecturas = s1 + s2 + s3 + s4 + s5;
-    float velocidadConstante = 0.6; 
+    float velocidadConstante = 0.4; 
 
     if (sumaLecturas > 0) {
         float x = (s1 * -1.0 + s2 * -0.5 + s3 * 0.0 + s4 * 0.5 + s5 * 1.0) / sumaLecturas;
