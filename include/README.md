@@ -1,4 +1,3 @@
-
 This directory is intended for project header files.
 
 A header file is a file containing C declarations and macro definitions
@@ -10,8 +9,7 @@ by including it, with the C preprocessing directive `#include'.
 
 #include "header.h"
 
-int main (void)
-{
+int main (void) {
  ...
 }
 ```
