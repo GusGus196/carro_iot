@@ -12,7 +12,7 @@ proyecto/carrito/control/modo
 
 proyecto/carrito/control/joystick
 
-Formato: "X, Y"
+Formato: "X,Y"
 Valores: -1.00 a 1.00
 
 ### Activa el claxón

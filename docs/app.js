@@ -58,6 +58,7 @@ function initJoystick() {
     // Función para mover el joystick
     const moveJoystick = (e) => {
         if (!dragging) return;
+           
         e.preventDefault(); // Evita scroll o gestos del navegador
 
         // Coordenadas del contenedor
@@ -85,7 +86,8 @@ function initJoystick() {
         const normX = (dx / radius).toFixed(2);
         const normY = ((dy / radius) * -1).toFixed(2); // Invertido Y para que arriba se positivo arriba
 
-        send("proyecto/carrito/control/joystick", `${normX}, ${normY}`);
+        console.log("Enviando:", `${normX},${normY}`); // Visualizar en consola los envíos
+        send("proyecto/carrito/control/joystick",`${normX},${normY}`);
         valX.innerText = normX;
         valY.innerText = normY;
     };
@@ -99,7 +101,7 @@ function initJoystick() {
         puck.style.transform = `translate(-50%, -50%)`;
         valX.innerText = "0.00";
         valY.innerText = "0.00";
-        send("proyecto/carrito/control/joystick", "0.00, 0.00"); // Enviar posición 0
+        send("proyecto/carrito/control/joystick","0.00,0.00"); // Enviar posición 0
     };
 
     // Eventos del Joystick
