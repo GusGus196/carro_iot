@@ -17,15 +17,13 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
     joystick(mensajeChar); 
   } else if(comando == "claxon") 
   {
-    digitalWrite(pinBuzzer, HIGH);             
-    delay(200);
-    digitalWrite(pinBuzzer, LOW);             
+    activarClaxon();             
   } else if(comando == "modo")
   {
     mensajeModo(mensajeChar);       
   } else if(comando == "sensor")
   {
-    mensajeChar[0] == '1' ? velocidadConstante = 0.4 : velocidadConstante = 0.00;
+    velocidadConstante = mensajeSensor(mensajeChar[0], 0.4f);
   }
   
   Serial.println(mensajeChar);
@@ -52,4 +50,18 @@ String extraerComando(const char* topicCompleto) {
   
   // Corta y devuelve todo lo que está después de la última '/'
   return tema.substring(ultimaDiagonal + 1);
+}
+
+void activarClaxon()
+{
+  //Aqui deberia ir el codigo para activar el claxon
+  digitalWrite(pinBuzzer, HIGH);             
+  delay(200);
+  digitalWrite(pinBuzzer, LOW);
+}
+
+//ingresamos el valor que queremos en el mensaje en el if es
+//mensajeChar[0], si es igual a '1' asignamos la velocidad deseada, sino 0.
+float mensajeSensor(char mensaje, float velocidadDeseada) {
+    return (mensaje == '1') ? velocidadDeseada : 0.00f;
 }
