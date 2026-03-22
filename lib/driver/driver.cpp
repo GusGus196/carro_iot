@@ -13,11 +13,11 @@ void driver(float valorX, float valorY){
 
   // Arranque
   if (abs(motorIzquierdo) > 0.1) {
-    velocidadA = 140 + (abs(motorIzquierdo) * (255 - 115));
+    velocidadA = 140 + (abs(motorIzquierdo) * (255 - 140));
   }
   
   if (abs(motorDerecho) > 0.1) {
-    velocidadB = 140 + (abs(motorDerecho) * (255 - 115));
+    velocidadB = 140 + (abs(motorDerecho) * (255 - 140));
   }
 
   // Compensación de motores
