@@ -16,7 +16,7 @@ const int canalB2 = 3;
 
 const int pinBuzzer = 5;
 
-const int freq = 1000;
+const int freq = 5000;
 const int resolucion = 8;
 
 String modo = "indefinida";

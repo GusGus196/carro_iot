@@ -22,10 +22,10 @@ void driver(float valorX, float valorY){
 
   // Compensación de motores
   // El valor de compensación debe aumentar si ese motor es más débil y causa que el carro no vaya en recto
-  float compensacionDerecha = 1.20;
+  float compensacionDerecha = 1.10;
   velocidadB = constrain(velocidadB * compensacionDerecha, 0, 255);
 
-  float compensacionIzquierda = 1.20; 
+  float compensacionIzquierda = 1.10; 
   velocidadA = constrain(velocidadA * compensacionIzquierda, 0, 255);
 
   // Motor izquierdo (A)
@@ -45,6 +45,10 @@ void driver(float valorX, float valorY){
     valorB1 = velocidadB;
     valorB2 = 0;
   }
+
+
+  Serial.print("IN: [X:"); Serial.print(valorX); Serial.print(" Y:"); Serial.print(valorY); Serial.print("]");
+  Serial.print(" -> PWM: [IZQ:"); Serial.print(velocidadA); Serial.print(" DER:"); Serial.print(velocidadB); Serial.println("]");
   
 
   ledcWrite(canalA1, valorA1);
