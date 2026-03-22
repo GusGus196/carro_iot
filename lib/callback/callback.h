@@ -10,4 +10,5 @@
 void callback(char* topic, uint8_t* payload, unsigned int length);
 void mensajeTopic(char* topic);
 void mensajeModo(char* mensaje);
+String extraerComando(const char* topicCompleto)
 #endif

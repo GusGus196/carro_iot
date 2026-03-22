@@ -11,23 +11,23 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
 
   Serial.print("Topic: "); Serial.print(topic);
   Serial.print(" Mensaje: "); Serial.println(mensajeChar);
-  
-  if (strcmp(topic, "proyecto/carrito/control/joystick") == 0) {
+  String comando = extraerComando(topic);
+  if (comando == "joystick") 
+  {
     joystick(mensajeChar); 
-  }
-//Emiliano
-   if(strcmp(topic, "proyecto/carrito/control/claxon") == 0) {
+  } else if(comando == "claxon") 
+  {
     digitalWrite(pinBuzzer, HIGH);             
     delay(200);
     digitalWrite(pinBuzzer, LOW);             
-  }
-  if(strcmp(topic, "proyecto/carrito/control/modo") == 0){
+  } else if(comando == "modo")
+  {
     mensajeModo(mensajeChar);       
-  }
-
-  if(strcmp(topic, "proyecto/carrito/control/sensor") == 0){
+  } else if(comando == "sensor")
+  {
     mensajeChar[0] == '1' ? velocidadConstante = 0.4 : velocidadConstante = 0.00;
   }
+  
   Serial.println(mensajeChar);
 
 }
@@ -43,4 +43,13 @@ void mensajeModo(char* mensaje)
     modo = String(mensaje);
     Serial.print("Modo actualizado: ");
     Serial.println(modo);
+}
+
+// Esta función recibe el topic completo y devuelve solo el final
+String extraerComando(const char* topicCompleto) {
+  String tema = String(topicCompleto);
+  int ultimaDiagonal = tema.lastIndexOf('/');
+  
+  // Corta y devuelve todo lo que está después de la última '/'
+  return tema.substring(ultimaDiagonal + 1);
 }
