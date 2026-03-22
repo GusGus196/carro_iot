@@ -3,10 +3,8 @@
 String modo; // Valor por defecto
 
 void callback(char* topic, uint8_t* payload, unsigned int length) {
-  Serial.print("Mensaje recibido en topic: ");
-  Serial.println(topic);
-  Serial.print(" Mensaje: ");
-    
+  mensajeTopic(topic);
+  
   char mensajeChar[length + 1]; 
   memcpy(mensajeChar, payload, length);
   mensajeChar[length] = '\0';
@@ -16,16 +14,27 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
   }
 
   if(strcmp(topic, "proyecto/carrito/control/claxon") == 0){
-    digitalWrite(pinBuzzer, HIGH);            
-    delay(1000);
-    digitalWrite(pinBuzzer, LOW);            
-  }
+        digitalWrite(pinBuzzer, HIGH);
+        claxonActivo = true;
+        tiempoClaxon = millis();
+    }
 
   if(strcmp(topic, "proyecto/carrito/control/modo") == 0){
-    modo = String(mensajeChar);
-    Serial.print("Modo cambiado a: ");
-    Serial.println(modo);         
+    mensajeModo(mensajeChar);       
   }
 
   Serial.println(mensajeChar);
+}
+
+void mensajeTopic(char* topic){
+  Serial.print("Mensaje recibido en topic: ");
+  Serial.println(topic);
+  Serial.print(" Mensaje: ");
+}
+
+void mensajeModo(char* mensaje) 
+{
+    modo = String(mensaje);
+    Serial.print("Modo cambiado a: ");
+    Serial.println(modo);  
 }

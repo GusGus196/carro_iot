@@ -26,4 +26,7 @@ extern const int resolucion;
 extern String modo;
 extern unsigned long ultimaVezRecibido;
 
+// --- ESTADO DEL CLAXON ---
+extern bool claxonActivo;
+extern unsigned long tiempoClaxon;
 #endif

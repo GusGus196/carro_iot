@@ -8,5 +8,6 @@
 
 // Cambiamos byte por uint8_t para evitar errores de compilación
 void callback(char* topic, uint8_t* payload, unsigned int length);
-
+void mensajeTopic(char* topic);
+void mensajeModo(char* mensaje);
 #endif

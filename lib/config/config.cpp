@@ -18,3 +18,6 @@ const int canalB2 = 3;
 
 const int freq = 5000;
 const int resolucion = 8;
+
+bool claxonActivo = false;
+unsigned long tiempoClaxon = 0;
