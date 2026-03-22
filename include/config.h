@@ -3,30 +3,39 @@
 
 #include <Arduino.h>
 
-// --- WIFI Y MQTT ---
+// WIFI Y MQTT
 extern const char* ssid;
 extern const char* password;
 extern const char* mqtt_server;
 
-// --- PINES ---
-extern const int pinBuzzer;
+// PINES IN DRV8833
 extern const int motorA1;
 extern const int motorA2;
 extern const int motorB1;
 extern const int motorB2;
 
-// --- PWM ---
+// CANALES PWM
 extern const int canalA1;
 extern const int canalA2;
 extern const int canalB1;
 extern const int canalB2;
+
 extern const int freq;
 extern const int resolucion;
 
+// PIN BUZZER
+extern const int pinBuzzer;
+
+// VARIABLES DE ESTADO
 extern String modo;
 extern unsigned long ultimaVezRecibido;
 
-// --- ESTADO DEL CLAXON ---
-extern bool claxonActivo;
-extern unsigned long tiempoClaxon;
+// Sensores de linea
+extern const int pinS1, pinS2, pinS3, pinS4, pinS5;
+
+extern const int gpsRX; // Pin 16
+extern const int gpsTX; // Pin 17
+
+extern float velocidadConstante;
+
 #endif

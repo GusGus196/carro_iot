@@ -1,15 +1,18 @@
-
 #include "driver.h"
 
-void driver(int valorX, int valorY){
+void driver(float valorX, float valorY){
   // Mezcla diferencial
   float motorIzquierdo = valorY + valorX;
   float motorDerecho = valorY - valorX;
 
-  motorIzquierdo = constrain(motorIzquierdo, -1.0, 1.0);
-  motorDerecho = constrain(motorDerecho, -1.0, 1.0);
+  float compensacionIzquierda = 1.20;
+  float compensacionDerecha = 1.0;
+
+  motorIzquierdo = constrain(motorIzquierdo * compensacionIzquierda, -1.0, 1.0);
+  motorDerecho = constrain(motorDerecho * compensacionDerecha, -1.0, 1.0);
 
   int valorA1 = 0, valorA2 = 0, valorB1 = 0, valorB2 = 0;
+  //Emiliano
   int velocidadA = 0;
   int velocidadB = 0;
   float compensacionDerecha = 1.20; 
@@ -32,13 +35,19 @@ void driver(int valorX, int valorY){
 
   // MOTOR DERECHO (B)
   aplicarGiroYPotencia(motorDerecho, velocidadB, canalB1, canalB2);
+
+
+  // Serial.print("IN: [X:"); Serial.print(valorX); Serial.print(" Y:"); Serial.print(valorY); Serial.print("]");
+  // Serial.print(" -> PWM: [IZQ:"); Serial.print(velocidadA); Serial.print(" DER:"); Serial.print(velocidadB); Serial.println("]");
+
 }
 
+
 int calibracionmotor(float motor){
-  motor =abs(motor);
+  motor = abs(motor);
   int velocidad = 0;
   if (motor > 0.1) {
-    velocidad = map(motor * 100, 10, 100, 115, 255); 
+    velocidad = 140 + (abs(motor) * (255 - 140)); 
   }
   return velocidad;
 }
@@ -51,7 +60,6 @@ int compensacionMotor(float compensacion, int velocidad){
 void aplicarGiroYPotencia(float lecturaJoystick, int velocidad, int canal1, int canal2) {
   int valor1 = 0;
   int valor2 = 0;
-
   if (lecturaJoystick > 0.1) {
     valor1 = 0;
     valor2 = velocidad; // Adelante

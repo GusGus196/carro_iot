@@ -4,8 +4,6 @@ const char* ssid = "gusgus";
 const char* password = "gusgus19++";
 const char* mqtt_server = "broker.hivemq.com";
 
-const int pinBuzzer = 5;
-
 const int motorA1 = 18;
 const int motorA2 = 19;
 const int motorB1 = 21;
@@ -16,8 +14,15 @@ const int canalA2 = 1;
 const int canalB1 = 2;
 const int canalB2 = 3;
 
+const int pinBuzzer = 5;
+
 const int freq = 5000;
 const int resolucion = 8;
 
-bool claxonActivo = false;
-unsigned long tiempoClaxon = 0;
+const int gpsRX = 16;
+const int gpsTX = 17;
+
+String modo = "indefinida";
+unsigned long ultimaVezRecibido = 0;
+
+float velocidadConstante = 0.00;

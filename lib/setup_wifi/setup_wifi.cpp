@@ -1,8 +1,8 @@
 #include "setup_wifi.h"
 
 void setup_wifi() {
-
   delay(10);
+  
   Serial.println();
   Serial.print("Conectando a ");
   Serial.println(ssid);
