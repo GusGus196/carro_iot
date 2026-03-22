@@ -53,8 +53,7 @@ String extraerComando(const char* topicCompleto) {
 }
 
 void activarClaxon()
-{
-  //Aqui deberia ir el codigo para activar el claxon
+{ //Aqui deberia ir el codigo para activar el claxon
   digitalWrite(pinBuzzer, HIGH);             
   delay(200);
   digitalWrite(pinBuzzer, LOW);
