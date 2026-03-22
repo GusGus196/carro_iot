@@ -25,8 +25,22 @@ void setup() {
 }
 
 void loop() {
+  // Intentar reconectar sin detener el programa
   if (!client.connected()) {
     reconnect();
   }
   client.loop();
+
+  // Ejecutar lógica según el modo
+  if (modo == "control"){
+    if (millis() - ultimaVezRecibido > 500) {
+      driver(0, 0);
+    }
+  } 
+  else if (modo == "linea") {
+     // Esta función leería sensores 
+  } 
+  else if (modo == "gps") {
+    // Esta función leería el GPS 
+  }
 }
