@@ -13,19 +13,19 @@ void driver(float valorX, float valorY){
 
   // Arranque
   if (abs(motorIzquierdo) > 0.1) {
-    velocidadA = 170 + (abs(motorIzquierdo) * (255 - 115));
+    velocidadA = 140 + (abs(motorIzquierdo) * (255 - 115));
   }
   
   if (abs(motorDerecho) > 0.1) {
-    velocidadB = 170 + (abs(motorDerecho) * (255 - 115));
+    velocidadB = 140 + (abs(motorDerecho) * (255 - 115));
   }
 
   // Compensación de motores
   // El valor de compensación debe aumentar si ese motor es más débil y causa que el carro no vaya en recto
-  float compensacionDerecha = 1.10;
+  float compensacionDerecha = 1;
   velocidadB = constrain(velocidadB * compensacionDerecha, 0, 255);
 
-  float compensacionIzquierda = 1.10; 
+  float compensacionIzquierda = 1.20; 
   velocidadA = constrain(velocidadA * compensacionIzquierda, 0, 255);
 
   // Motor izquierdo (A)
