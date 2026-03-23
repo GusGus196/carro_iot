@@ -1,8 +1,17 @@
-#include "ultrasonico.h";
+#include "ultrasonico.h"
 
 void iniciarUltrasonico() {
     pinMode(trig, OUTPUT);
     pinMode(echo, INPUT);
+}
+
+float leerDistanciaFiltrada() {
+    float suma = 0;
+    for (int i = 0; i < 3; i++) {
+        suma += leerDistancia();
+        delay(5);
+    }
+    return suma / 3.0;
 }
 
 float leerDistancia() {

@@ -7,5 +7,6 @@
 
 void iniciarUltrasonico();
 float leerDistancia();
+float leerDistanciaFiltrada();
 
 #endif
