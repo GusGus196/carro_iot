@@ -14,10 +14,19 @@ const int canalA2 = 1;
 const int canalB1 = 2;
 const int canalB2 = 3;
 
-const int pinBuzzer = 5;
-
 const int freq = 5000;
 const int resolucion = 8;
+
+const int pinBuzzer = 5;
+
+const int trig = 14;
+const int echo = 12;
+
+const int pinS1 = 32;
+const int pinS2 = 33;
+const int pinS3 = 25;
+const int pinS4 = 26;
+const int pinS5 = 27;
 
 const int gpsRX = 16;
 const int gpsTX = 17;
