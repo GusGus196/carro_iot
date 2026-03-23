@@ -22,9 +22,9 @@ void ejecutarSeguidorLinea() {
     int s5 = digitalRead(pinS5);
 
     float sumaLecturas = s1 + s2 + s3 + s4 + s5;
-    //El peso de s3 es 0, por lo que no es necesario considerarlo en la suma superior
+
     if (sumaLecturas > 0) {
-        float x = (s1 * -1.0 + s2 * -0.5 + s4 * 0.5 + s5 * 1.0) / sumaLecturas;
+        float x = (s1 * -1.0 + s2 * -0.5 + s3 * 0.0 + s4 * 0.5 + s5 * 1.0) / sumaLecturas;
         driver(x, velocidadConstante); //
     } else {
         driver(0, 0); 
