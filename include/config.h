@@ -19,12 +19,14 @@ extern const int canalA1;
 extern const int canalA2;
 extern const int canalB1;
 extern const int canalB2;
+extern const int canalBuzzer;
 
 extern const int freq;
 extern const int resolucion;
 
 // PIN BUZZER
 extern const int pinBuzzer;
+extern const int freqBuzzer;
 
 // PINES ULTRASONICO
 extern const int trig;

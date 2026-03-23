@@ -4,12 +4,13 @@
 // Librerías del proyecto
 #include "config.h"  // Variables globales de configuración
 
+#include "buzzer.h" // Funciones para activar el buzzer
 #include "callback.h" // Función de callback para manejar mensajes MQTT entrantes
 #include "driver.h" // Función para configurar los valores PWM del driver a partir de los valores del joystick
 #include "joystick.h" // Funciones para configurar y leer el joystick
 #include "reconnect.h"  // Función para reconectar al broker MQTT
-#include "setup_wifi.h" // Función para configurar la conexión WiFi
 #include "seguidor_linea.h" // Funciones para configurar y ejecutar el seguidor de línea
+#include "setup_wifi.h" // Función para configurar la conexión WiFi
 
 void setup() {
   Serial.begin(115200);
@@ -21,8 +22,7 @@ void setup() {
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
 
-  pinMode(pinBuzzer, OUTPUT);
-
+  iniciarBuzzer(); // Configuración del buzzer
   iniciarSeguidor(); // Configuración de los sensores de línea
   iniciarJoystick(); // Configuración de los motores
 }
@@ -39,11 +39,9 @@ void loop() {
     if (millis() - ultimaVezRecibido > 500) {
       driver(0, 0);
     }
-  } 
-  else if (modo == "linea") {
+  } else if (modo == "linea") {
     ejecutarSeguidorLinea();
-  } 
-  else if (modo == "gps") {
+  } else if (modo == "gps") {
     // Esta función leería el GPS 
   };
 }

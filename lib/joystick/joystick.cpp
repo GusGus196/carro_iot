@@ -17,12 +17,14 @@ void iniciarJoystick() {
 
 void joystick(char* mensaje) {
   ultimaVezRecibido = millis();
+
   char* ptr = strtok(mensaje, ",");
 
   if (ptr != NULL) {
     valorX = atof(ptr);
     
     ptr = strtok(NULL, ",");
+    
     if (ptr != NULL) {
       valorY = atof(ptr);
     };

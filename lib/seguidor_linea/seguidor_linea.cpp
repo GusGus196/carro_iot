@@ -1,17 +1,11 @@
 #include "seguidor_linea.h"
 
-const int pinS1 = 32; // Extremo Izquierdo (-1.0)
-const int pinS2 = 33; // Medio Izquierdo (-0.5)
-const int pinS3 = 25; // Centro (0.0)
-const int pinS4 = 26; // Medio Derecho (0.5)
-const int pinS5 = 27; // Extremo Derecho (1.0)
-
 void iniciarSeguidor() {
-    pinMode(pinS1, INPUT);
-    pinMode(pinS2, INPUT);
-    pinMode(pinS3, INPUT);
-    pinMode(pinS4, INPUT);
-    pinMode(pinS5, INPUT);
+    pinMode(pinS1, INPUT); // Extremo Izquierdo (-1.0) 33
+    pinMode(pinS2, INPUT); // Medio Izquierdo (-0.5)
+    pinMode(pinS3, INPUT); // Centro (0.0)
+    pinMode(pinS4, INPUT); // Medio Derecho (0.5)
+    pinMode(pinS5, INPUT); // Extremo Derecho (1.0)
 }
 
 void ejecutarSeguidorLinea() {

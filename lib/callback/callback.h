@@ -3,9 +3,10 @@
 
 #include <Arduino.h>
 
-#include "joystick.h"
 #include "config.h"
+#include "buzzer.h"
+#include "joystick.h"
 
-void callback(char* topic, uint8_t* payload, unsigned int length); // Cambiamos byte por uint8_t para evitar errores de compilación
+void callback(char* topic, uint8_t* payload, unsigned int length);
 
 #endif

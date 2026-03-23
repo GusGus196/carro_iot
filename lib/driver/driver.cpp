@@ -40,12 +40,7 @@ void driver(float valorX, float valorY){
     valorB1 = velocidadB;
     valorB2 = 0;
   }
-
-
-  // Serial.print("IN: [X:"); Serial.print(valorX); Serial.print(" Y:"); Serial.print(valorY); Serial.print("]");
-  // Serial.print(" -> PWM: [IZQ:"); Serial.print(velocidadA); Serial.print(" DER:"); Serial.print(velocidadB); Serial.println("]");
   
-
   ledcWrite(canalA1, valorA1);
   ledcWrite(canalA2, valorA2);
   ledcWrite(canalB1, valorB1);
