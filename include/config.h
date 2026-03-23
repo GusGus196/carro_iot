@@ -19,22 +19,33 @@ extern const int canalA1;
 extern const int canalA2;
 extern const int canalB1;
 extern const int canalB2;
+extern const int canalBuzzer;
 
 extern const int freq;
 extern const int resolucion;
 
 // PIN BUZZER
 extern const int pinBuzzer;
+extern const int freqBuzzer;
+
+// PINES ULTRASONICO
+extern const int trig;
+extern const int echo;
+
+// PINES REFLECTIVO
+extern const int pinS1;
+extern const int pinS2;
+extern const int pinS3;
+extern const int pinS4;
+extern const int pinS5;
+
+// PINES GPS
+extern const int gpsRX;
+extern const int gpsTX;
 
 // VARIABLES DE ESTADO
 extern String modo;
 extern unsigned long ultimaVezRecibido;
-
-// Sensores de linea
-extern const int pinS1, pinS2, pinS3, pinS4, pinS5;
-
-extern const int gpsRX; // Pin 16
-extern const int gpsTX; // Pin 17
 
 extern float velocidadConstante;
 

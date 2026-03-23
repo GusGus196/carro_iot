@@ -1,26 +1,21 @@
 #include "callback.h"
 
 void callback(char* topic, uint8_t* payload, unsigned int length) {
-  mensajeTopic(topic);
-  
-  Serial.println(">> Mensaje recibido");
-
   char mensajeChar[length + 1]; 
   memcpy(mensajeChar, payload, length);
   mensajeChar[length] = '\0';
 
-  Serial.print("Topic: "); Serial.print(topic);
-  Serial.print(" Mensaje: "); Serial.println(mensajeChar);
+  mensajeTopic(topic, mensajeChar);
   String comando = extraerComando(topic);
   if (comando == "joystick") 
   {
     joystick(mensajeChar); 
   } else if(comando == "claxon") 
   {
-    activarClaxon();             
+    claxon();             
   } else if(comando == "modo")
   {
-    mensajeModo(mensajeChar);       
+    sonarConfirmacion();       
   } else if(comando == "sensor")
   {
     velocidadConstante = mensajeSensor(mensajeChar[0], 0.4f);
@@ -28,12 +23,6 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
   
   Serial.println(mensajeChar);
 
-}
-
-void mensajeTopic(char* topic){
-  Serial.print("Mensaje recibido en topic: ");
-  Serial.println(topic);
-  Serial.print(" Mensaje: ");
 }
 
 void mensajeModo(char* mensaje) 
@@ -52,15 +41,16 @@ String extraerComando(const char* topicCompleto) {
   return tema.substring(ultimaDiagonal + 1);
 }
 
-void activarClaxon()
-{//Aqui deberia ir el codigo para activar el claxon
-  digitalWrite(pinBuzzer, HIGH);             
-  delay(200);
-  digitalWrite(pinBuzzer, LOW);
-}
-
 //ingresamos el valor que queremos en el mensaje en el if es
 //mensajeChar[0], si es igual a '1' asignamos la velocidad deseada, sino 0.
 float mensajeSensor(char mensaje, float velocidadDeseada) {
     return (mensaje == '1') ? velocidadDeseada : 0.00f;
+  }
+
+void mensajeTopic(char* topic, char* mensajeChar){
+  Serial.print("Topic: "); 
+  Serial.print(topic); 
+  Serial.print(" Mensaje: "); 
+  Serial.println(mensajeChar);
 }
+  

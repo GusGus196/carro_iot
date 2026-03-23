@@ -15,14 +15,16 @@ Características:
 
 Material:
 
+- ⁠⁠ESP32 con shield.
 - ⁠Chasis.
 - 2 ruedas.
 - ⁠⁠Pilas 18650 o 3.7V.
+- Regulador De voltaje LM2596.
 - ⁠⁠DRV8833.
-- GPS.
-- ⁠⁠ESP32 con shield.
-- 5 sensores de reflexión TCRT5000.
+- GY-GPS6MV2.
 - ⁠⁠Sensor ultrasónico HC-SR04.
+- Array de 5 sensores reflectivos TCRT5000.
+- Jumpers.
 
 Estructura:
 

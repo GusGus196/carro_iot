@@ -10,7 +10,6 @@ extern float valorX;
 extern float valorY;
 
 void iniciarJoystick();
-
 void joystick(char* mensaje);
 
 #endif

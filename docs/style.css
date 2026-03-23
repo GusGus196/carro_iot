@@ -114,6 +114,7 @@ body {
   transform: translateY(3px);
   box-shadow: none;
 }
+
 /* Tarjetas de modo (Línea / GPS) */
 .mode-card {
   text-align: center;
