@@ -8,5 +8,6 @@
 void iniciarBuzzer();
 void claxon();
 void sonarConfirmacion();
+void sonarError();
 
 #endif

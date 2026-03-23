@@ -1,7 +1,7 @@
 #include "config.h"
 
-const char* ssid = "ARRIS-9548";
-const char* password = "109397DA9548";
+const char* ssid = "";
+const char* password = "";
 const char* mqtt_server = "broker.hivemq.com";
 
 const int motorA1 = 18;
@@ -22,7 +22,7 @@ const int pinBuzzer = 5;
 const int freqBuzzer = 2000;
 
 const int trig = 14;
-const int echo = 12;
+const int echo = 23;
 
 const int pinS1 = 32;
 const int pinS2 = 33;
