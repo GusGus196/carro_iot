@@ -9,18 +9,18 @@ void iniciarSeguidor() {
 }
 
 void ejecutarSeguidorLinea() {
-    int s1 = digitalRead(pinS1);
-    int s2 = digitalRead(pinS2);
-    int s3 = digitalRead(pinS3);
-    int s4 = digitalRead(pinS4);
-    int s5 = digitalRead(pinS5);
+    int s1 = !digitalRead(pinS1);
+    int s2 = !digitalRead(pinS2);
+    int s3 = !digitalRead(pinS3);
+    int s4 = !digitalRead(pinS4);
+    int s5 = !digitalRead(pinS5);
 
     float sumaLecturas = s1 + s2 + s3 + s4 + s5;
 
     if (sumaLecturas > 0) {
-        float x = (s1 * -1.0 + s2 * -0.5 + s3 * 0.0 + s4 * 0.5 + s5 * 1.0) / sumaLecturas;
-        driver(x, velocidadConstante); //
+        float x = (s1 * -1.0 + s2 * -0.5 + s4 * 0.5 + s5 * 1.0) / sumaLecturas;
+        driver(x, velocidadConstante);
     } else {
-        driver(0, 0); 
+        driver(0, 0);
     }
 }
