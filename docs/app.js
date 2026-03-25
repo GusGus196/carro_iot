@@ -199,7 +199,8 @@ function sensor(){
     btnSensor.classList.contains('btn-action') 
       ? "Activar" 
       : "Desactivar";
+      
+      send("proyecto/carrito/control/sensor", btnSensor.classList.contains('btn-desactivado') ? "1" : "0");  
   });
 
-  send("proyecto/carrito/control/sensor", btnSensor.classList.contains('btn-action') ? "1" : "0");  
 }
