@@ -268,17 +268,6 @@
                 lonC.innerText = lon.toFixed(6);
             }
 
-<<<<<<< HEAD
-  btnSensor.textContent = 
-    btnSensor.classList.contains('btn-action') 
-      ? "Activar" 
-      : "Desactivar";
-      
-      send("proyecto/carrito/control/sensor", btnSensor.classList.contains('btn-desactivado') ? "1" : "0");  
-  });
-
-}
-=======
             // Movimiento de la camara a la posición del carro
             if (mapa) {
                 const posicion = [lat, lon];
@@ -293,4 +282,3 @@
             }
     }
 });
->>>>>>> gps
