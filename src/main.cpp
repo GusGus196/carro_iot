@@ -48,6 +48,6 @@ void loop() {
   } else if (modo == "linea") {
     ejecutarSeguidorLinea();
   } else if (modo == "gps") {
-    // Esta función leería el GPS 
+    actualizarNavegacion();
   };
 }

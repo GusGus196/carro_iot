@@ -254,31 +254,31 @@
     }
 
     client.on('message', (topic, message) => {
-    if (topic === "proyecto/carrito/estado/ubicacion") {
-        const data = message.toString().split(',');
-        const lat = parseFloat(data[0]);
-        const lon = parseFloat(data[1]);
+        if (topic === "proyecto/carrito/estado/ubicacion") {
+            const data = message.toString().split(',');
+            const lat = parseFloat(data[0]);
+            const lon = parseFloat(data[1]);
 
-        // Solo actualizamos la ubicación si estamos en el modo GPS
-        const latC = document.getElementById('latC');
-        const lonC = document.getElementById('lonC');
-        
-        if (latC && lonC) {
-            latC.innerText = lat.toFixed(6);
-            lonC.innerText = lon.toFixed(6);
-        }
-
-        // Movimiento de la camara a la posición del carro
-        if (mapa) {
-            const posicion = [lat, lon];
-
-            if (!carroMarker) {
-                carroMarker = L.marker(posicion, {icon: greenIcon}).addTo(mapa).bindPopup("Smart Car");
-                mapa.panTo(posicion);
-            } else {
-                carroMarker.setLatLng(posicion);
-                mapa.panTo(posicion);
+            // Solo actualizamos la ubicación si estamos en el modo GPS
+            const latC = document.getElementById('latC');
+            const lonC = document.getElementById('lonC');
+            
+            if (latC && lonC) {
+                latC.innerText = lat.toFixed(6);
+                lonC.innerText = lon.toFixed(6);
             }
-        }
+
+            // Movimiento de la camara a la posición del carro
+            if (mapa) {
+                const posicion = [lat, lon];
+
+                if (!carroMarker) {
+                    carroMarker = L.marker(posicion, {icon: greenIcon}).addTo(mapa).bindPopup("Smart Car");
+                    mapa.panTo(posicion);
+                } else {
+                    carroMarker.setLatLng(posicion);
+                    mapa.panTo(posicion);
+                }
+            }
     }
 });

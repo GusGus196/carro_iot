@@ -37,6 +37,9 @@ float destinoLatitud = 0.00;
 float destinoLongitud = 0.00;
 bool destino = false;
 
+double distanciaAlObjetivo = 0.00;
+double rumboAlObjetivo = 0.00;
+
 String modo = "indefinido";
 unsigned long ultimaVezRecibido = 0;
 
