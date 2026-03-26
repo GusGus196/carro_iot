@@ -270,14 +270,14 @@
 
         // Movimiento de la camara a la posición del carro
         if (mapa) {
-            const posicionNueva = [lat, lon];
+            const posicion = [lat, lon];
 
             if (!carroMarker) {
-                carroMarker = L.marker(posicionNueva, {icon: greenIcon}).addTo(mapa).bindPopup("Smart Car");
-                mapa.panTo(posicionNueva);
+                carroMarker = L.marker(posicion, {icon: greenIcon}).addTo(mapa).bindPopup("Smart Car");
+                mapa.panTo(posicion);
             } else {
-                carroMarker.setLatLng(posicionNueva);
-                mapa.panTo(posicionNueva);
+                carroMarker.setLatLng(posicion);
+                mapa.panTo(posicion);
             }
         }
     }
