@@ -5,8 +5,8 @@ void driver(float valorX, float valorY){
   float motorIzquierdo = valorY + valorX;
   float motorDerecho = valorY - valorX;
 
-  float compensacionIzquierda = 1.20;
-  float compensacionDerecha = 1.0;
+  float compensacionIzquierda = 1.1;
+  float compensacionDerecha = 1;
 
   motorIzquierdo = constrain(motorIzquierdo * compensacionIzquierda, -1.0, 1.0);
   motorDerecho = constrain(motorDerecho * compensacionDerecha, -1.0, 1.0);
@@ -20,7 +20,7 @@ void driver(float valorX, float valorY){
   }
   
   if (abs(motorDerecho) > 0.1) {
-    velocidadB = 140 + (abs(motorDerecho) * (255 - 140));
+    velocidadB = 150 + (abs(motorDerecho) * (255 - 150));
   }
 
   // Motor izquierdo (A)
