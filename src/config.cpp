@@ -33,6 +33,13 @@ const int pinS5 = 27;
 const int gpsRX = 16;
 const int gpsTX = 17;
 
+float destinoLatitud = 0.00;
+float destinoLongitud = 0.00;
+bool destino = false;
+
+double distanciaAlObjetivo = 0.00;
+double rumboAlObjetivo = 0.00;
+
 String modo = "indefinido";
 unsigned long ultimaVezRecibido = 0;
 

@@ -43,6 +43,14 @@ extern const int pinS5;
 extern const int gpsRX;
 extern const int gpsTX;
 
+// VARIABLES DEL GPS
+extern float destinoLatitud;
+extern float destinoLongitud;
+extern bool destino;
+
+extern double distanciaAlObjetivo;
+extern double rumboAlObjetivo;
+
 // VARIABLES DE ESTADO
 extern String modo;
 extern unsigned long ultimaVezRecibido;

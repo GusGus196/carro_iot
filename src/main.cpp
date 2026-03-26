@@ -7,6 +7,7 @@
 #include "buzzer.h" // Funciones para activar el buzzer (claxon y cambio de modo)
 #include "callback.h" // Función de callback para manejar mensajes MQTT entrantes
 #include "driver.h" // Función para configurar los valores PWM del driver a partir de los valores del joystick
+#include "gps.h" // Funciones para utilizar el módulo GPS y establecer la ruta a un destino dado
 #include "joystick.h" // Funciones para configurar y leer el joystick
 #include "reconnect.h"  // Función para reconectar al broker MQTT
 #include "seguidor_linea.h" // Funciones para configurar y ejecutar el seguidor de línea
@@ -26,6 +27,7 @@ void setup() {
   iniciarJoystick(); // Configuración de los motores
   iniciarSeguidor(); // Configuración de los sensores de línea
   iniciarUltrasonico(); // Configuración del sensor ultrasonico
+  iniciarGPS(); // Iniciar la comunicación serial con el módulo GY-GPS6MV2
   iniciarBuzzer(); // Configuración del buzzer
 }
 
@@ -35,6 +37,8 @@ void loop() {
   }
   
   client.loop();
+  
+  procesarGPS(); // Enviar posición del carro cada 2 segundos
 
   // Ejecutar lógica según el modo
   if (modo == "control") {
@@ -44,6 +48,6 @@ void loop() {
   } else if (modo == "linea") {
     ejecutarSeguidorLinea();
   } else if (modo == "gps") {
-    // Esta función leería el GPS 
+    actualizarNavegacion();
   };
 }
