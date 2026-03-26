@@ -12,22 +12,17 @@
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
 
     <!--Leaflet-->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-      crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-      crossorigin="">
-    </script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   </head>
   <body>
     <!--Div para el select del modo-->
     <div class="header-nav">
       <select id="modeSelect">
         <option value="0" disabled selected>Elige un modo</option>
-        <option value="1">Control manual (Joystick)</option>
+        <option value="1">Control manual</option>
         <option value="2">Seguidor de línea</option>
-          <option value="3">Modo GPS</option>
+        <option value="3">Navegación GPS</option>
         </select>
     </div>
 

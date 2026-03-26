@@ -24,6 +24,6 @@ Valor: "1"
 
 Videos de apoyo:
 
-[¿Cómo funciona el GPS?](https://youtu.be/8tL-UBNsCv8?si=CyYxXupMfAu1qpgO);
-[Explicación de coordenadas](https://youtu.be/QvfbDL8BqE4?si=Pr89A_WSxSQygKEc);
-[Documentación de Leaftlet](https://leafletjs.com/examples/quick-start/);
+[¿Cómo funciona el GPS?](https://youtu.be/8tL-UBNsCv8?si=CyYxXupMfAu1qpgO)
+[Explicación de coordenadas](https://youtu.be/QvfbDL8BqE4?si=Pr89A_WSxSQygKEc)
+[Documentación de Leaftlet](https://leafletjs.com/examples/quick-start/)
