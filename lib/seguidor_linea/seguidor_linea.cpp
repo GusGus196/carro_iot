@@ -1,4 +1,8 @@
 #include "seguidor_linea.h"
+const float kP = 0.8;  // más alto = más agresivo
+const float kD = 0.5;  // más alto = más suavizado
+
+float errorAnterior = 0;
 
 void iniciarSeguidor() {
     pinMode(pinS1, INPUT); // Extremo Izquierdo (-1.0) 33
@@ -18,8 +22,15 @@ void ejecutarSeguidorLinea() {
     float sumaLecturas = s1 + s2 + s3 + s4 + s5;
 
     if (sumaLecturas > 0) {
-        float x = (s1 * -1.0 + s2 * -0.5 + s4 * 0.5 + s5 * 1.0) / sumaLecturas;
-        driver(x, velocidadConstante);
+        float error = (s1 * -1.0 + s2 * -0.5 + s4 * 0.5 + s5 * 1.0) / sumaLecturas;
+
+        float derivada = error - errorAnterior;
+        errorAnterior = error;
+
+        float correccion = (kP * error) + (kD * derivada);
+        correccion = constrain(correccion, -1.0, 1.0);
+
+        driver(correccion, velocidadConstante);
     } else {
         driver(0, 0);
     }

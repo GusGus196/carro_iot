@@ -23,8 +23,13 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
     sonarConfirmacion();
   }
 
+<<<<<<< HEAD
+  if(strcmp(topic, "proyecto/carrito/control/sensor") == 0){
+    mensajeChar[0] == '1' ? velocidadConstante = 0.2 : velocidadConstante = 0.00;
+=======
   if(strcmp(topic, "proyecto/carrito/control/sensor") == 0) {
     mensajeChar[0] == '1' ? velocidadConstante = 0.1 : velocidadConstante = 0.00;
+>>>>>>> gps
   }
 
   if(strcmp(topic, "proyecto/carrito/control/destino") == 0) {
