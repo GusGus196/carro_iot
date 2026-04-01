@@ -3,8 +3,8 @@ const interfaceSpace = document.getElementById('interfaceSpace'); // Interfaz de
 let mapa, destino, destinoMarker, carroMarker; // Variables para GPS
 
 const TOPICS = {
-    joystick: "smartcar/control/joystick",
     modo: "smartcar/control/modo",
+    joystick: "smartcar/control/joystick",
     claxon: "smartcar/control/claxon",
     sensor: "smartcar/control/sensor",
     destino: "smartcar/control/destino",
@@ -21,7 +21,7 @@ const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt', { // Conecta al
 
 client.on('connect', () => {
     console.log("MQTT Conectado");
-    client.subscribe("smartcar/estado/ubicacion");
+    client.subscribe(TOPICS.ubicacion);
 });
 
 // Función para enviar mensajes al broker
@@ -52,7 +52,7 @@ modeSelect.addEventListener('change', () => {
             </div>
         `;
         
-        send("proyecto/carrito/control/modo", "control");
+        send(TOPICS.modo, "control");
         initJoystick();
     } else if (value == "2") {
         interfaceSpace.innerHTML = `
@@ -61,7 +61,7 @@ modeSelect.addEventListener('change', () => {
             </div>
         `;
     
-        send("proyecto/carrito/control/modo", "linea");
+        send(TOPICS.modo, "linea");
         initSeguidor();
     } else if (value == "3") {
         interfaceSpace.innerHTML = `
@@ -81,7 +81,7 @@ modeSelect.addEventListener('change', () => {
             </div>
         `;
     
-        send("proyecto/carrito/control/modo", "gps");
+        send(TOPICS.modo, "gps");
         setTimeout(() => {
             initMapa(); // Esperar 100ms a que renderice el contenedor para crear el mapa
         }, 100);
@@ -96,6 +96,7 @@ function initJoystick() {
     const puck = document.getElementById('joystick-puck'); 
     const valX = document.getElementById('valX'); 
     const valY = document.getElementById('valY'); 
+    
     const btnClaxon = document.getElementById("btnClaxon"); 
     const radius = container.offsetWidth / 2; 
     const FRECUENCIA_MS = 50;
@@ -140,7 +141,7 @@ function initJoystick() {
 
         if (!sendInterval) {
             sendInterval = setInterval(() => {
-                send("proyecto/carrito/control/joystick", latestMsg);
+                send(TOPICS.joystick, latestMsg);
             }, FRECUENCIA_MS);
         }
     };
@@ -157,7 +158,7 @@ function initJoystick() {
         puck.style.transform = `translate(-50%, -50%)`;
         valX.innerText = "0.00";
         valY.innerText = "0.00";
-        send("proyecto/carrito/control/joystick", "0.00,0.00"); // Enviamos la posición 0.00,0.00
+        send(TOPICS.joystick, "0.00,0.00"); // Enviamos la posición 0.00,0.00
     };
 
     // Remover listeners previos para evitar duplicados
@@ -179,7 +180,9 @@ function initJoystick() {
     window.addEventListener('touchend', stopJoystick);
     
     // Evento del botón claxon
-    btnClaxon.addEventListener("click", () => send("proyecto/carrito/control/claxon", "1"));
+    btnClaxon.addEventListener("click", () => {
+        send(TOPICS.claxon, "1");
+    });
 }
 
 /* Seguidor de líneas 🗿 */
@@ -193,7 +196,7 @@ function initSeguidor() {
         btnSensor.classList.toggle('btn-desactivado');
         btnSensor.textContent = btnSensor.classList.contains('btn-action') ? "Activar modo" : "Desactivar modo";
         
-        send("proyecto/carrito/control/sensor", btnSensor.classList.contains('btn-action') ? "1" : "0"); // Si el botón contiene la clase 'btn-action' enviar un 1, de lo contrario envía 0
+        send(TOPICS.sensor, btnSensor.classList.contains('btn-action') ? "1" : "0"); // Si el botón contiene la clase 'btn-action' enviar un 1, de lo contrario envía 0
     });
 }
 
@@ -263,7 +266,7 @@ function initMapa() {
     document.getElementById('btnConfirmar').addEventListener('click', () => {
         if (destino) {
             const msg = `${destino.lat.toFixed(6)},${destino.lng.toFixed(6)}`; // Mensaje 'latitud,longitud' del destino
-            send("proyecto/carrito/control/destino", msg); // Enviamos el mensaje
+            send(TOPICS.destino, msg); // Enviamos el mensaje
             alert("Destino enviado!");
         } else {
             alert("Selecciona un punto de destino en el mapa.");
@@ -272,7 +275,7 @@ function initMapa() {
 }
 
 client.on('message', (topic, message) => {
-    if (topic === "proyecto/carrito/estado/ubicacion") {
+    if (topic === TOPICS.ubicacion) {
         const data = message.toString().split(','); // Mensaje recibido del smart car con su posición
         const lat = parseFloat(data[0]); // Latitud del smart car
         const lon = parseFloat(data[1]); // Longitud del smart car
