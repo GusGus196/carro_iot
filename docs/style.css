@@ -78,7 +78,7 @@ body {
     touch-action: none;
 }
 
-/* Tarjetas y mensajes (Modo seguidor de línea y GPS) */
+/* Tarjetas y mensajes (modo seguidor de línea y navegación GPS) */
 .mode-card {
     text-align: center;
     padding: 25px;
@@ -122,7 +122,7 @@ body {
 .stats b {
     color: #ffffff;
     font-size: 0.75rem;
-    letter-spacing: 1.5px; /* Estilo tablero */
+    letter-spacing: 1.5px;
 }
 
 /* Eventos del botón */
