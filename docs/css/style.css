@@ -1,22 +1,40 @@
-/* Estilo general */
+/* ------------------------- Body y configuración global ------------------------- */
+:root {
+    /* Colores */
+    --bg-body: #121212;
+    --bg-nav: #1f1f1f;
+    --bg-card: #1f1f1f;
+    
+    /* Estados */
+    --accent-green: #00ff88;
+    --accent-glow: rgba(0, 255, 136, 0.4);
+    --primary-btn: #219C9C;
+    --primary-btn-hover: #22BABA;
+    --disabled-btn: #78909c;
+    
+    /* Tipografías */
+    --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-mono: 'Cascadia Code', 'Courier New', monospace;
+}
+
 body {
     display: flex;
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    background-color: #121212;
+    background-color: var(--bg-body);
     color: white;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: var(--font-main);
     overflow-x: hidden; 
     overflow-y: auto;
 }
 
-/* Barra de navegación y select */
+/* ------------------------- Barra de navegación y select ------------------------- */
 .header-nav {
     width: 100%;
     padding: 20px 0;
-    background: #1f1f1f;
+    background: var(--bg-nav);
     display: flex;
     justify-content: center;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
@@ -36,6 +54,7 @@ body {
     outline: none;
     transition: all 0.3s;
     font-weight: 600;
+    border: none;
 }
 
 #modeSelect:hover {
@@ -43,7 +62,6 @@ body {
     box-shadow: 0 0 10px rgba(255,255,255,0.1);
 }
 
-/* Contenedor */
 #interfaceSpace {
     display: flex;
     flex-direction: column;
@@ -54,7 +72,7 @@ body {
     box-sizing: border-box;
 }
 
-/* Estilos del joystick */
+/* ------------------------- Joystick ------------------------- */
 #joystick-container {
     width: 220px;
     height: 220px;
@@ -68,17 +86,17 @@ body {
 #joystick-puck {
     width: 70px;
     height: 70px;
-    background: #00ff88;
+    background: var(--accent-green);
     border-radius: 50%;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+    box-shadow: 0 0 20px var(--accent-glow);
     touch-action: none;
 }
 
-/* Tarjetas y mensajes (modo seguidor de línea y navegación GPS) */
+/* ------------------------- Contenedor del modo y mapa ------------------------- */
 .mode-card {
     text-align: center;
     padding: 25px;
@@ -102,11 +120,12 @@ body {
     margin-bottom: 5px;
 }
 
+/* ------------------------- Stats y botones ------------------------- */
 .stats {
     margin: 10px 0;
-    font-family: 'Cascadia Code', 'Courier New', monospace;
+    font-family: var(--font-mono);
     font-size: 0.9rem;
-    color: #00ff88;
+    color: var(--accent-green);
     background: rgba(0, 255, 136, 0.03);
     padding: 12px;
     border-radius: 12px;
@@ -125,13 +144,9 @@ body {
     letter-spacing: 1.5px;
 }
 
-/* Eventos del botón */
 .btn-action, .btn-desactivado {
-    padding: 0; 
-    
     width: 220px; 
     height: 50px; 
-    
     font-size: 18px;
     font-weight: bold;
     color: white;
@@ -139,27 +154,24 @@ body {
     border-radius: 50px;
     cursor: pointer;
     transition: all 0.1s;
-
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .btn-action {
-    background-color: #219C9C;
+    background-color: var(--primary-btn);
     box-shadow: 0 4px 0 #263238;
-    color: #ffffff;
     letter-spacing: 0.5px;
 }
 
 .btn-action:hover {
-    background-color: #22BABA;
+    background-color: var(--primary-btn-hover);
 }
 
 .btn-desactivado {
-    background-color: #78909c;
+    background-color: var(--disabled-btn);
     box-shadow: 0 4px 0 #546e7a;
-    color: white;
 }
 
 .btn-action:active, .btn-desactivado:active {
@@ -174,7 +186,7 @@ body {
     margin-top: 5px;
 }
 
-/* Responsividad para télefono */
+/* ------------------------- Responsividad para móvil ------------------------- */
 @media (max-width: 480px) {
     #mapa {
         height: 280px;
