@@ -1,52 +1,52 @@
-const modeSelect = document.getElementById('modeSelect'); // Select del modo
-const interfaceSpace = document.getElementById('interfaceSpace'); // Interfaz del modo (contenedor)
+// const modeSelect = document.getElementById('modeSelect'); // Select del modo
+// const interfaceSpace = document.getElementById('interfaceSpace'); // Interfaz del modo (contenedor)
 let container, puck, btnClaxon, valX, valY; // Variables para joystick
 let mapa, destino, destinoMarker, carroMarker; // Variables para GPS
 
-const TOPICS = {
-    modo: "smartcar/control/modo",
-    joystick: "smartcar/control/joystick",
-    claxon: "smartcar/control/claxon",
-    sensor: "smartcar/control/sensor",
-    destino: "smartcar/control/destino",
-    ubicacion: "smartcar/estado/ubicacion",
-    llegada: "smartcar/estado/llegada"
-};
+// const TOPICS = {
+//     modo: "smartcar/control/modo",
+//     joystick: "smartcar/control/joystick",
+//     claxon: "smartcar/control/claxon",
+//     sensor: "smartcar/control/sensor",
+//     destino: "smartcar/control/destino",
+//     ubicacion: "smartcar/estado/ubicacion",
+//     llegada: "smartcar/estado/llegada"
+// };
 
 // Conexión MQTT
-const clientId = 'smartcar-mqttcontroller-' + Math.random().toString(16).slice(2, 10); // Genera un ID de cliente
-const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt', { // Conecta al broker público HiveMQ utilizando WebSockets
-    clientId: clientId,
-    clean: true
-});
+// const clientId = 'smartcar-mqttcontroller-' + Math.random().toString(16).slice(2, 10); // Genera un ID de cliente
+// const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt', { // Conecta al broker público HiveMQ utilizando WebSockets
+//     clientId: clientId,
+//     clean: true
+// });
 
-client.on('connect', () => {
-    console.log("MQTT conectado");
-    client.subscribe(TOPICS.ubicacion); // Escuchar la ubicación del smart car siempre
-});
+// client.on('connect', () => {
+//     console.log("MQTT conectado");
+//     client.subscribe(TOPICS.ubicacion); // Escuchar la ubicación del smart car siempre
+// });
 
-client.on('reconnect', () => {
-    console.warn("Reconectando al servidor MQTT...");
-});
+// client.on('reconnect', () => {
+//     console.warn("Reconectando al servidor MQTT...");
+// });
 
-client.on('error', (err) => {
-    console.error("Error de conexión MQTT:", err);
-    client.end();
-});
+// client.on('error', (err) => {
+//     console.error("Error de conexión MQTT:", err);
+//     client.end();
+// });
 
-client.on('offline', () => {
-    console.error("Estado offline, revisa tu conexión");
-});
+// client.on('offline', () => {
+//     console.error("Estado offline, revisa tu conexión");
+// });
 
-// Función para enviar mensajes al broker
-function send(topic, message) {
-    if (client.connected) {
-        client.publish(topic, message); // Publica mensaje en el topic indicado
+// // Función para enviar mensajes al broker
+// function send(topic, message) {
+//     if (client.connected) {
+//         client.publish(topic, message); // Publica mensaje en el topic indicado
     
-        // En caso de hacer test en los TOPICS, utilizar la siguiente linea:
-        console.log(`${topic}: ${message}`);
-    }
-}
+//         // En caso de hacer test en los TOPICS, utilizar la siguiente linea:
+//         console.log(`${topic}: ${message}`);
+//     }
+// }
 
 /* 
     Cambio de modo
