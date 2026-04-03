@@ -5,39 +5,33 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
   memcpy(mensajeChar, payload, length);
   mensajeChar[length] = '\0';
 
-  // Serial.print("Topic: "); Serial.print(topic); Serial.print(" Mensaje: "); Serial.println(mensajeChar);
-  
-  if (strcmp(topic, "proyecto/carrito/control/joystick") == 0) {
-    joystick(mensajeChar); 
-  }
+  // Comentar la siguiente linea para dejar de mostrar los mensajes recibidios
+  // Serial.print(topic); Serial.print(": "); Serial.println(mensajeChar);
 
-  if(strcmp(topic, "proyecto/carrito/control/claxon") == 0) {
-    claxon();
-  }
-
-  if(strcmp(topic, "proyecto/carrito/control/modo") == 0) {
+  if (strcmp(topic, topic_modo) == 0) {
     modo = String(mensajeChar);
-    Serial.print("Modo actualizado: ");
-    Serial.println(modo);
-
     sonarConfirmacion();
-  }
 
-  if(strcmp(topic, "proyecto/carrito/control/sensor") == 0) {
+  } else if (strcmp(topic, topic_joystick) == 0) {
+    joystick(mensajeChar);
+
+  } else if (strcmp(topic, topic_claxon) == 0) {
+    claxon();
+  
+  } else if (strcmp(topic, topic_sensor) == 0) {
     mensajeChar[0] == '1' ? velocidadConstante = 0.1 : velocidadConstante = 0.00;
-  }
 
-  if(strcmp(topic, "proyecto/carrito/control/destino") == 0) {
+  } else if (strcmp(topic, topic_destino) == 0) {
     String msg = String(mensajeChar);
     int coma = msg.indexOf(','); // posición de la coma, si no encuentra retorna -1
 
     if(coma != -1) {
-      String stringLatitud = msg.substring(0, coma);
-      String stringLongitud = msg.substring(coma + 1);
+      String stringLat = msg.substring(0, coma);
+      String stringLon = msg.substring(coma + 1);
 
-      destinoLatitud = stringLatitud.toFloat();
-      destinoLongitud = stringLongitud.toFloat();
-      destino = true;
+      destinoLat = stringLat.toDouble();
+      destinoLon = stringLon.toDouble();
+      hayDestino = true;
 
       sonarConfirmacion();
     }
