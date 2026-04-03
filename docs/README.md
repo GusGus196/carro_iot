@@ -2,21 +2,24 @@
 
 Controlador web modular para un Smart Car. Utiliza el protocolo [MQTT](https://mqtt.org/) para la comunicación en tiempo real y una interfaz dinámica que cambia según el modo seleccionado.
 
-## Contenido de docs/
+## Contenido
 
 ```text
 /docs
+├── /css
+│   └── style.css       # Estilo global de la aplicación
 │
-├── index.html          # HTML base y carga de librerías (Leaflet, MQTT)
-├── main.js             # JavaScript principal (manejo de modos y HTML)
-├── /js                 # Módulos de JavaScript
-│   ├── mqtt.js         # Configuración del cliente y función de envío
-│   ├── topics.js       # Diccionario de topics MQTT
-│   ├── joystick.js     # Lógica de modo 'control manual' y eventos táctiles del joystick
-│   ├── seguidor.js     # Lógica de modo 'seguidor de línea'
-│   └── gps.js          # Lógica de modo 'navegación GPS' (integración con Leaflet y rastreo en tiempo real)
-└── /css
-    └── style.css       # Estilo CSS global
+├── /modules            # Módulos JavaScript
+│   ├── /assets         # Imágenes SVG usadas en el módulo GPS
+│   ├── alert.js        # Alertas personalizadas para el modo 'navegación GPS'
+│   ├── gps.js          # Lógica de navegación GPS (Leaflet + rastreo en tiempo real)
+│   ├── joystick.js     # Control del modo 'manual' y eventos táctiles del joystick
+│   ├── mqtt.js         # Configuración del cliente MQTT y envío de mensajes
+│   ├── seguidor.js     # Lógica del modo 'seguidor de línea'
+│   └── topics.js       # Diccionario de topics MQTT
+│
+├── index.html          # HTML base, enlaces a librerías externas (Leaflet, MQTT)
+└── main.js             # JavaScript principal (gestión de modos y manipulación del DOM)
 ```
 
 ---
@@ -25,7 +28,7 @@ Controlador web modular para un Smart Car. Utiliza el protocolo [MQTT](https://m
 
 ### Comunicación MQTT (publish / subscribe)
 
-La comunicación se centraliza en el archivo [topics.js](./modules/topics.js) para asegurar la consistencia de los canales. Los tópicos se dividen en **Control** (comandos hacia el hardware) y **Estado** (datos desde el hardware):
+La comunicación se centraliza en el módulo [mqtt.js](./modules/mqtt.js), haciendo uso de los canales definidos en [topics.js](./modules/topics.js). Los tópicos se dividen en **Control** (comandos hacia el smart car) y **Estado** (datos desde el smart car):
 
 |Tópico MQTT|Dirección|Descripción|
 |:---|:---|:---|
@@ -39,15 +42,20 @@ La comunicación se centraliza en el archivo [topics.js](./modules/topics.js) pa
 
 ## Instrucciones de uso
 
-1. **Conexión**: el Smart Car y el controlador deben apuntar al mismo Broker MQTT.
+1. **Conexión**: el Smart Car y el controlador web deben apuntar al mismo Broker MQTT.
 2. **Modo manual**: usar el joystick táctil para mover el vehículo.
 3. **Seguidor de línea**: activa y desactivar el sensor infrarrojo con un botón toggle.
-4. **GPS**: haz clic en el mapa para marcar un destino y presiona "Confirmar" para que el coche inicie la ruta.
+4. **GPS**: haz clic en el mapa para marcar un destino y presiona "Enviar destino" para que el coche inicie la ruta, esperar a la notificación de llegada.
 
 ---
 
 ## Filosofía de desarrollo
 
-Este proyecto prioriza la programación funcional (módulos) sobre la complejidad de clases innecesarias. La arquitectura sigue el principio YAGNI (You Ain't Gonna Need It), asegurando que cada módulo tenga un propósito directo en el control del vehículo.
+Este proyecto prioriza la programación funcional (módulos) sobre la complejidad de clases innecesarias. La arquitectura sigue el principio YAGNI (You Ain't Gonna Need It), asegurando que cada módulo tenga un propósito directo en el control del smart car.
+
+## Recursos
+
+- [Bootstrap icons](https://icons.getbootstrap.com/)
+- [Leaflet documentation](https://leafletjs.com/)
 
 Escrito por [René Núñez](https://github.com/rene-nunez)

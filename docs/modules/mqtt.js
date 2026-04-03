@@ -25,5 +25,5 @@ export function send(topic, message) {
     
         // Comentar la siguiente linea para dejar de mostrar los mensajes enviados:
         console.log(`${topic}: ${message}`);
-    }
-}
+    };
+};

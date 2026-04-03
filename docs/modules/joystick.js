@@ -51,7 +51,7 @@ export function initJoystick() {
     window.addEventListener('touchend', stopJoystick);
 
     btnClaxon.onclick = () => send(TOPICS.claxon, "1"); // Enviar un '1' al topic 'claxon' cuando el botón es presionado
-}
+};
 
 // Función invocada para calcular la posición del joystick al detectar movimiento
 function moveJoystick(evento) {

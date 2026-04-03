@@ -16,4 +16,4 @@ export function initSeguidor() {
         // Si el botón no contiene la clase 'btn-action' enviar un 1, de lo contrario envía 0
         send(TOPICS.sensor, !btnSensor.classList.contains('btn-action') ? "1" : "0");
     });
-}   
+};

@@ -80,5 +80,5 @@ modeSelect.addEventListener('change', () => {
 
         send(TOPICS.modo, "gps");
         setTimeout(initMapa, 200);
-    }
+    };
 });

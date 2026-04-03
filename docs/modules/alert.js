@@ -12,5 +12,5 @@ export function showAlert(title, message) {
         setTimeout(() => {
             alert.classList.remove('alert-visible'); // Ocultamos la alerta a los 2 segundos
         }, 2000);
-    }
-}
+    };
+};
