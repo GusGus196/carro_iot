@@ -7,6 +7,15 @@ extern const char* ssid;
 extern const char* password;
 extern const char* mqtt_server;
 
+extern const char* topic_modo;
+extern const char* topic_joystick;
+extern const char* topic_claxon;
+extern const char* topic_sensor;
+extern const char* topic_destino;
+
+extern const char* topic_ubicacion;
+extern const char* topic_llegada;
+
 extern const int motorA1;
 extern const int motorA2;
 extern const int motorB1;

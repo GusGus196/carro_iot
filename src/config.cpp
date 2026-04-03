@@ -5,6 +5,17 @@ const char* ssid = "";
 const char* password = "";
 const char* mqtt_server = "broker.hivemq.com";
 
+// TOPICS MQTT de entrada (subscribe)
+const char* topic_modo = "smartcar/control/modo";
+const char* topic_joystick = "smartcar/control/joystick";
+const char* topic_claxon = "smartcar/control/claxon";
+const char* topic_sensor = "smartcar/control/sensor";
+const char* topic_destino = "smartcar/control/destino";
+
+// TOPICS MQTT de salida (publish)
+const char* topic_ubicacion = "smartcar/estado/ubicacion";
+const char* topic_llegada = "smartcar/estado/llegada";
+
 // Pines del driver DRV8833
 const int motorA1 = 18;
 const int motorA2 = 19;

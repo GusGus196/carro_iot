@@ -1,10 +1,9 @@
-// Framework
-#include <Arduino.h>
+#include <Arduino.h> // Framework
 
 // Librerías del proyecto
-#include "config.h"  // Variables globales de configuración
+#include "config.h" // Variables globales
 
-#include "buzzer.h" // Funciones para activar el buzzer (claxon y cambio de modo)
+#include "buzzer.h" // Funciones para activar el buzzer
 #include "callback.h" // Función de callback para manejar mensajes MQTT entrantes
 #include "driver.h" // Función para configurar los valores PWM del driver a partir de los valores del joystick
 #include "gps.h" // Funciones para utilizar el módulo GPS y establecer la ruta a un destino dado
