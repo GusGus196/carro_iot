@@ -4,11 +4,16 @@ import {send} from './mqtt.js'; // Cliente y función enviar MQTT
 export function initSeguidor() {
     const btnSensor = document.getElementById('btnSensor');
     
+    if (!btnSensor) return; // Evitar errores si el elemento no existe
+
     btnSensor.addEventListener("click", () => {
         btnSensor.classList.toggle('btn-action');
         btnSensor.classList.toggle('btn-desactivado');
-        btnSensor.textContent = btnSensor.classList.contains('btn-action') ? "Activar modo" : "Desactivar modo"; // Cambiar texto contenido
         
-        send(TOPICS.sensor, btnSensor.classList.contains('btn-action') ? "1" : "0"); // Si el botón contiene la clase 'btn-action' enviar un 1, de lo contrario envía 0
+        // Cambiar texto contenido
+        btnSensor.textContent = btnSensor.classList.contains('btn-action') ? "Activar" : "Desactivar";
+        
+        // Si el botón no contiene la clase 'btn-action' enviar un 1, de lo contrario envía 0
+        send(TOPICS.sensor, !btnSensor.classList.contains('btn-action') ? "1" : "0");
     });
-}
+}   
