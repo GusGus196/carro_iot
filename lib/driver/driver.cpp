@@ -1,6 +1,6 @@
 #include "driver.h"
 
-void driver(float valorX, float valorY){
+void driver(float valorX, float valorY) {
   // Mezcla diferencial
   float motorIzquierdo = valorY + valorX;
   float motorDerecho = valorY - valorX;
