@@ -49,9 +49,6 @@ extern double destinoLat;
 extern double destinoLon;
 extern bool hayDestino;
 
-extern double destinoDistancia;
-extern double destinoRumbo;
-
 extern String modo;
 extern unsigned long ultimaVezRecibido;
 extern float velocidadConstante;
