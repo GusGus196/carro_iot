@@ -45,7 +45,11 @@ export function iniciarMapa() {
      // Animación de zoom de hacia la nueva dirección de 1 segundo
     setTimeout(() => {
         mapa.invalidateSize();
-        mapa.flyTo([19.248302, -103.700119], 16, {duration: 1});
+        mapa.flyTo([19.248302, -103.700119], 16, {
+            animate: true,
+            duration: 3,
+            easeLinearity: 0.25
+        });
     }, 1000);
     
     // Evento click en el mapa
