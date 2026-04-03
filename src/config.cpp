@@ -60,6 +60,6 @@ double destinoDistancia = 0.0;
 double destinoRumbo = 0.0;
 
 // Variables de estado
-String modo = "indefinido"; // Modo seleccionado
-unsigned long ultimaVezRecibido = 0; // Última vez recibido un mensaje MQTT
+String modo = "indefinido"; // Modo seleccionado (control, linea o gps)
+unsigned long ultimaVezRecibido = 0; // Última vez recibido un mensaje MQTT para joystick
 float velocidadConstante = 0.00; // Velocidad constante para modo 'seguidor de línea'

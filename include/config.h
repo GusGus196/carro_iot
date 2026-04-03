@@ -53,7 +53,7 @@ extern double destinoDistancia;
 extern double destinoRumbo;
 
 extern String modo;
-extern unsigned long ultimoRecibido;
+extern unsigned long ultimaVezRecibido;
 extern float velocidadConstante;
 
 #endif

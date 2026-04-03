@@ -5,9 +5,9 @@
 
 #include "buzzer.h" // Funciones para activar el buzzer
 #include "callback.h" // Función de callback para manejar mensajes MQTT entrantes
-#include "driver.h" // Función para configurar los valores PWM del driver a partir de los valores del joystick
+#include "driver.h" // Función para configurar los valores PWM del driver ⁠DRV8833 a partir de la posición del joystick
 #include "gps.h" // Funciones para utilizar el módulo GPS y establecer la ruta a un destino dado
-#include "joystick.h" // Funciones para configurar y leer el joystick
+#include "joystick.h" // Funciones para iniciar y leer la posición del joystick (posición x,y utilizada por el driver)
 #include "reconnect.h"  // Función para reconectar al broker MQTT
 #include "seguidor_linea.h" // Funciones para configurar y ejecutar el seguidor de línea
 #include "setup_wifi.h" // Función para configurar la conexión WiFi
