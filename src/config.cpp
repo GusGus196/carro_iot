@@ -1,14 +1,17 @@
 #include "config.h"
 
-const char* ssid = "gusgus";
-const char* password = "gusgus19++";
+// Variables de configuración WIFI y MQTT
+const char* ssid = "";
+const char* password = "";
 const char* mqtt_server = "broker.hivemq.com";
 
+// Pines del driver DRV8833
 const int motorA1 = 18;
 const int motorA2 = 19;
 const int motorB1 = 21;
 const int motorB2 = 22;
 
+// Canales PWM del ESP32
 const int canalA1 = 0;
 const int canalA2 = 1;
 const int canalB1 = 2;
@@ -18,29 +21,34 @@ const int canalBuzzer = 4;
 const int freq = 5000;
 const int resolucion = 8;
 
+// Pin y frecuencia del buzzer pasivo
 const int pinBuzzer = 5;
 const int freqBuzzer = 2000;
 
+// Pines del sensor ultrasónico HC-SR04
 const int trig = 14;
 const int echo = 23;
 
+// Pines del array de 5 sensores reflectivos TCRT5000
 const int pinS1 = 32;
 const int pinS2 = 33;
 const int pinS3 = 25;
 const int pinS4 = 26;
 const int pinS5 = 27;
 
+// Pines del módulo GPS GY-GPS6MV2
 const int gpsRX = 16;
 const int gpsTX = 17;
 
-float destinoLatitud = 0.00;
-float destinoLongitud = 0.00;
-bool destino = false;
+// Variables del modo 'navegación GPS'
+double destinoLat = 0.0;
+double destinoLon = 0.0;
+bool hayDestino = false;
 
-double distanciaAlObjetivo = 0.00;
-double rumboAlObjetivo = 0.00;
+double destinoDistancia = 0.0;
+double destinoRumbo = 0.0;
 
-String modo = "indefinido";
-unsigned long ultimaVezRecibido = 0;
-
-float velocidadConstante = 0.00;
+// Variables de estado
+String modo = "indefinido"; // Modo seleccionado
+unsigned long ultimaVezRecibido = 0; // Última vez recibido un mensaje MQTT
+float velocidadConstante = 0.00; // Velocidad constante para modo 'seguidor de línea'
