@@ -17,6 +17,7 @@ client.on('message', (topic, message) => {
 
         if (!isNaN(lat) && !isNaN(lon)) {
             actualizarPosicion(lat, lon);
+            console.log(`${topic}: ${lat}, ${lon}`); // Comentar esta linea para dejar de mostrar mensajes de ubicación recibidos
         };
     };
 

@@ -23,7 +23,7 @@ export function enviar(topic, message) {
     if (client.connected) {
         client.publish(topic, message);
     
-        // Comentar la siguiente linea para dejar de mostrar los mensajes enviados:
+        // Comentar la siguiente linea para dejar de mostrar los mensajes enviados
         console.log(`${topic}: ${message}`);
     };
 };
