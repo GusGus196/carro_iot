@@ -1,5 +1,6 @@
 import {TOPICS} from "./topics.js";
 import {send} from "./mqtt.js";
+import {showAlert} from "./alert.js";
 
 let mapa, destino, destinoMarker, carroMarker;
 
@@ -33,34 +34,38 @@ let greenIcon = new LeafIcon({iconUrl: 'https://leafletjs.com/examples/custom-ic
 
 // Función para crear el mapa
 export function initMapa() {
-    // Si mapa ya fue inicializado y ocurrió un cambio de modo (select), creamos uno nuevo y borramos las direcciones lat, long anteriores
+    // Si mapa ya fue inicializado y ocurrió un cambio de modo (select), creamos uno nuevo y borramos los marcadores anteriores
     if (mapa) {
         mapa.remove();
         destinoMarker = null;
         carroMarker = null;
     }
+
     mapa = L.map('mapa').setView([19.248302, -103.700119], 5); // Vista inicial de México
     
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { // Layer del mapa utilizando OpenStreetMap.org
-        attribution: '&copy; OpenStreetMap'
-    }).addTo(mapa);
+     // Layer del mapa utilizando OpenStreetMap.org
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '&copy; OpenStreetMap'}).addTo(mapa);
+    
+     // Animación de zoom de hacia la nueva dirección de 1 segundo
     setTimeout(() => {
         mapa.invalidateSize();
-        mapa.flyTo([19.248302, -103.700119], 16, {
-            duration: 1
-        }); // Animación de zoom de hacia la nueva dirección de 1 segundo
+        mapa.flyTo([19.248302, -103.700119], 16, {duration: 1});
     }, 1000);
     
     // Evento click en el mapa
     mapa.on('click', function(evento) {
         destino = evento.latlng;
+
+        // Crear marcador con icono (Leaflet o custom) y texto flotante del destino seleccionado
         if (!destinoMarker) {
-            destinoMarker = L.marker(evento.latlng, {icon: redIcon}).addTo(mapa).bindPopup("Destino"); // Crear marcador con icono (Leaflet o custom) y texto flotante del destino seleccionado
+            destinoMarker = L.marker(evento.latlng, {icon: redIcon}).addTo(mapa).bindPopup("Destino");
         } else {
             destinoMarker.setLatLng(evento.latlng);
         }
+
         document.getElementById('latD').innerText = evento.latlng.lat.toFixed(4); // Latitud del destino
         document.getElementById('lonD').innerText = evento.latlng.lng.toFixed(4); // Longitud del destino
+
         // Nota: mostramos 4 decimales para optimizar el espacio, aunque se deben enviar 6 para mejorar la precisión
     });
     
@@ -69,9 +74,9 @@ export function initMapa() {
         if (destino) {
             const msg = `${destino.lat.toFixed(6)},${destino.lng.toFixed(6)}`; // Mensaje 'latitud,longitud' del destino
             send(TOPICS.destino, msg); // Enviamos el mensaje
-            alert("Destino enviado!");
+            showAlert("NAVEGACIÓN GPS", "Destino enviado correctamente."); // Mostramos una alerta personalizada
         } else {
-            alert("Selecciona un punto de destino en el mapa.");
+            showAlert("NAVEGACIÓN GPS", "Selecciona un destino antes de enviar.");
         }
     });
 }
@@ -92,10 +97,10 @@ export function actualizarPosicion(lat, lon) {
         
         // Si el marcador no existe lo creamos, de lo contrario solo actualizamos su posición
         if (!carroMarker) {
-            carroMarker = L.marker(posicion, {icon: greenIcon}).addTo(mapa).bindPopup("Smart Car");  // Crear marcador con icono (Leaflet o custom) y texto flotante de la posición del smart car
-            mapa.panTo(posicion, {animate: true, duration: 0.5}); // Cambiar el centro del mapa a la posición del smart car, simulando un seguimiento
+            carroMarker = L.marker(posicion, {icon: greenIcon}).addTo(mapa).bindPopup("Smart Car");
+            mapa.panTo(posicion, {animate: true, duration: 0.5}); // Cambiar el centro del mapa a la posición del smart car
         } else {
-            carroMarker.setLatLng(posicion); // Actualizar posición del marcador con la posición recibida
+            carroMarker.setLatLng(posicion); // Actualizar posición del marcador con la posición recibida si el marcador ya existe
             mapa.panTo(posicion, {animate: true, duration: 0.5});
         }
     }
