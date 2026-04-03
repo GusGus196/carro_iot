@@ -1,8 +1,9 @@
 import {TOPICS} from './modules/topics.js' // Topics MQTT
-import {client, send} from './modules/mqtt.js'; // Cliente y función send MQTT
+import {client, send} from './modules/mqtt.js'; // Cliente y función send() MQTT
 import {initJoystick, stopJoystick} from './modules/joystick.js'; // Funciones del joystick 'modo manual'
 import {initSeguidor} from './modules/seguidor.js'; // Activar 'modo seguidor de línea'
 import {initMapa, actualizarPosicion} from './modules/gps.js'; // Funciones del mapa para 'modo navegación gps'
+import {showAlert} from './modules/alert.js'; // Alerta personalizada para navegación GPS
 
 const modeSelect = document.getElementById('modeSelect'); // Select del modo
 const interfaceSpace = document.getElementById('interfaceSpace'); // Interfaz del modo
@@ -17,6 +18,11 @@ client.on('message', (topic, message) => {
             actualizarPosicion(lat, lon);
         }
     }
+
+    if(topic === TOPICS.llegada) {
+        // Mostramos una alerta personalizada al llegar al destino
+        showAlert("NAVEGACIÓN GPS", "¡Se ha llegado al destino!");
+    }
 })
 
 // Select del modo
@@ -27,6 +33,7 @@ modeSelect.addEventListener('change', () => {
         value = 2, seguidor de línea
         value = 3, navegación gps
     */
+
     stopJoystick(); // Detenerlo al cambiar de modo
     
     if (value === "1") {
@@ -47,7 +54,7 @@ modeSelect.addEventListener('change', () => {
     } else if (value === "2") {
         interfaceSpace.innerHTML = `
             <div class="mode-card">
-                <button id="btnSensor" type="button" class="btn-action">Activar modo</button>
+                <button id="btnSensor" type="button" class="btn-action">Activar</button>
             </div>
         `;
         
@@ -66,7 +73,7 @@ modeSelect.addEventListener('change', () => {
                     Lat: <span id="latC">0.00</span> | Lon: <span id="lonC">0.00</span>
                 </div>
                 <div class="controls">
-                    <button id="btnConfirmar" class="btn-action">Confirmar destino</button>
+                    <button id="btnConfirmar" class="btn-action">Enviar destino</button>
                 </div>
             </div>
         `;

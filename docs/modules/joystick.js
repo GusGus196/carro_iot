@@ -9,7 +9,7 @@ let sendInterval = null; // Intervalo para enviar datos
 const FRECUENCIA_MS = 50; // Tiempo entre envío de datos (50ms o 20 veces por segundo)
 
 // Función para inicializar todo el joystick
-function initJoystick() {
+export function initJoystick() {
     container = document.getElementById('joystick-container'); // Div del contenedor joystick
     puck = document.getElementById('joystick-puck'); // Div del control (puck)
     btnClaxon = document.getElementById('btnClaxon'); // Botón del claxon
@@ -98,7 +98,7 @@ function moveJoystick(evento) {
 };
 
 // Función invocada al soltar el joystick
-function stopJoystick() {
+export function stopJoystick() {
     if (!dragging) return; // Si aún hay movimiento, salir
     dragging = false; // Detiene el movimiento
 
@@ -114,5 +114,3 @@ function stopJoystick() {
     
     send(TOPICS.joystick, "0.00,0.00"); // Envía el mensaje directamente y detiene el smart car
 };
-
-export {initJoystick, stopJoystick};
