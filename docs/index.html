@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-MX">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Car Web Controller</title>
     
     <!--CSS-->
     <link rel="stylesheet" href="./css/style.css">
 
     <!--MQTT-->
-    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js" defer></script>
 
     <!--Leaflet-->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
@@ -19,7 +19,7 @@
     <!--Div para el select del modo-->
     <div class="header-nav">
       <select id="modeSelect">
-        <option value="0" disabled selected>Elige un modo</option>
+        <option value="0" disabled selected>Selecciona un modo</option>
         <option value="1">Control manual</option>
         <option value="2">Seguidor de línea</option>
         <option value="3">Navegación GPS</option>
@@ -29,6 +29,12 @@
     <!--Div para la interfaz del modo-->
     <div id="interfaceSpace">
       <p class="placeholder-text">Selecciona un modo para comenzar</p>
+    </div>
+
+    <!--Div para alerta personalizada del modo 'navegación GPS'-->
+    <div id="custom-alert">
+      <span id="alert-title"></span>
+      <div id="alert-text"></div>
     </div>
 
     <script type="module" src="main.js"></script>
