@@ -19,7 +19,7 @@ client.on('error', (err) => console.error("Error de conexión MQTT:", err));
 client.on('offline', () => console.error("Estado offline, revisa tu conexión"));
 
 // Función para enviar mensajes al broker
-export function send(topic, message) {
+export function enviar(topic, message) {
     if (client.connected) {
         client.publish(topic, message);
     

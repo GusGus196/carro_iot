@@ -1,14 +1,15 @@
 import {TOPICS} from './modules/topics.js' // Topics MQTT
-import {client, send} from './modules/mqtt.js'; // Cliente y función send() MQTT
-import {initJoystick, stopJoystick} from './modules/joystick.js'; // Funciones del joystick 'modo manual'
-import {initSeguidor} from './modules/seguidor.js'; // Activar 'modo seguidor de línea'
-import {initMapa, actualizarPosicion} from './modules/gps.js'; // Funciones del mapa para 'modo navegación gps'
-import {showAlert} from './modules/alert.js'; // Alerta personalizada para navegación GPS
+import {client, enviar} from './modules/mqtt.js'; // Cliente y función enviar() MQTT
+import {iniciarJoystick, detenerJoystick} from './modules/joystick.js'; // Funciones del joystick 'modo manual'
+import {iniciarSeguidor} from './modules/seguidor.js'; // Activar y desactivar 'modo seguidor de línea'
+import {iniciarMapa, actualizarPosicion, reiniciarDestino} from './modules/gps.js'; // Funciones del mapa para 'modo navegación gps'
+import {mostrarAlerta} from './modules/alert.js'; // Alerta personalizada para navegación GPS
 
 const modeSelect = document.getElementById('modeSelect'); // Select del modo
 const interfaceSpace = document.getElementById('interfaceSpace'); // Interfaz del modo
 
 client.on('message', (topic, message) => {
+    // Actualizar la posición del smart car
     if (topic === TOPICS.ubicacion) {
         const data = message.toString().split(','); // Mensaje recibido del smart car con su posición
         const lat = parseFloat(data[0]); // Latitud del smart car
@@ -16,14 +17,19 @@ client.on('message', (topic, message) => {
 
         if (!isNaN(lat) && !isNaN(lon)) {
             actualizarPosicion(lat, lon);
-        }
-    }
+        };
+    };
 
+    /* 
+        Esta condición solo se cumple cuando el smart car ha llegado a su destino.
+        Se establece un radio de llegada 2-5 metros entre el smart car y el destino,
+        debido a la imprecisión que pueda causar del módulo GY-GPS6MV2
+    */
     if(topic === TOPICS.llegada) {
-        // Mostramos una alerta personalizada al llegar al destino
-        showAlert("NAVEGACIÓN GPS", "¡Se ha llegado al destino!");
+        mostrarAlerta("NAVEGACIÓN GPS", "¡Se ha llegado al destino!"); // Mostramos una alerta personalizada al llegar
+        reiniciarDestino(); // Función para reiniciar los valores de destino
     }
-})
+});
 
 // Select del modo
 modeSelect.addEventListener('change', () => {
@@ -34,7 +40,7 @@ modeSelect.addEventListener('change', () => {
         value = 3, navegación gps
     */
 
-    stopJoystick(); // Detenerlo al cambiar de modo
+    detenerJoystick(); // Detenerlo al cambiar de modo
     
     if (value === "1") {
         interfaceSpace.innerHTML = `
@@ -49,8 +55,8 @@ modeSelect.addEventListener('change', () => {
             </div>
         `;
         
-        send(TOPICS.modo, "control");
-        initJoystick();
+        enviar(TOPICS.modo, "control");
+        iniciarJoystick();
     } else if (value === "2") {
         interfaceSpace.innerHTML = `
             <div class="mode-card">
@@ -58,8 +64,8 @@ modeSelect.addEventListener('change', () => {
             </div>
         `;
         
-        send(TOPICS.modo, "linea");
-        initSeguidor();
+        enviar(TOPICS.modo, "linea");
+        iniciarSeguidor();
     } else if (value === "3") {
         interfaceSpace.innerHTML = `
             <div class="mode-card">
@@ -73,12 +79,12 @@ modeSelect.addEventListener('change', () => {
                     Lat: <span id="latC">0.00</span> | Lon: <span id="lonC">0.00</span>
                 </div>
                 <div class="controls">
-                    <button id="btnConfirmar" class="btn-action">Enviar destino</button>
+                    <button id="btnEnviar" class="btn-action">Enviar destino</button>
                 </div>
             </div>
         `;
 
-        send(TOPICS.modo, "gps");
-        setTimeout(initMapa, 200);
+        enviar(TOPICS.modo, "gps");
+        setTimeout(iniciarMapa, 200);
     };
 });

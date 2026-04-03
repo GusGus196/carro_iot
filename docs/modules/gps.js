@@ -1,6 +1,6 @@
 import {TOPICS} from "./topics.js";
-import {send} from "./mqtt.js";
-import {showAlert} from "./alert.js";
+import {enviar} from "./mqtt.js";
+import {mostrarAlerta} from "./alert.js";
 
 let mapa, destino, destinoMarker, carroMarker;
 
@@ -26,7 +26,7 @@ const carIcon = L.icon({
 });
 
 // Función para crear el mapa
-export function initMapa() {
+export function iniciarMapa() {
     /* 
         Si mapa ya fue inicializado y ocurrió un cambio de modo (select),
         creamos uno nuevo y borramos los marcadores anteriores. De lo contrario se crearan duplicados
@@ -66,13 +66,13 @@ export function initMapa() {
     });
     
     // Evento del botón 'btnConfirmar' para enviar destino
-    document.getElementById('btnConfirmar').addEventListener('click', () => {
+    document.getElementById('btnEnviar').addEventListener('click', () => {
         if (destino) {
             const msg = `${destino.lat.toFixed(6)},${destino.lng.toFixed(6)}`; // Mensaje 'latitud,longitud' del destino
-            send(TOPICS.destino, msg); // Enviamos el mensaje
-            showAlert("NAVEGACIÓN GPS", "Destino enviado correctamente."); // Mostramos una alerta personalizada
+            enviar(TOPICS.destino, msg); // Enviamos el mensaje
+            mostrarAlerta("NAVEGACIÓN GPS", "Destino enviado correctamente."); // Mostramos una alerta personalizada
         } else {
-            showAlert("NAVEGACIÓN GPS", "Selecciona un destino antes de enviar.");
+            mostrarAlerta("NAVEGACIÓN GPS", "Selecciona un destino antes de enviar.");
         };
     });
 };
@@ -101,3 +101,23 @@ export function actualizarPosicion(lat, lon) {
         };
     };
 };
+
+/*
+    Esta función se ejecuta una vez que el smart car ha llegado a su destino.
+    Remueve el pin del destino, el objeto, la coordenada y los valores de latitud, longitud mostrados en pantalla,
+    de este modo podemos definir un nuevo destino e iniciar la ruta nuevamente
+*/
+export function reiniciarDestino() {
+    if (mapa && destinoMarker) {
+        mapa.removeLayer(destinoMarker);
+        destinoMarker = null;
+        destino = null;
+    }
+    
+    const latD = document.getElementById('latD');
+    const lonD = document.getElementById('lonD');
+    if (latD && lonD) {
+        latD.innerText = "0.0000";
+        lonD.innerText = "0.0000";
+    }
+}

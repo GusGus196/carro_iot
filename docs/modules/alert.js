@@ -1,4 +1,4 @@
-export function showAlert(title, message) {
+export function mostrarAlerta(title, message) {
     const alert = document.getElementById('custom-alert');
     const alertTitle = document.getElementById('alert-title');
     const alertText = document.getElementById('alert-text');

@@ -1,5 +1,5 @@
 import {TOPICS} from "./topics.js";
-import {send} from "./mqtt.js";
+import {enviar} from "./mqtt.js";
 
 let container, puck, btnClaxon, valX, valY;
 
@@ -9,7 +9,7 @@ let sendInterval = null; // Intervalo para enviar datos
 const FRECUENCIA_MS = 50; // Tiempo entre envío de datos (50ms o 20 veces por segundo)
 
 // Función para inicializar todo el joystick
-export function initJoystick() {
+export function iniciarJoystick() {
     container = document.getElementById('joystick-container'); // Div del contenedor joystick
     puck = document.getElementById('joystick-puck'); // Div del control (puck)
     btnClaxon = document.getElementById('btnClaxon'); // Botón del claxon
@@ -22,22 +22,22 @@ export function initJoystick() {
 
         if (!sendInterval) {
             sendInterval = setInterval(() => {
-                send(TOPICS.joystick, latestMsg); // Toma el último valor 'latestMsg' y lo envía por MQTT
+                enviar(TOPICS.joystick, latestMsg); // Toma el último valor 'latestMsg' y lo envía por MQTT
             }, FRECUENCIA_MS); // Este intervalo determina el tiempo de envío de mensajes de movimiento hacia el topic 'joystick' cada 50ms
         }
     };
 
     /*
-        Se eliminan los event listeners y se vuelven a crear cada que se llama a initJoystick(),
+        Se eliminan los event listeners y se vuelven a crear cada que se llama a iniciarJoystick(),
         debido a que esta función se llama cada vez que cambiamos de modo en el selector a 'modo manual',
         si no hacemos este proceso, los event listeners se duplicarán cada que cambiamos de modo y volvemos a modo manual,
         generando mensajes duplicados de envío al topic
     */
 
-    window.removeEventListener('mousemove', moveJoystick);
-    window.removeEventListener('mouseup', stopJoystick);
-    window.removeEventListener('touchmove', moveJoystick);
-    window.removeEventListener('touchend', stopJoystick);
+    window.removeEventListener('mousemove', moverJoystick);
+    window.removeEventListener('mouseup', detenerJoystick);
+    window.removeEventListener('touchmove', moverJoystick);
+    window.removeEventListener('touchend', detenerJoystick);
 
     puck.addEventListener('mousedown', startJoystick);
     puck.addEventListener('touchstart', (evento) => {
@@ -45,16 +45,16 @@ export function initJoystick() {
         startJoystick();
     }, { passive: false }); // Permite utilizar preventDefault()
 
-    window.addEventListener('mousemove', moveJoystick);
-    window.addEventListener('touchmove', moveJoystick, {passive: false});
-    window.addEventListener('mouseup', stopJoystick);
-    window.addEventListener('touchend', stopJoystick);
+    window.addEventListener('mousemove', moverJoystick);
+    window.addEventListener('touchmove', moverJoystick, {passive: false});
+    window.addEventListener('mouseup', detenerJoystick);
+    window.addEventListener('touchend', detenerJoystick);
 
-    btnClaxon.onclick = () => send(TOPICS.claxon, "1"); // Enviar un '1' al topic 'claxon' cuando el botón es presionado
+    btnClaxon.onclick = () => enviar(TOPICS.claxon, "1"); // Enviar un '1' al topic 'claxon' cuando el botón es presionado
 };
 
 // Función invocada para calcular la posición del joystick al detectar movimiento
-function moveJoystick(evento) {
+function moverJoystick(evento) {
     if (!dragging) return; // Si no hay movimiento, salir
     evento.preventDefault();
 
@@ -98,7 +98,7 @@ function moveJoystick(evento) {
 };
 
 // Función invocada al soltar el joystick
-export function stopJoystick() {
+export function detenerJoystick() {
     if (!dragging) return; // Si aún hay movimiento, salir
     dragging = false; // Detiene el movimiento
 
@@ -112,5 +112,5 @@ export function stopJoystick() {
     if (valX) valX.innerText = "0.00";
     if (valY) valY.innerText = "0.00";
     
-    send(TOPICS.joystick, "0.00,0.00"); // Envía el mensaje directamente y detiene el smart car
+    enviar(TOPICS.joystick, "0.00,0.00"); // Envía el mensaje directamente y detiene el smart car
 };
