@@ -30,3 +30,37 @@ void enviarUbicacion() {
         }
     }
 }
+
+void actualizarNavegacion() {
+    // Solo si la ubicación es válida y ya tenemos un destino definido en el callback
+    if (gps.location.isValid() && hayDestino) {
+        /*
+            Calculamos la distancia en metros, entre el smart car y el destino,
+            devuelve un valor tipo double, Se usa la fórmula de Haversine para el cálculo
+        */
+        destinoDistancia = gps.distanceBetween(gps.location.lat(), gps.location.lng(), destinoLat, destinoLon);
+        
+        /*
+            courseTo() calcula el bearing o rumbo. Es decir, el ángulo que existe entre la posición actual del smart car y el destino,
+            tomando como referencia el norte. El valor del ángulo que devuelve es absoluto, no tiene en consideración hacia donde apunta
+            el smart car, para eso utilizamos la función obtenerOrientacion()
+        */
+        destinoRumbo = gps.courseTo(gps.location.lat(), gps.location.lng(), destinoLat, destinoLon);
+
+        // Radio de llegada: 3 metros
+        if (destinoDistancia < 3.0) {
+            hayDestino = false; // Esperar por un nuevo destino
+            driver(0, 0); // Parar el motor al estar en el radio de llegada
+            client.publish(topic_llegada, "1"); // Publicar alerta de llegada al broker MQTT
+            claxon(); // Sonar claxon
+            // Test: Serial.println("¡Destino alcanzado!");
+        } else {
+            // obtenerOrientacion();
+            /*
+                Mientras no se alcance el destino:
+                    - Calcular y corregir la orientación entre el smart car y el destino
+                    - A partir de la orientación debemos controlar el driver
+            */
+        }
+    }
+}

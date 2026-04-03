@@ -56,6 +56,9 @@ double destinoLat = 0.0;
 double destinoLon = 0.0;
 bool hayDestino = false;
 
+double destinoDistancia = 0.0;
+double destinoRumbo = 0.0;
+
 // Variables de estado
 String modo = "indefinido"; // Modo seleccionado (control, linea o gps)
 unsigned long ultimaVezRecibido = 0; // Última vez recibido un mensaje MQTT para joystick
