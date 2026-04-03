@@ -4,42 +4,38 @@ import {showAlert} from "./alert.js";
 
 let mapa, destino, destinoMarker, carroMarker;
 
-// Clase para crear iconos de Leaflet
-const LeafIcon = L.Icon.extend({
-    options: {
-        shadowUrl: 'https://leafletjs.com/examples/custom-icons/leaf-shadow.png',
-        iconSize: [38, 95],
-        shadowSize: [50, 64],
-        iconAnchor: [22, 94],
-        shadowAnchor: [4, 62],
-        popupAnchor: [-3, -76]
-    }
+// Icono para el destino
+const destinoIcon = L.icon({
+    iconUrl: 'modules/assets/geo-fill.svg',
+    iconSize: [32, 32], // Tamaño del icono
+    iconAnchor: [16, 32], // Centrar punta inferior
+    popupAnchor: [0, -32], // Mensaje popup, aparece sobre el pin
+    
+    // Sombra
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    shadowSize: [35, 35],
+    shadowAnchor: [10, 35]
 });
 
-// Clase para crear iconos custom
-const CustomIcon = L.Icon.extend({
-    options: {
-        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
-        popupAnchor: [0, -40],
-        shadowSize: [41, 41],
-        shadowAnchor: [12, 41]
-    }
+// Icono para el smart car
+const carIcon = L.icon({
+    iconUrl: 'modules/assets/car-front.svg',
+    iconSize: [35, 35],
+    iconAnchor: [17.5, 17.5],
+    popupAnchor: [0, -18]
 });
-
-// Nota: para generar un icono de las dos anteriores clases, debemos crear un nuevo objeto y agregar la URL o la dirección local de la imagen en el atributo 'iconUrl'
-let redIcon = new LeafIcon({iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-red.png'});
-let greenIcon = new LeafIcon({iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png'});
 
 // Función para crear el mapa
 export function initMapa() {
-    // Si mapa ya fue inicializado y ocurrió un cambio de modo (select), creamos uno nuevo y borramos los marcadores anteriores
+    /* 
+        Si mapa ya fue inicializado y ocurrió un cambio de modo (select),
+        creamos uno nuevo y borramos los marcadores anteriores. De lo contrario se crearan duplicados
+    */
     if (mapa) {
         mapa.remove();
         destinoMarker = null;
         carroMarker = null;
-    }
+    };
 
     mapa = L.map('mapa').setView([19.248302, -103.700119], 5); // Vista inicial de México
     
@@ -58,10 +54,10 @@ export function initMapa() {
 
         // Crear marcador con icono (Leaflet o custom) y texto flotante del destino seleccionado
         if (!destinoMarker) {
-            destinoMarker = L.marker(evento.latlng, {icon: redIcon}).addTo(mapa).bindPopup("Destino");
+            destinoMarker = L.marker(evento.latlng, {icon: destinoIcon}).addTo(mapa).bindPopup("Destino");
         } else {
             destinoMarker.setLatLng(evento.latlng);
-        }
+        };
 
         document.getElementById('latD').innerText = evento.latlng.lat.toFixed(4); // Latitud del destino
         document.getElementById('lonD').innerText = evento.latlng.lng.toFixed(4); // Longitud del destino
@@ -77,9 +73,9 @@ export function initMapa() {
             showAlert("NAVEGACIÓN GPS", "Destino enviado correctamente."); // Mostramos una alerta personalizada
         } else {
             showAlert("NAVEGACIÓN GPS", "Selecciona un destino antes de enviar.");
-        }
+        };
     });
-}
+};
 
 export function actualizarPosicion(lat, lon) {
     // Solo actualizamos la ubicación del smart car si estamos en el modo navegación GPS
@@ -97,11 +93,11 @@ export function actualizarPosicion(lat, lon) {
         
         // Si el marcador no existe lo creamos, de lo contrario solo actualizamos su posición
         if (!carroMarker) {
-            carroMarker = L.marker(posicion, {icon: greenIcon}).addTo(mapa).bindPopup("Smart Car");
+            carroMarker = L.marker(posicion, {icon: carIcon}).addTo(mapa).bindPopup("Smart Car");
             mapa.panTo(posicion, {animate: true, duration: 0.5}); // Cambiar el centro del mapa a la posición del smart car
         } else {
             carroMarker.setLatLng(posicion); // Actualizar posición del marcador con la posición recibida si el marcador ya existe
             mapa.panTo(posicion, {animate: true, duration: 0.5});
-        }
-    }
+        };
+    };
 };
