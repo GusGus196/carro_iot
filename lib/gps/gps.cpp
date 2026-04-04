@@ -47,20 +47,26 @@ void actualizarNavegacion() {
         */
         destinoRumbo = gps.courseTo(gps.location.lat(), gps.location.lng(), destinoLat, destinoLon);
 
+        // Test: if(gps.location.isUpdated()) {Serial.print("Distancia: "); Serial.print(destinoDistancia); Serial.print(" | Rumbo: ") ;Serial.println(destinoRumbo);}
+        
         // Radio de llegada: 3 metros
         if (destinoDistancia < 3.0) {
             hayDestino = false; // Esperar por un nuevo destino
             driver(0, 0); // Parar el motor al estar en el radio de llegada
             client.publish(topic_llegada, "1"); // Publicar alerta de llegada al broker MQTT
-            claxon(); // Sonar claxon
+            claxon(); // Sonido de llegada
             // Test: Serial.println("¡Destino alcanzado!");
+
         } else {
-            obtenerOrientacion();
-            /*
-                Mientras no se alcance el destino:
-                    - Calcular y corregir la orientación entre el smart car y el destino
-                    - A partir de la orientación debemos controlar el driver
-            */
+            // Solo calculamos la orientación si hay datos nuevos del GPS
+            if (gps.location.isUpdated() || gps.course.isUpdated()) {
+                obtenerOrientacion();
+                /*
+                    Mientras no se alcance el destino:
+                        - Calcular y corregir la orientación entre el smart car y el destino
+                        - A partir de la orientación debemos controlar el driver
+                */
+            }
         }
     }
 }
@@ -70,7 +76,8 @@ void obtenerOrientacion() {
     // poder calcular el rumbo de desplazamiento
     if (gps.speed.kmph() < 1.0) {
         driver(0.0, 0.4); // Avanzar recto mientras la velocidad sea menor a 1km/h
-        // Test: Serial.println("Calibrando rumbo..");
+        // Test: Serial.println("Calibrando..");
+
     } else {
         /*
             El smart car no cuenta con una brújula incluida, por lo que debemos hacerlo que avance 
@@ -83,6 +90,8 @@ void obtenerOrientacion() {
             y como ya sabemos el rumbo hacia el destino, podemos calcular la diferencia de grados (error) y
             hacer que el smart car gire en dirección al destino
         */
+        
+        // Test: Serial.print("Rumbo actual: "); Serial.println(actualRumbo);
         actualRumbo = gps.course.deg();
         corregirOrientacion(actualRumbo, destinoRumbo); // Manipular el driver para corregir la orientación
     }
@@ -90,6 +99,7 @@ void obtenerOrientacion() {
 
 void corregirOrientacion(double actual, double destino) {
     double error = destino - actual; // Diferencia entre los dos rumbos
+    // Test: Serial.print("Error: "); Serial.println(error);
 
     /*
         Ej. Si el rumbo actual es 0 grados (Norte) y el rumbo entre el smart car y el destino
@@ -112,6 +122,7 @@ void corregirOrientacion(double actual, double destino) {
 
     if (abs(error) < 15) {
         giro = 0.0; // Si el error es menor a 15 grados, quiere decir que vamos en dirección al destino
+
     } else {
         giro = constrain(error / 90.0, -1.0, 1.0); // Normaliza los valores de error entre -1 y 1 (usados en el driver para girar en x)
         if (abs(error) > 45) velocidad = 0.3;

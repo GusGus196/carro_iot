@@ -5,8 +5,7 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
   memcpy(mensajeChar, payload, length);
   mensajeChar[length] = '\0';
 
-  // Comentar la siguiente linea para dejar de mostrar los mensajes recibidios
-  // Serial.print(topic); Serial.print(": "); Serial.println(mensajeChar);
+  // Test: Serial.print(topic); Serial.print(": "); Serial.println(mensajeChar);
 
   if (strcmp(topic, topic_modo) == 0) {
     modo = String(mensajeChar);
