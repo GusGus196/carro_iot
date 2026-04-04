@@ -84,6 +84,39 @@ void obtenerOrientacion() {
             hacer que el smart car gire en dirección al destino
         */
         actualRumbo = gps.course.deg();
-        // corregirOrientacion(actualRumbo, destinoRumbo); // Diferencia entre los dos rumbos y manipular el driver para corregir la orientación
+        corregirOrientacion(actualRumbo, destinoRumbo); // Manipular el driver para corregir la orientación
     }
+}
+
+void corregirOrientacion(double actual, double destino) {
+    double error = destino - actual; // Diferencia entre los dos rumbos
+
+    /*
+        Ej. Si el rumbo actual es 0 grados (Norte) y el rumbo entre el smart car y el destino
+        es igual a 180 grados (Sur), al hacer la resta obtenemos +180, por lo que debemos a la derecha
+        hasta que nuestro rumbo actual sea igual a 180 grados para poder avanzar recto hacia el destino
+    */
+
+    // Esto asegura que siempre se tome el giro más corto
+    if (error > 180)  error -= 360; // Si el error es mayor a 180, giramos a la izquierda (-)
+    if (error < -180) error += 360; // Si el error es menor a 180, giramos a la derecha (+)
+
+    /*
+        Ej. Si el rumbo al destino es 270 grados (Oeste) y actual 10 grados, al restar obtenemos 270 - 10 = +280,
+        por lo que deberiamos girar 280 grados a la derecha, pero usando las condicionales al ser el error mayor a 180
+        le restamos 360 y obtenemos -80 (280 - 360). Ahora solo necesitamos girar 80 grados a la izquierda
+    */
+
+    float velocidad = 0.4;
+    float giro = 0.0;
+
+    if (abs(error) < 15) {
+        giro = 0.0; // Si el error es menor a 15 grados, quiere decir que vamos en dirección al destino
+    } else {
+        giro = constrain(error / 90.0, -1.0, 1.0); // Normaliza los valores de error entre -1 y 1 (usados en el driver para girar en x)
+        if (abs(error) > 45) velocidad = 0.3;
+        // Si el error es mayor a 45 grados, bajamos la velocidad para poder corregirlo con el giro en cada loop
+    }
+
+    driver(giro, velocidad);
 }

@@ -40,7 +40,7 @@ void loop() {
   // Ejecutar lógica según el modo
   if (modo == "control") {
     if (millis() - ultimaVezRecibido > 500) {
-      driver(0, 0); // Detener el smart car si el tiempo del último mensaje recibido es mayor a 500ms por seguridad
+      driver(0, 0); // Detener el smart car si el último mensaje fue recibido hace más de 500ms por seguridad
     }
   } else if (modo == "linea") {
     ejecutarSeguidorLinea();

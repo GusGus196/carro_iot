@@ -12,9 +12,10 @@
 extern TinyGPSPlus gps;
 extern HardwareSerial SerialGPS; 
 
-void iniciarGPS(); // Iniciar la comunicación serial con el módulo GY-GPS6MV2
-void enviarUbicacion(); // Enviar la ubicación del smart car para actualizar el marcador en el controlador web
-void actualizarNavegacion(); // Obtener la distancia y el ángulo entre el smart car y el destino, publicar la alerta cuando se alcance el destino y detener el driver
-void obtenerOrientacion(); // Obtener el ángulo de orientación actual del smart car e invocar la correción de orientación en dirección al destino
+void iniciarGPS(); // Inicia la comunicación serial con el módulo GY-GPS6MV2
+void enviarUbicacion(); // Envia la ubicación del smart car para actualizar el marcador en el controlador web
+void actualizarNavegacion(); // Obtiene la distancia y el ángulo entre el smart car y el destino, publica la alerta cuando se alcance el destino y detiene el driver
+void obtenerOrientacion(); // Obtiene el ángulo de orientación actual del smart car e invoca la correción de orientación en dirección al destino
+void corregirOrientacion(double actual, double destino); // Establece la correción de orientación manipulando el giro y la velocidad mientras el smart car avanza
 
 #endif
