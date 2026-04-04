@@ -58,6 +58,7 @@ bool hayDestino = false;
 
 double destinoDistancia = 0.0;
 double destinoRumbo = 0.0;
+double actualRumbo = 0.0;
 
 // Variables de estado
 String modo = "indefinido"; // Modo seleccionado (control, linea o gps)

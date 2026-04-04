@@ -51,6 +51,7 @@ extern bool hayDestino;
 
 extern double destinoDistancia;
 extern double destinoRumbo;
+extern double actualRumbo;
 
 extern String modo;
 extern unsigned long ultimaVezRecibido;

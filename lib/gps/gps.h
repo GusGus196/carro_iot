@@ -15,5 +15,6 @@ extern HardwareSerial SerialGPS;
 void iniciarGPS(); // Iniciar la comunicación serial con el módulo GY-GPS6MV2
 void enviarUbicacion(); // Enviar la ubicación del smart car para actualizar el marcador en el controlador web
 void actualizarNavegacion(); // Obtener la distancia y el ángulo entre el smart car y el destino, publicar la alerta cuando se alcance el destino y detener el driver
+void obtenerOrientacion(); // Obtener el ángulo de orientación actual del smart car e invocar la correción de orientación en dirección al destino
 
 #endif
