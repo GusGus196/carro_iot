@@ -10,7 +10,7 @@ void iniciarGPS() {
 }
 
 void enviarUbicacion() {
-    while (SerialGPS.available() > 0) {
+    if (SerialGPS.available() > 0) {
         if (gps.encode(SerialGPS.read())) {
             // Publicar la localización solo si han pasado 2 segundos desde la última publicación y si es válida
             if (gps.location.isValid() && (millis() - ultimaPublicacion > 2000)) {
