@@ -10,7 +10,7 @@ extern const char* mqtt_server;
 extern const char* topic_modo;
 extern const char* topic_joystick;
 extern const char* topic_claxon;
-extern const char* topic_sensor;
+extern const char* topic_seguidor;
 extern const char* topic_destino;
 
 extern const char* topic_ubicacion;

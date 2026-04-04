@@ -14,6 +14,6 @@ export function iniciarSeguidor() {
         btnSensor.textContent = btnSensor.classList.contains('btn-action') ? "Activar" : "Desactivar";
         
         // Si el botón no contiene la clase 'btn-action' enviar un 1, de lo contrario envía 0
-        enviar(TOPICS.sensor, !btnSensor.classList.contains('btn-action') ? "1" : "0");
+        enviar(TOPICS.seguidor, !btnSensor.classList.contains('btn-action') ? "1" : "0");
     });
 };

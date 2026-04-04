@@ -18,7 +18,7 @@ void reconnect() {
         client.subscribe(topic_modo);
         client.subscribe(topic_joystick);
         client.subscribe(topic_claxon);
-        client.subscribe(topic_sensor);
+        client.subscribe(topic_seguidor);
         client.subscribe(topic_destino);
       }
     }
