@@ -46,7 +46,11 @@ void loop() {
     }
 
   } else if (modo == "linea") {
-    ejecutarSeguidorLinea();
+    if (velocidadConstante > 0.0) {
+      ejecutarSeguidorLinea();
+    } else {
+      driver(0, 0);
+    }
 
   } else if (modo == "gps") {
     if(gps.location.isValid()) {

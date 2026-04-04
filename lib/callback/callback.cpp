@@ -9,6 +9,7 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
 
   if (strcmp(topic, topic_modo) == 0) {
     modo = String(mensajeChar);
+    velocidadConstante = 0.0; // Reiniciar la velocidad del modo 'seguidor de línea' a 0
     sonarConfirmacion();
 
   } else if (strcmp(topic, topic_joystick) == 0) {
@@ -18,12 +19,7 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
     claxon();
   
   } else if (strcmp(topic, topic_seguidor) == 0) {
-    if (mensajeChar[0] == '1') {
-        velocidadConstante = 0.1;
-    } else {
-        velocidadConstante = 0.0;
-        driver(0, 0);
-    }
+    mensajeChar[0] == '1' ? velocidadConstante = 0.2 : velocidadConstante = 0.0;
 
   } else if (strcmp(topic, topic_destino) == 0) {
     String msg = String(mensajeChar);
