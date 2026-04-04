@@ -36,10 +36,13 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
 */
 
 
-void mensajeModo(char* mensaje) 
+
+    void mensajeModo(char* mensaje) 
 {
+    //Reseteamos la velocidad al cambiar de modo
+    velocidadConstante = 0.00f; 
     modo = String(mensaje);
-    Serial.print("Modo actualizado: ");
+    Serial.print("Modo actualizado (velocidad reseteada a 0). Nuevo modo: ");
     Serial.println(modo);
 }
 
