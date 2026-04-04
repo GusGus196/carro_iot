@@ -4,23 +4,23 @@ const float compensacionDerecha = 1.00f;
 const float zonaMuerta = 0.1f;
 const int minPWM = 140;
 const int maxPWM = 255;
+const int rangoPWM = maxPWM - minPWM;
 
 void driver(float valorX, float valorY){
   // Mezcla diferencial
   float motorIzquierdo = valorY + valorX;
   float motorDerecho = valorY - valorX;
-  int velocidadA = 0, velocidadB = 0;
+  int velocidadIzq = 0, velocidadDer = 0;
 
   motorIzquierdo = compensacionMotor(compensacionIzquierda,motorIzquierdo);
   motorDerecho =  compensacionMotor(compensacionDerecha, motorDerecho);
 
   // Arranque
-  velocidadA = calibracionmotor(motorIzquierdo);
-  velocidadB = calibracionmotor(motorDerecho);
+  velocidadIzq = calibracionmotor(motorIzquierdo);
+  velocidadDer = calibracionmotor(motorDerecho);
 
-  // Motor izquierdo (A)
-  aplicarGiroYPotencia(motorIzquierdo, velocidadA, canalA1, canalA2);
-  aplicarGiroYPotencia(motorDerecho, velocidadB, canalB1, canalB2);
+  aplicarGiroYPotencia(motorIzquierdo, velocidadIzq, canalA1, canalA2);
+  aplicarGiroYPotencia(motorDerecho, velocidadDer, canalB1, canalB2);
 
 }
 
@@ -28,7 +28,7 @@ int calibracionmotor(float motor){
   motor = abs(motor);
   if (motor > zonaMuerta) 
   {
-    return minPWM + (motor * (maxPWM - minPWM)); 
+    return minPWM + (motor * rangoPWM); 
   }
   return 0;
 }
