@@ -36,15 +36,35 @@ void loop() {
   }
   
   client.loop();
+
+  enviarUbicacion(); // Enviar ubicación al controlador web siempre
   
   // Ejecutar lógica según el modo
   if (modo == "control") {
     if (millis() - ultimaVezRecibido > 500) {
       driver(0, 0); // Detener el smart car si el último mensaje fue recibido hace más de 500ms por seguridad
     }
+
   } else if (modo == "linea") {
     ejecutarSeguidorLinea();
-  } else if (modo == "gps") {
 
+  } else if (modo == "gps") {
+    if(gps.location.isValid()) {
+      actualizarNavegacion();
+      /*
+        Esta función solo se activa si se cumplen 4 condiciones:
+          1. El modo 'gps' fue seleccionado
+          2. El GPS está sincronizado y recibe la ubicación válida
+          3. El destino fue enviado y el callback actualizo las variables destinoLat, destinoLon y la bandera hayDestino como true
+          4. Dentro, comprueba que la bandera hayDestino sea true
+          
+        Cuando se completa el destino, la bandera hayDestino vuelve a false y se espera un nuevo destino del controlador web
+      */
+    } else {
+      driver(0, 0);
+    }
+  
+  } else {
+    driver(0, 0);
   }
 }

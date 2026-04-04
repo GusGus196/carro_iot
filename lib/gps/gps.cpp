@@ -32,8 +32,8 @@ void enviarUbicacion() {
 }
 
 void actualizarNavegacion() {
-    // Solo si la ubicación es válida y ya tenemos un destino definido en el callback
-    if (gps.location.isValid() && hayDestino) {
+    // Solo si ya tenemos un destino definido en el callback
+    if (hayDestino) {
         /*
             Calculamos la distancia en metros, entre el smart car y el destino,
             devuelve un valor tipo double, Se usa la fórmula de Haversine para el cálculo
