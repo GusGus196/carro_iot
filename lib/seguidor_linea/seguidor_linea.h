@@ -14,5 +14,4 @@ extern float errorAnterior;
 void iniciarSeguidor();
 void ejecutarSeguidorLinea();
 
-
 #endif
