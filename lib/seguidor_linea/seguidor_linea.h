@@ -8,6 +8,6 @@
 
 void iniciarSeguidor();
 void ejecutarSeguidorLinea();
-
+float leerPosicionLinea();
 
 #endif
