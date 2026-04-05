@@ -10,6 +10,8 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
   if (strcmp(topic, topic_modo) == 0) {
     modo = String(mensajeChar);
     velocidadConstante = 0.0; // Reiniciar la velocidad del modo 'seguidor de línea' a 0
+    hayDestino = false; // Reiniciar el destino del modo 'navegación GPS'
+
     sonarConfirmacion();
 
   } else if (strcmp(topic, topic_joystick) == 0) {
