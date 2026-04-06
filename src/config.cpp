@@ -17,9 +17,10 @@ const char* topic_ubicacion = "smartcar/estado/ubicacion";
 const char* topic_llegada = "smartcar/estado/llegada";
 
 // Pines del driver DRV8833
-const int motorA1 = 18;
+const int motorA1 = 18; // Motor izquierdo
 const int motorA2 = 19;
-const int motorB1 = 21;
+
+const int motorB1 = 21; // Motor derecho
 const int motorB2 = 22;
 
 // Canales PWM del ESP32

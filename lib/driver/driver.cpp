@@ -1,65 +1,70 @@
 #include "driver.h"
-const float compensacionIzquierda = 1.20f;
-const float compensacionDerecha = 1.00f;
+
+// Compensación utilizada para igualar potencia de los motores DC
+const float compensacionIzquierda = 1.20;
+const float compensacionDerecha = 1.00;
+
+// Zona muerta del joystick
 const float zonaMuerta = 0.1f;
+
+// Valor PWM mínimos y máximos para activar el motor DC
 const int minPWM = 140;
 const int maxPWM = 255;
 const int rangoPWM = maxPWM - minPWM;
 
-//WARNING: no meter a driver.h porque va conflictuar con el "inline"
-inline void escribirPWM(int canal, int valor);
-
-void driver(float valorX, float valorY){
-  //Diferenciales
+void driver(float valorX, float valorY) {
+  // Diferenciales
   float motorIzquierdo = valorY + valorX;
   float motorDerecho = valorY - valorX;
   int velocidadIzq = 0, velocidadDer = 0;
 
-  motorIzquierdo = compensacionMotor(compensacionIzquierda,motorIzquierdo);
-  motorDerecho =  compensacionMotor(compensacionDerecha, motorDerecho);
+  motorIzquierdo = compensarMotor(compensacionIzquierda,motorIzquierdo);
+  motorDerecho =  compensarMotor(compensacionDerecha, motorDerecho);
 
   // Arranque
-  velocidadIzq = calibracionmotor(motorIzquierdo);
-  velocidadDer = calibracionmotor(motorDerecho);
+  velocidadIzq = calibrarMotor(motorIzquierdo);
+  velocidadDer = calibrarMotor(motorDerecho);
 
-  aplicarGiroYPotencia(motorIzquierdo, velocidadIzq, canalA1, canalA2);
-  aplicarGiroYPotencia(motorDerecho, velocidadDer, canalB1, canalB2);
-
+  aplicarGiro(motorIzquierdo, velocidadIzq, canalA1, canalA2);
+  aplicarGiro(motorDerecho, velocidadDer, canalB1, canalB2);
 }
 
-int calibracionmotor(float motor){
+int calibrarMotor(float motor){
   motor = abs(motor);
-  if (motor > zonaMuerta) 
-  {
+  if (motor > zonaMuerta) {
     return minPWM + (motor * rangoPWM); 
   }
+
   return 0;
 }
 
-float compensacionMotor(float compensacion, float motor){
+float compensarMotor(float compensacion, float motor){
   return constrain(motor * compensacion, -1.0, 1.0);
 }
 
 // Función para calcular la dirección y encender el motor
-void aplicarGiroYPotencia(float lecturaJoystick, int velocidad, int canal1, int canal2) {
+void aplicarGiro(float valorJoystick, int velocidad, int canal1, int canal2) {
   int valor1 = 0;
   int valor2 = 0;
   
-  if (lecturaJoystick > zonaMuerta) {
+  if (valorJoystick > zonaMuerta) {
     valor1 = 0;
     valor2 = velocidad; // Adelante
-  } else if (lecturaJoystick < -zonaMuerta) {
+
+  } else if (valorJoystick < -zonaMuerta) {
     valor1 = velocidad; 
-    valor2 = 0;         // Reversa
+    valor2 = 0; // Reversa
   }
+  
   escribirPWM(canal1,valor1);
   escribirPWM(canal2,valor2);
 }
 
-/*Funcion auxiliar para aplicarGiroYPotencia, verifica si hay cambio de velocidad
-para evitar reescribir inncesariamente el valor si sigue siendo constante */
-inline void escribirPWM(int canal, int valor)
-{
+/*
+  Función auxiliar para aplicarGiro(), verifica si hay cambio de velocidad
+  para evitar reescribir innecesariamente el valor si sigue siendo constante
+*/
+void escribirPWM(int canal, int valor) {
   static int ultimoValor[16] = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
 
   if (ultimoValor[canal] != valor) {
