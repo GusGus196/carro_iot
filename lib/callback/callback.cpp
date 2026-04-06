@@ -15,7 +15,7 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
     sonarConfirmacion();
 
   } else if (strcmp(topic, topic_joystick) == 0) {
-    joystick(mensajeChar);
+    procesarJoystick(mensajeChar);
 
   } else if (strcmp(topic, topic_claxon) == 0) {
     claxon();

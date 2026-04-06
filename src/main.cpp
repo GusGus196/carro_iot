@@ -7,7 +7,7 @@
 #include "callback.h" // Función de callback para manejar mensajes MQTT entrantes
 #include "driver.h" // Función para configurar los valores PWM del driver ⁠DRV8833 a partir de la posición del joystick
 #include "gps.h" // Funciones para utilizar el módulo GPS y establecer la ruta a un destino dado, publicar en TOPICS ubicación y llegada
-#include "joystick.h" // Funciones para iniciar y leer la posición del joystick (posición x,y utilizada por el driver)
+#include "joystick.h" // Funciones para iniciar y procesar la posición del joystick (posición x,y utilizada por el driver)
 #include "reconnect.h" // Función para reconectar al broker MQTT y suscripciones a TOPICS
 #include "seguidor_linea.h" // Funciones para configurar los pines del array de sensores reflectivos TCRT5000 y ejecutar el seguidor de línea
 #include "setup_wifi.h" // Función para configurar la conexión WiFi

@@ -15,7 +15,7 @@ void iniciarJoystick() {
   ledcAttachPin(motorB2, canalB2);
 }
 
-void joystick(char* mensaje) {
+void procesarJoystick(char* mensaje) {
   ultimaVezRecibido = millis();
 
   char* ptr = strtok(mensaje, ",");
