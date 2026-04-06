@@ -1,13 +1,8 @@
 #include "driver.h"
 
-// Compensación utilizada para igualar potencia de los motores DC
 const float compensacionIzquierda = 1.20;
 const float compensacionDerecha = 1.00;
-
-// Zona muerta del joystick
 const float zonaMuerta = 0.1f;
-
-// Valor PWM mínimos y máximos para activar el motor DC
 const int minPWM = 140;
 const int maxPWM = 255;
 const int rangoPWM = maxPWM - minPWM;

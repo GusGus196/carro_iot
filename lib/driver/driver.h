@@ -5,6 +5,18 @@
 
 #include "config.h"
 
+// Compensación utilizada para igualar potencia de los motores DC
+extern const float compensacionIzquierda;
+extern const float compensacionDerecha;
+
+// Zona muerta del joystick
+extern const float zonaMuerta;
+
+// Valor PWM mínimos y máximos para activar el motor DC
+extern const int minPWM;
+extern const int maxPWM;
+extern const int rangoPWM;
+
 void driver(float valorX, float valorY);
 int calibrarMotor(float motor);
 float compensarMotor(float compensacion, float motor);
