@@ -12,8 +12,8 @@ void iniciarGPS() {
 void enviarUbicacion() {
     if (SerialGPS.available() > 0) {
         if (gps.encode(SerialGPS.read())) {
-            // Publicar la localización solo si han pasado 2 segundos desde la última publicación y si es válida
-            if (gps.location.isValid() && (millis() - ultimaPublicacion > 2000)) {
+            // Publicar la localización solo si ha pasado 1 segundo desde la última publicación y si es válida
+            if (gps.location.isValid() && (millis() - ultimaPublicacion > 1000)) {
                 
                 /*
                     Declaramos un arreglo de 40 caracteres llamado posición,
@@ -124,7 +124,7 @@ void corregirOrientacion(double actual, double destino) {
         giro = 0.0; // Si el error es menor a 15 grados, quiere decir que vamos en dirección al destino
 
     } else {
-        giro = constrain(error / 90.0, -1.0, 1.0); // Normaliza los valores de error entre -1 y 1 (usados en el driver para girar en x)
+        giro = constrain(error / 180.0, -1.0, 1.0); // Normaliza los valores de error entre -1 y 1 (usados en el driver para girar en x)
         if (abs(error) > 45) velocidad = 0.3;
         // Si el error es mayor a 45 grados, bajamos la velocidad para poder corregirlo con el giro en cada loop
     }
