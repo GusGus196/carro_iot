@@ -50,7 +50,7 @@ void actualizarNavegacion() {
         // Test: if(gps.location.isUpdated()) {Serial.print("Distancia: "); Serial.print(destinoDistancia); Serial.print(" | Rumbo: ") ;Serial.println(destinoRumbo);}
         
         // Radio de llegada: 3 metros
-        if (destinoDistancia < 3.0) {
+        if (destinoDistancia < 4.0) {
             hayDestino = false; // Esperar por un nuevo destino
             driver(0, 0); // Parar el motor al estar en el radio de llegada
             client.publish(topic_llegada, "1"); // Publicar alerta de llegada al broker MQTT
@@ -120,11 +120,11 @@ void corregirOrientacion(double actual, double destino) {
     float velocidad = 0.4;
     float giro = 0.0;
 
-    if (abs(error) < 15) {
+    if (abs(error) < 45) {
         giro = 0.0; // Si el error es menor a 15 grados, quiere decir que vamos en dirección al destino
 
     } else {
-        giro = constrain(error / 180.0, -1.0, 1.0); // Normaliza los valores de error entre -1 y 1 (usados en el driver para girar en x)
+        giro = constrain(error / 90.0, -0.4, 0.4); // Normaliza los valores de error entre -1 y 1 (usados en el driver para girar en x)
         if (abs(error) > 45) velocidad = 0.3;
         // Si el error es mayor a 45 grados, bajamos la velocidad para poder corregirlo con el giro en cada loop
     }
