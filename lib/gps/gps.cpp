@@ -1,9 +1,10 @@
 #include "gps.h"
 
 TinyGPSPlus gps;
-HardwareSerial SerialGPS(2); 
+HardwareSerial SerialGPS(2);
 
 static unsigned long ultimaPublicacion = 0;
+static unsigned long ultimoRumboCalculado = 0; // Controlar el calculo de rumbo cada 5 segundos
 
 void iniciarGPS() {
     SerialGPS.begin(9600, SERIAL_8N1, gpsRX, gpsTX);
@@ -47,59 +48,54 @@ void actualizarNavegacion() {
         */
         destinoRumbo = gps.courseTo(gps.location.lat(), gps.location.lng(), destinoLat, destinoLon);
 
-        // Test: if(gps.location.isUpdated()) {Serial.print("Distancia: "); Serial.print(destinoDistancia); Serial.print(" | Rumbo: ") ;Serial.println(destinoRumbo);}
-        
-        // Radio de llegada: 3 metros
+        // Radio de llegada: 4 metros
         if (destinoDistancia < 4.0) {
             hayDestino = false; // Esperar por un nuevo destino
             driver(0, 0); // Parar el motor al estar en el radio de llegada
             client.publish(topic_llegada, "1"); // Publicar alerta de llegada al broker MQTT
             claxon(); // Sonido de llegada
             // Test: Serial.println("¡Destino alcanzado!");
-
         } else {
-            // Solo calculamos la orientación si hay datos nuevos del GPS
-            if (gps.location.isUpdated() || gps.course.isUpdated()) {
-                obtenerOrientacion();
-                /*
-                    Mientras no se alcance el destino:
-                        - Calcular y corregir la orientación entre el smart car y el destino
-                        - A partir de la orientación debemos controlar el driver
-                */
+            /* 
+               Cada 5 segundos obtenemos una nueva orientación. 
+               Mientras tanto, calibramos el error con la última lectura obtenida
+            */
+            if (millis() - ultimoRumboCalculado > 5000) {
+                // Solo calculamos la orientación si hay datos nuevos
+                if (gps.location.isUpdated()) {
+                    obtenerOrientacion();
+                    ultimoRumboCalculado = millis();
+                } else {
+                    // Si no tenemos rumbo fiable, avanzamos recto para que el GPS se oriente
+                    driver(0.0, 0.4);
+                }
+            } else {
+                // Si el último rumbo calculado fue hace menos de 5 segundos,
+                // seguimos corrigiendo el error con el rumbo actual
+                corregirOrientacion(actualRumbo, destinoRumbo);
             }
         }
     }
 }
 
 void obtenerOrientacion() {
-    // El GPS deberá estar en movimiento a una velocidad mayor a 1km/h para 
-    // poder calcular el rumbo de desplazamiento
-    if (gps.speed.kmph() < 1.0) {
-        driver(0.0, 0.4); // Avanzar recto mientras la velocidad sea menor a 1km/h
-        // Test: Serial.println("Calibrando..");
-
-    } else {
-        /*
-            El smart car no cuenta con una brújula incluida, por lo que debemos hacerlo que avance 
-            para que el GPS pueda orientarse. Al avanzar, el objeto .course de la librería TinyGPS++ procesa 
-            los datos de desplazamiento, comparando la posición anterior con la nueva para trazar una línea de trayectoria. 
-            
-            Mediante el método .deg(), se extrae este ángulo en grados decimales (0 a 360), 
-            tomando el Norte como 0 y aumentando en sentido horario (Este 90, Sur 180, Oeste 270), 
-            lo que permite al coche conocer su rumbo actual en grados (hacia donde se dirige) 
-            y como ya sabemos el rumbo hacia el destino, podemos calcular la diferencia de grados (error) y
-            hacer que el smart car gire en dirección al destino
-        */
+    /*
+        El smart car no cuenta con una brújula incluida, por lo que debemos hacerlo que avance 
+        para que el GPS pueda orientarse. Al avanzar, el objeto .course de la librería TinyGPS++ procesa 
+        los datos de desplazamiento, comparando la posición anterior con la nueva para trazar una línea de trayectoria. 
         
-        // Test: Serial.print("Rumbo actual: "); Serial.println(actualRumbo);
-        actualRumbo = gps.course.deg();
-        corregirOrientacion(actualRumbo, destinoRumbo); // Manipular el driver para corregir la orientación
-    }
+        Mediante el método .deg(), se extrae este ángulo en grados decimales (0 a 360), 
+        tomando el Norte como 0 y aumentando en sentido horario (Este 90, Sur 180, Oeste 270), 
+        lo que permite al coche conocer su rumbo actual en grados (hacia donde se dirige) 
+        y como ya sabemos el rumbo hacia el destino, podemos calcular la diferencia de grados (error) y
+        hacer que el smart car gire en dirección al destino
+    */
+    actualRumbo = gps.course.deg();
+    corregirOrientacion(actualRumbo, destinoRumbo); // Manipular el driver para corregir la orientación
 }
 
 void corregirOrientacion(double actual, double destino) {
     double error = destino - actual; // Diferencia entre los dos rumbos
-    // Test: Serial.print("Error: "); Serial.println(error);
 
     /*
         Ej. Si el rumbo actual es 0 grados (Norte) y el rumbo entre el smart car y el destino
@@ -111,22 +107,15 @@ void corregirOrientacion(double actual, double destino) {
     if (error > 180)  error -= 360; // Si el error es mayor a 180, giramos a la izquierda (-)
     if (error < -180) error += 360; // Si el error es menor a 180, giramos a la derecha (+)
 
-    /*
-        Ej. Si el rumbo al destino es 270 grados (Oeste) y actual 10 grados, al restar obtenemos 270 - 10 = +280,
-        por lo que deberiamos girar 280 grados a la derecha, pero usando las condicionales al ser el error mayor a 180
-        le restamos 360 y obtenemos -80 (280 - 360). Ahora solo necesitamos girar 80 grados a la izquierda
-    */
-
     float velocidad = 0.4;
     float giro = 0.0;
 
-    if (abs(error) < 45) {
-        giro = 0.0; // Si el error es menor a 15 grados, quiere decir que vamos en dirección al destino
-
+    if (abs(error) < 30) {
+        giro = 0.0; // Si el error es pequeño, vamos en dirección al destino
     } else {
-        giro = constrain(error / 90.0, -0.4, 0.4); // Normaliza los valores de error entre -1 y 1 (usados en el driver para girar en x)
+        giro = constrain(error / 90.0, -0.4, 0.4); // Normaliza los valores de error entre -1 y 1
         if (abs(error) > 45) velocidad = 0.3;
-        // Si el error es mayor a 45 grados, bajamos la velocidad para poder corregirlo con el giro en cada loop
+        // Si el error es mayor a 45 grados, bajamos la velocidad para poder corregirlo
     }
 
     driver(giro, velocidad);
