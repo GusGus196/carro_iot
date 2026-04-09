@@ -1,7 +1,7 @@
 #include "driver.h"
 
-const float compensacionIzquierda = 1.20;
-const float compensacionDerecha = 1.00;
+const float compensacionIzquierda = 1.0;
+const float compensacionDerecha = 1.2;
 const float zonaMuerta = 0.1f;
 const int minPWM = 140;
 const int maxPWM = 255;

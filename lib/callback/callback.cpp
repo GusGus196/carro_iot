@@ -21,7 +21,7 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
     claxon();
   
   } else if (strcmp(topic, topic_seguidor) == 0) {
-    mensajeChar[0] == '1' ? velocidadConstante = 0.2 : velocidadConstante = 0.0;
+    mensajeChar[0] == '1' ? velocidadConstante = 0.25 : velocidadConstante = 0.0;
 
   } else if (strcmp(topic, topic_destino) == 0) {
     String msg = String(mensajeChar);
