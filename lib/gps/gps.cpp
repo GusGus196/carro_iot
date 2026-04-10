@@ -36,15 +36,31 @@ void actualizarNavegacion() {
     // Solo si ya tenemos un destino definido en el callback
     if (!hayDestino) return;
     
-    calcularMetricasGPS();
-        // Radio de llegada: 4 metros
-        if (destinoDistancia < 4.0) {
-            procesarLlegadaAlDestino();
-        } else {
-            conducirHaciaDestino();
-        }
-    }
+    calcularMetricasGPS(); // Calcular distancia y rumbo
 
+    // Radio de llegada: 4 metros
+    if (destinoDistancia < 4.0) {
+        procesarLlegada();
+    } else {
+        conducirHaciaDestino();
+    }
+}
+
+void calcularMetricasGPS() {
+    static unsigned long ultimoCalculo = 0;
+    
+    /*
+        Calculamos la distancia en metros entre el smart car y el destino cada 1 segundo,
+        devuelve un valor tipo double, Se usa la fórmula de Haversine para el cálculo
+    */
+    if (millis() - ultimoCalculo > 1000) {
+        if (gps.location.isValid()) {
+            destinoDistancia = gps.distanceBetween(gps.location.lat(), gps.location.lng(), destinoLat, destinoLon);
+            destinoRumbo = gps.courseTo(gps.location.lat(), gps.location.lng(), destinoLat, destinoLon);
+        }
+        ultimoCalculo = millis();
+    }
+}
 
 void obtenerOrientacion() {
     /*
@@ -80,23 +96,7 @@ void corregirOrientacion(double actual, double destino) {
     driver(giro, velocidad);
 }
 
-void calcularMetricasGPS() {
-    static unsigned long ultimoCalculoGPS = 0;
-    
-        /*
-            Calculamos la distancia en metros, entre el smart car y el destino,
-            devuelve un valor tipo double, Se usa la fórmula de Haversine para el cálculo
-        */
-    if (millis() - ultimoCalculoGPS > 1000) {
-        if (gps.location.isValid()) {
-            destinoDistancia = gps.distanceBetween(gps.location.lat(), gps.location.lng(), destinoLat, destinoLon);
-            destinoRumbo = gps.courseTo(gps.location.lat(), gps.location.lng(), destinoLat, destinoLon);
-        }
-        ultimoCalculoGPS = millis();
-    }
-}
-
-void procesarLlegadaAlDestino() {
+void procesarLlegada() {
     hayDestino = false; // Esperar por un nuevo destino
     driver(0, 0); // Parar el motor al estar en el radio de llegada
     client.publish(topic_llegada, "1"); // Publicar alerta de llegada al broker MQTT
