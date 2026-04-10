@@ -58,7 +58,37 @@ void calcularMetricasGPS() {
             destinoDistancia = gps.distanceBetween(gps.location.lat(), gps.location.lng(), destinoLat, destinoLon);
             destinoRumbo = gps.courseTo(gps.location.lat(), gps.location.lng(), destinoLat, destinoLon);
         }
+
         ultimoCalculo = millis();
+    }
+}
+
+void procesarLlegada() {
+    hayDestino = false; // Esperar por un nuevo destino
+    driver(0, 0); // Parar el motor al estar en el radio de llegada
+    client.publish(topic_llegada, "1"); // Publicar alerta de llegada al broker MQTT
+    claxon(); // Sonido de llegada 
+}
+
+void conducirHaciaDestino() {
+    /* 
+        Cada 5 segundos obtenemos una nueva orientación. 
+        Mientras tanto, calibramos el error con la última lectura obtenida
+    */
+    if (millis() - ultimoRumboCalculado > 5000) {
+        // Solo calculamos la orientación si hay datos nuevos
+        if (gps.location.isUpdated()) {
+            obtenerOrientacion();
+            ultimoRumboCalculado = millis();
+            
+        } else {
+            // Si no tenemos rumbo fiable, avanzamos recto para que el GPS se oriente
+            driver(0.0, 0.4);
+        }
+    } else {
+        // Si el último rumbo calculado fue hace menos de 5 segundos,
+        // seguimos corrigiendo el error con el rumbo actual
+        corregirOrientacion(actualRumbo, destinoRumbo);
     }
 }
 
@@ -91,35 +121,7 @@ void corregirOrientacion(double actual, double destino) {
     else if (error < -180) error += 360; // Si el error es menor a 180, giramos a la derecha (+)
     
     double errorAbs = abs(error);
-    float giro =(errorAbs < 30) ? 0.0 : constrain(error / 90.0, -0.4, 0.4); // Si el error es pequeño, vamos en dirección al destino
-    float velocidad = (errorAbs > 45) ? 0.3: 0.4;
+    float giro = (errorAbs < 30) ? 0.0 : constrain(error / 90.0, -0.4, 0.4); // Si el error es pequeño, vamos en dirección al destino
+    float velocidad = (errorAbs > 45) ? 0.3 : 0.4;
     driver(giro, velocidad);
-}
-
-void procesarLlegada() {
-    hayDestino = false; // Esperar por un nuevo destino
-    driver(0, 0); // Parar el motor al estar en el radio de llegada
-    client.publish(topic_llegada, "1"); // Publicar alerta de llegada al broker MQTT
-    claxon(); // Sonido de llegada 
-}
-
-void conducirHaciaDestino() {
-    /* 
-        Cada 5 segundos obtenemos una nueva orientación. 
-        Mientras tanto, calibramos el error con la última lectura obtenida
-    */
-    if (millis() - ultimoRumboCalculado > 5000) {
-        // Solo calculamos la orientación si hay datos nuevos
-        if (gps.location.isUpdated()) {
-            obtenerOrientacion();
-            ultimoRumboCalculado = millis();
-        } else {
-            // Si no tenemos rumbo fiable, avanzamos recto para que el GPS se oriente
-            driver(0.0, 0.4);
-        }
-    } else {
-        // Si el último rumbo calculado fue hace menos de 5 segundos,
-        // seguimos corrigiendo el error con el rumbo actual
-        corregirOrientacion(actualRumbo, destinoRumbo);
-    }
 }
