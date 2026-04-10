@@ -61,6 +61,14 @@ double destinoDistancia = 0.0;
 double destinoRumbo = 0.0;
 double actualRumbo = 0.0;
 
+// Variables para punto A (anterior)
+double latAnterior = 0.0;
+double lonAnterior = 0.0;
+
+bool primeraLecturaRealizada = false; // Bandera para omitir la primer lectura
+bool comandoEnviado = false; // Enviar una sola instrucción al driver
+unsigned long ultimoRumboCalculado = 0;
+
 // Variables de estado
 String modo = "indefinido"; // Modo seleccionado (control, linea o gps)
 unsigned long ultimaVezRecibido = 0; // Última vez recibido un mensaje MQTT para joystick

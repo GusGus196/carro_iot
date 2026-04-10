@@ -53,6 +53,13 @@ extern double destinoDistancia;
 extern double destinoRumbo;
 extern double actualRumbo;
 
+extern double latAnterior;
+extern double lonAnterior;
+
+extern bool primeraLecturaRealizada;
+extern bool comandoEnviado;
+extern unsigned long ultimoRumboCalculado;
+
 extern String modo;
 extern unsigned long ultimaVezRecibido;
 extern float velocidadConstante;

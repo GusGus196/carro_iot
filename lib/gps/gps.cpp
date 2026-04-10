@@ -4,11 +4,6 @@ TinyGPSPlus gps;
 HardwareSerial SerialGPS(2);
 
 static unsigned long ultimaPublicacion = 0;
-static unsigned long ultimoRumboCalculado = 0; // Controlar el calculo de rumbo cada 5 segundos
-
-double latAnterior, lonAnterior; // Variables para punto A (anterior)
-bool primeraLecturaRealizada = false; // Bandera para omitir la primer lectura
-bool comandoEnviado = false; // Enviar una sola instrucción al driver
 
 void iniciarGPS() {
     SerialGPS.begin(9600, SERIAL_8N1, gpsRX, gpsTX);
