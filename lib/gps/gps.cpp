@@ -57,6 +57,7 @@ void calcularMetricasGPS() {
         if (gps.location.isValid()) {
             destinoDistancia = gps.distanceBetween(gps.location.lat(), gps.location.lng(), destinoLat, destinoLon);
             destinoRumbo = gps.courseTo(gps.location.lat(), gps.location.lng(), destinoLat, destinoLon);
+
         }
 
         ultimoCalculo = millis();
@@ -71,10 +72,7 @@ void procesarLlegada() {
 }
 
 void conducirHaciaDestino() {
-    /* 
-        Cada 5 segundos obtenemos una nueva orientación. 
-        Mientras tanto, calibramos el error con la última lectura obtenida
-    */
+    // Cada 5 segundos obtenemos una nueva orientación
     if (millis() - ultimoRumboCalculado > 5000) {
         // Solo calculamos la orientación si hay datos nuevos
         if (gps.location.isUpdated()) {
@@ -85,10 +83,20 @@ void conducirHaciaDestino() {
             // Si no tenemos rumbo fiable, avanzamos recto para que el GPS se oriente
             driver(0.0, 0.4);
         }
-    } else {
-        // Si el último rumbo calculado fue hace menos de 5 segundos,
-        // seguimos corrigiendo el error con el rumbo actual
+
+    } else if (millis() - ultimoRumboCalculado < 1000) {
+        /* 
+        Durante el primer segundo del intervalo, 
+        aplicamos el giro calculado para orientarnos al destino
+        */
         corregirOrientacion(actualRumbo, destinoRumbo);
+
+    } else {
+        /* 
+            Entre el segundo 1 y 5 forzamos el avance recto para que el 
+            GPS pueda calcular el nuevo rumbo real de desplazamiento
+        */
+        driver(0.0, 0.4);
     }
 }
 
@@ -117,11 +125,11 @@ void corregirOrientacion(double actual, double destino) {
     */
 
     // Esto asegura que siempre se tome el giro más corto
-    if (error > 180)  error -= 360; // Si el error es mayor a 180, giramos a la izquierda (-)
+    if (error > 180) error -= 360; // Si el error es mayor a 180, giramos a la izquierda (-)
     else if (error < -180) error += 360; // Si el error es menor a 180, giramos a la derecha (+)
     
-    double errorAbs = abs(error);
-    float giro = (errorAbs < 30) ? 0.0 : constrain(error / 90.0, -0.4, 0.4); // Si el error es pequeño, vamos en dirección al destino
-    float velocidad = (errorAbs > 45) ? 0.3 : 0.4;
+    float giro = (abs(error) < 30) ? 0.0 : constrain(error / 90.0, -0.4, 0.4); // Si el error es pequeño, vamos en dirección al destino
+    float velocidad = (abs(error) > 45) ? 0.2 : 0.3;
+    
     driver(giro, velocidad);
 }
