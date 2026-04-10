@@ -77,15 +77,17 @@ void procesarLlegada() {
 }
 
 void conducirHaciaDestino() {
-    // CADA 5 SEGUNDOS: Cerramos el vector A-B y calculamos rumbo real
+    // Cada 5 segundos calculamos el rumbo entre el punto anterior A (lat, lon) y el actual B
     if ( millis() - ultimoRumboCalculado > 5000) {
+        ultimoRumboCalculado = millis();
+        
         if (gps.location.isValid()) {
             
             // Solo si la primer lectura ya fue realizada
             if (primeraLecturaRealizada) {
                 /* 
                    Calculamos el rumbo basándonos en el desplazamiento real 
-                   desde el punto A (anterior) hasta el punto B (actual).
+                   desde el punto A (anterior) hasta el punto B (actual)
                 */
                 actualRumbo = gps.courseTo(latAnterior, lonAnterior, gps.location.lat(), gps.location.lng());
             }
@@ -94,8 +96,6 @@ void conducirHaciaDestino() {
             latAnterior = gps.location.lat();
             lonAnterior = gps.location.lng();
             primeraLecturaRealizada = true;
-            
-            ultimoRumboCalculado = millis();
 
         } else {
             driver(0.0, 0.4); // Si no hay GPS, avanzamos para buscar señal
