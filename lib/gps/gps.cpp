@@ -80,7 +80,7 @@ void conducirHaciaDestino() {
         
         if (gps.location.isValid()) {
             // Solo si la primer lectura ya fue realizada
-            if (latAnterior != 0 && lonAnterior != 0) {
+            if (latAnterior != 0.0 && lonAnterior != 0.0) {
                 /* 
                    Calculamos el rumbo basándonos en el desplazamiento real 
                    desde el punto A (anterior) hasta el punto B (actual)
@@ -100,11 +100,14 @@ void conducirHaciaDestino() {
         if (!comandoEnviado) {
             if (primeraLecturaRealizada) {
                 corregirOrientacion(actualRumbo, destinoRumbo);
+
             } else {
                 driver(0.0, 0.4); // Primer arranque del carro
             }
+
             comandoEnviado = true;
         }
+
     } else {
         if(comandoEnviado) {
             driver(0.0, 0.4);
