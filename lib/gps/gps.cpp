@@ -38,8 +38,8 @@ void actualizarNavegacion() {
     
     calcularMetricasGPS(); // Calcular distancia y rumbo
 
-    // Radio de llegada: 4 metros
-    if (destinoDistancia < 4.0) {
+    // Radio de llegada: 5 metros
+    if (destinoDistancia < 5.0) {
         procesarLlegada();
     } else {
         conducirHaciaDestino();
@@ -67,7 +67,9 @@ void calcularMetricasGPS() {
 void procesarLlegada() {
     hayDestino = false; // Esperar por un nuevo destino
     driver(0, 0); // Parar el motor al estar en el radio de llegada
-    client.publish(topic_llegada, "1"); // Publicar alerta de llegada al broker MQTT
+    if(client.connected()) {
+        client.publish(topic_llegada, "1"); // Publicar alerta de llegada al broker MQTT
+    }
     claxon(); // Sonido de llegada 
 }
 
@@ -84,16 +86,16 @@ void conducirHaciaDestino() {
             driver(0.0, 0.4);
         }
 
-    } else if (millis() - ultimoRumboCalculado < 1000) {
+    } else if (millis() - ultimoRumboCalculado < 500) {
         /* 
-        Durante el primer segundo del intervalo, 
+        Durante los primeros 500 milisegundos del intervalo, 
         aplicamos el giro calculado para orientarnos al destino
         */
         corregirOrientacion(actualRumbo, destinoRumbo);
 
     } else {
         /* 
-            Entre el segundo 1 y 5 forzamos el avance recto para que el 
+            Entre el segundo 0.5 y 5 forzamos el avance recto para que el 
             GPS pueda calcular el nuevo rumbo real de desplazamiento
         */
         driver(0.0, 0.4);
