@@ -37,8 +37,8 @@ void actualizarNavegacion() {
     
     calcularMetricasGPS(); // Calcular distancia y rumbo
 
-    // Radio de llegada: 5 metros
-    if (destinoDistancia < 5.0) {
+    // Radio de llegada: 8 metros
+    if (destinoDistancia < 8.0) {
         procesarLlegada();
     } else {
         conducirHaciaDestino();
@@ -66,9 +66,7 @@ void calcularMetricasGPS() {
 void procesarLlegada() {
     hayDestino = false; // Esperar por un nuevo destino
     driver(0, 0); // Parar el motor al estar en el radio de llegada
-    if(client.connected()) {
-        client.publish(topic_llegada, "1"); // Publicar alerta de llegada al broker MQTT
-    }
+    client.publish(topic_llegada, "1"); // Publicar alerta de llegada al broker MQTT
     claxon(); // Sonido de llegada 
 }
 
