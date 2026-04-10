@@ -6,6 +6,9 @@ HardwareSerial SerialGPS(2);
 static unsigned long ultimaPublicacion = 0;
 static unsigned long ultimoRumboCalculado = 0; // Controlar el calculo de rumbo cada 5 segundos
 
+double latAnterior, lonAnterior; // Variables para punto A (anterior)
+bool primeraLecturaRealizada = false; // Bandera para omitir la primer lectura
+
 void iniciarGPS() {
     SerialGPS.begin(9600, SERIAL_8N1, gpsRX, gpsTX);
 }
@@ -74,30 +77,36 @@ void procesarLlegada() {
 }
 
 void conducirHaciaDestino() {
-    // Cada 5 segundos obtenemos una nueva orientación
-    if (millis() - ultimoRumboCalculado > 5000) {
-        // Solo calculamos la orientación si hay datos nuevos
-        if (gps.location.isUpdated()) {
-            obtenerOrientacion();
-            ultimoRumboCalculado = millis();
+    // CADA 5 SEGUNDOS: Cerramos el vector A-B y calculamos rumbo real
+    if ( millis() - ultimoRumboCalculado > 5000) {
+        if (gps.location.isValid()) {
             
+            // Solo si la primer lectura ya fue realizada
+            if (primeraLecturaRealizada) {
+                /* 
+                   Calculamos el rumbo basándonos en el desplazamiento real 
+                   desde el punto A (anterior) hasta el punto B (actual).
+                */
+                actualRumbo = gps.courseTo(latAnterior, lonAnterior, gps.location.lat(), gps.location.lng());
+            }
+
+            // Actualizamos el Punto A para el próximo intervalo de 5 segundos
+            latAnterior = gps.location.lat();
+            lonAnterior = gps.location.lng();
+            primeraLecturaRealizada = true;
+            
+            ultimoRumboCalculado = millis();
+
         } else {
-            // Si no tenemos rumbo fiable, avanzamos recto para que el GPS se oriente
-            driver(0.0, 0.4);
+            driver(0.0, 0.4); // Si no hay GPS, avanzamos para buscar señal
         }
-
-    } else if (millis() - ultimoRumboCalculado < 500) {
-        /* 
-        Durante los primeros 500 milisegundos del intervalo, 
-        aplicamos el giro calculado para orientarnos al destino
-        */
-        corregirOrientacion(actualRumbo, destinoRumbo);
-
+    } else if ( millis() - ultimoRumboCalculado < 1000) {
+        if (primeraLecturaRealizada) {
+            corregirOrientacion(actualRumbo, destinoRumbo);
+        } else {
+            driver(0.0, 0.4); // Primer arranque del carro
+        }
     } else {
-        /* 
-            Entre el segundo 0.5 y 5 forzamos el avance recto para que el 
-            GPS pueda calcular el nuevo rumbo real de desplazamiento
-        */
         driver(0.0, 0.4);
     }
 }
