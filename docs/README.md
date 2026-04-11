@@ -1,6 +1,6 @@
-# Smart Car Web Controller
+# Control Web
 
-Controlador web modular para un Smart Car. Utiliza el protocolo [MQTT](https://mqtt.org/) para la comunicación en tiempo real y una interfaz dinámica que cambia según el modo seleccionado.
+Control web modular para un Smart Car. Utiliza el protocolo [MQTT](https://mqtt.org/) para la comunicación en tiempo real y una interfaz dinámica que cambia según el modo seleccionado.
 
 ## Contenido
 
