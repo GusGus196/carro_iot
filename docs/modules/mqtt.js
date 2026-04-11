@@ -10,8 +10,8 @@ export const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt', {
 
 client.on('connect', () => {
     console.log("MQTT conectado");
-    client.subscribe(TOPICS.ubicacion); 
-    // El GPS puede tardar en obtener un "fix" inicial o ubicación, nos suscribimos desde el inicio para recibirla en cuanto esté disponible
+    client.subscribe(TOPICS.ubicacion); // El GPS puede tardar en obtener un "fix" inicial o ubicación, nos suscribimos desde el inicio para recibirla en cuanto esté disponible
+    client.subscribe(TOPICS.llegada); // El GPS enviara un mensaje "1" cuando se encuentre dentro del área de llegada
 });
 
 client.on('reconnect', () => console.warn("Reconectando al servidor MQTT..."));

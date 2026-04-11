@@ -26,7 +26,7 @@ client.on('message', (topic, message) => {
         Se establece un radio de llegada 2-5 metros entre el smart car y el destino,
         debido a la imprecisión que pueda causar del módulo GY-GPS6MV2
     */
-    if(topic === TOPICS.llegada) {
+    if (topic === TOPICS.llegada) {
         mostrarAlerta("NAVEGACIÓN GPS", "¡Se ha llegado al destino!"); // Mostramos una alerta personalizada al llegar
         reiniciarDestino(); // Función para reiniciar los valores de destino
     }
