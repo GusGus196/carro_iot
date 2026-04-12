@@ -1,6 +1,7 @@
 import {TOPICS} from "./topics.js";
 
-const clientId = 'smartcar-webcontroller-' + Math.random().toString(16).slice(2, 10); // ID de cliente
+// Generar un ID de cliente
+const clientId = 'web-' + crypto.randomUUID();
 
 // Cliente conectado al broker público HiveMQ utilizando WebSockets
 export const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt', {
