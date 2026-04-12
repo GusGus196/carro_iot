@@ -8,6 +8,7 @@ Control web modular para un Smart Car. Utiliza el protocolo [MQTT](https://mqtt.
 /docs
 ├── /css
 │   └── style.css       # Estilo global de la aplicación
+├── /mapa               # Capas de imágenes para mapa local utilizado por Leaflet
 │
 ├── /modules            # Módulos JavaScript
 │   ├── /assets         # Imágenes SVG usadas en el módulo GPS
