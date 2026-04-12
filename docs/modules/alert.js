@@ -1,8 +1,7 @@
 export function mostrarAlerta(title, message) {
-    // Elementos de la alerta
     const alert = document.getElementById('custom-alert'); // Contenedor
     const alertTitle = document.getElementById('alert-title'); // Título
-    const alertBody = document.getElementById('alert-text'); // Cuerpo
+    const alertBody = document.getElementById('alert-body'); // Cuerpo
 
     // La visibilidad y animación de la alerta se controla con la clase CSS 'alert-visible'
     if (alert) {

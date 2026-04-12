@@ -16,7 +16,7 @@ Control web modular para un Smart Car. Utiliza el protocolo [MQTT](https://mqtt.
 │   ├── joystick.js     # Control del modo 'manual' y eventos táctiles del joystick
 │   ├── mqtt.js         # Configuración del cliente MQTT y envío de mensajes
 │   ├── seguidor.js     # Lógica del modo 'seguidor de línea'
-│   └── topics.js       # Diccionario de topics MQTT
+│   └── topics.js       # Diccionario de tópicos MQTT
 │
 ├── index.html          # HTML principal
 └── main.js             # JavaScript principal (gestión de modos y manipulación del DOM)
@@ -24,30 +24,26 @@ Control web modular para un Smart Car. Utiliza el protocolo [MQTT](https://mqtt.
 
 ## Arquitectura
 
-### Comunicación MQTT (publish / subscribe)
+### Comunicación MQTT (publicación / suscripción)
 
-La comunicación se centraliza en el módulo [mqtt.js](./modules/mqtt.js), haciendo uso de los canales definidos en [topics.js](./modules/topics.js), donde los tópicos se dividen en **control** (comandos hacia el smart car) y **estado** (datos desde el smart car):
+La comunicación se centraliza en el módulo [mqtt.js](./modules/mqtt.js), haciendo uso de los canales definidos en [topics.js](./modules/topics.js), donde los tópicos se dividen en **control** (comandos hacia el Smart Car) y **estado** (datos desde el Smart Car):
 
 |Tópico MQTT|Dirección|Descripción|
 |:---|:---|:---|
-|`smartcar/control/modo`|Output|Define el comportamiento: `control`, `linea` o `gps`.|
-|`smartcar/control/joystick`|Output|Envía coordenadas normalizadas `x,y` (Rango -1 a 1).|
-|`smartcar/control/claxon`|Output|Activa el buzzer del vehículo.|
-|`smartcar/control/sensor`|Output|Parámetro para activar y desactivar el modo seguidor de línea.|
-|`smartcar/control/destino`|Output|Envía las coordenadas GPS `lat,lon` del punto de destino seleccionado.|
-|`smartcar/estado/ubicacion`|Input|Recibe la posición actual del Smart Car (Lat, Lon).|
-|`smartcar/estado/llegada`|Input|Recibe confirmación cuando el vehículo alcanza su destino.|
+|`smartcar/control/modo`|Publica|Define el comportamiento: `control`, `linea` o `gps`.|
+|`smartcar/control/joystick`|Publica|Envía coordenadas normalizadas `x,y` (rango de -1 a 1).|
+|`smartcar/control/claxon`|Publica|Activa el buzzer del vehículo.|
+|`smartcar/control/sensor`|Publica|Parámetro para activar o desactivar el modo seguidor de línea.|
+|`smartcar/control/destino`|Publica|Envía las coordenadas GPS `lat, lon` del punto de destino seleccionado.|
+|`smartcar/estado/ubicacion`|Suscribe|Recibe la posición actual del Smart Car (lat, lon).|
+|`smartcar/estado/llegada`|Suscribe|Recibe confirmación cuando el vehículo alcanza su destino.|
 
 ## Instrucciones de uso
 
-1. **Conexión**: el Smart Car y el controlador web deben apuntar al mismo Broker MQTT.
-2. **Modo manual**: usar el joystick táctil para mover el vehículo.
-3. **Seguidor de línea**: activa y desactivar el sensor infrarrojo con un botón toggle.
-4. **GPS**: haz clic en el mapa para marcar un destino y presiona "Enviar destino" para que el coche inicie la ruta. Esperar la alerta de llegada para definir un nuevo destino.
-
-## Filosofía de desarrollo
-
-Este proyecto prioriza la programación funcional (módulos) sobre la complejidad de clases innecesarias. La arquitectura sigue el principio YAGNI (You Ain't Gonna Need It), asegurando que cada módulo tenga un propósito directo en el control del smart car.
+1. **Conexión**: el Smart Car y el controlador web deben apuntar al mismo broker MQTT.
+2. **Modo manual**: usa el joystick táctil para mover el vehículo.
+3. **Seguidor de línea**: activa o desactiva el sensor infrarrojo con un botón toggle.
+4. **GPS**: haz clic en el mapa para marcar un destino y presiona "Enviar destino" para que el Smart Car inicie la ruta. Espera la alerta de llegada para definir un nuevo destino.
 
 ## Recursos
 

@@ -13,7 +13,7 @@
 
     <!--Leaflet-->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
   </head>
   <body>
     <!--Div para el select del modo-->
@@ -23,7 +23,7 @@
         <option value="1">Control manual</option>
         <option value="2">Seguidor de línea</option>
         <option value="3">Navegación GPS</option>
-        </select>
+      </select>
     </div>
 
     <!--Div para la interfaz del modo-->
@@ -34,7 +34,7 @@
     <!--Div para alerta personalizada del modo 'navegación GPS'-->
     <div id="custom-alert">
       <span id="alert-title"></span>
-      <div id="alert-text"></div>
+      <div id="alert-body"></div>
     </div>
 
     <script type="module" src="main.js"></script>
