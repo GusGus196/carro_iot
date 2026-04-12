@@ -28,7 +28,7 @@ const destinoIcono = L.icon({
 // Función para enviar el destino por MQTT al presionar el botón 'btnEnviar'
 const enviarDestino = () => {
     if (destino) {
-        const msg = `${destino.lat.toFixed(6)},${destino.lng.toFixed(6)}`; // Mensaje 'lat,lon' del destino
+        const msg = `${destino.lat.toFixed(6)},${destino.lng.toFixed(6)}`; // Mensaje 'lat, lon' del destino
         enviar(TOPICS.destino, msg); // Enviamos el mensaje
         mostrarAlerta("NAVEGACIÓN GPS", "Destino enviado correctamente."); // Mostramos una alerta personalizada
     } else {
@@ -38,8 +38,13 @@ const enviarDestino = () => {
 
 // Función para crear el mapa
 export function iniciarMapa() {
+    // Definimos los límites de nuestro mapa local
+    const inferiorIzquierda = L.latLng(19.244693, -103.705745);
+    const superiorDerecha = L.latLng(19.251293, -103.695145);
+    const limites = L.latLngBounds(inferiorIzquierda, superiorDerecha); // Rectángulo formado
+
     /* 
-        Si el mapa ya fue inicializado y ocurrió un cambio de modo (select),
+        Si el mapa ya fue inicializado y ocurrió un cambio de modo,
         creamos uno nuevo y borramos los marcadores anteriores. De lo contrario, se crearán duplicados.
     */
     if (mapa) {
@@ -48,22 +53,34 @@ export function iniciarMapa() {
         carroMarcador = null;
     }
 
-    mapa = L.map('mapa').setView([19.248302, -103.700119], 5); // Vista inicial de México
-    
-    // Capa del mapa utilizando OpenStreetMap
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap' }).addTo(mapa);
-    
-    // Animación de zoom hacia la nueva dirección durante 3 segundos
+    // Configuramos el mapa para que no se pueda salir de los límites
+    mapa = L.map('mapa', {
+        center: [19.248, -103.700],
+        zoom: 15,
+        maxBounds: limites, // Bloquea el desplazamiento fuera de la zona
+        maxBoundsViscosity: 1.0 // Evita que el usuario "empuje" el mapa al vacío
+    });
+
+    // Definimos la capa de imágenes y aplicamos los límites
+    L.tileLayer('mapa/{z}/{x}/{y}.png', {
+        minZoom: 15,
+        maxZoom: 19,
+        bounds: limites, // Además, evita que Leaflet solicite tiles fuera de rango
+        attribution: '&copy; OpenStreetMap (Offline)',
+        noWrap: true // Evita que el mapa se repita infinitamente
+    }).addTo(mapa);
+
+    // Animación flyTo desde el punto inicial (zoom 15) hasta un punto con zoom 19
     setTimeout(() => {
         mapa.invalidateSize();
-        mapa.flyTo([19.248302, -103.700119], 16, {
+        mapa.flyTo([19.2491, -103.6974], 19, {
             animate: true,
-            duration: 3,
+            duration: 2,
             easeLinearity: 0.25
         });
     }, 1000);
     
-    // Evento de clic en el mapa
+    // Evento de clic sobre el mapa
     mapa.on('click', function(evento) {
         destino = evento.latlng;
 
@@ -98,7 +115,6 @@ export function actualizarPosicion(lat, lon) {
         lonC.innerText = lon.toFixed(4);
     }
     
-    // Crear marcador del Smart Car
     if (mapa) {
         const posicion = [lat, lon];
         
