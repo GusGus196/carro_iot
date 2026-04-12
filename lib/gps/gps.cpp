@@ -4,6 +4,10 @@ TinyGPSPlus gps;
 HardwareSerial SerialGPS(2);
 
 static unsigned long ultimaPublicacion = 0;
+static unsigned long ultimoRumboCalculado = 0; // Controlar el calculo de rumbo cada 5 segundos
+
+double latAnterior, lonAnterior; // Variables para punto A (anterior)
+bool primeraLecturaRealizada = false; // Bandera para omitir la primer lectura
 
 void iniciarGPS() {
     SerialGPS.begin(9600, SERIAL_8N1, gpsRX, gpsTX);
@@ -37,8 +41,8 @@ void actualizarNavegacion() {
     
     calcularMetricasGPS(); // Calcular distancia y rumbo
 
-    // Radio de llegada: 8 metros
-    if (destinoDistancia < 8.0) {
+    // Radio de llegada: 5 metros
+    if (destinoDistancia < 5.0) {
         procesarLlegada();
     } else {
         conducirHaciaDestino();
@@ -66,19 +70,21 @@ void calcularMetricasGPS() {
 void procesarLlegada() {
     hayDestino = false; // Esperar por un nuevo destino
     driver(0, 0); // Parar el motor al estar en el radio de llegada
-    client.publish(topic_llegada, "1"); // Publicar alerta de llegada al broker MQTT
+    if(client.connected()) {
+        client.publish(topic_llegada, "1"); // Publicar alerta de llegada al broker MQTT
+    }
     claxon(); // Sonido de llegada 
 }
 
 void conducirHaciaDestino() {
     // Cada 5 segundos calculamos el rumbo entre el punto anterior A (lat, lon) y el actual B
-    if (millis() - ultimoRumboCalculado > 5000) {
+    if ( millis() - ultimoRumboCalculado > 5000) {
         ultimoRumboCalculado = millis();
-        comandoEnviado = false; // Reset de la bandera para el nuevo intervalo
         
         if (gps.location.isValid()) {
+            
             // Solo si la primer lectura ya fue realizada
-            if (latAnterior != 0.0 && lonAnterior != 0.0) {
+            if (primeraLecturaRealizada) {
                 /* 
                    Calculamos el rumbo basándonos en el desplazamiento real 
                    desde el punto A (anterior) hasta el punto B (actual)
@@ -94,23 +100,14 @@ void conducirHaciaDestino() {
         } else {
             driver(0.0, 0.4); // Si no hay GPS, avanzamos para buscar señal
         }
-    } else if (millis() - ultimoRumboCalculado < 500) {
-        if (!comandoEnviado) {
-            if (primeraLecturaRealizada) {
-                corregirOrientacion(actualRumbo, destinoRumbo);
-
-            } else {
-                driver(0.0, 0.4); // Primer arranque del carro
-            }
-
-            comandoEnviado = true;
+    } else if ( millis() - ultimoRumboCalculado < 1000) {
+        if (primeraLecturaRealizada) {
+            corregirOrientacion(actualRumbo, destinoRumbo);
+        } else {
+            driver(0.0, 0.4); // Primer arranque del carro
         }
-
     } else {
-        if(comandoEnviado) {
-            driver(0.0, 0.4);
-            comandoEnviado = false;
-        }
+        driver(0.0, 0.4);
     }
 }
 
@@ -142,7 +139,7 @@ void corregirOrientacion(double actual, double destino) {
     if (error > 180) error -= 360; // Si el error es mayor a 180, giramos a la izquierda (-)
     else if (error < -180) error += 360; // Si el error es menor a 180, giramos a la derecha (+)
     
-    float giro = (abs(error) < 30) ? 0.0 : constrain(error / 90.0, -0.2, 0.2); // Si el error es pequeño, vamos en dirección al destino
+    float giro = (abs(error) < 30) ? 0.0 : constrain(error / 90.0, -0.4, 0.4); // Si el error es pequeño, vamos en dirección al destino
     float velocidad = (abs(error) > 45) ? 0.2 : 0.3;
     
     driver(giro, velocidad);

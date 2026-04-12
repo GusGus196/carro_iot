@@ -35,13 +35,6 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
       destinoLon = stringLon.toDouble();
       hayDestino = true;
 
-      latAnterior = 0; 
-      lonAnterior = 0;
-
-      primeraLecturaRealizada = false;    
-      comandoEnviado = false;
-      ultimoRumboCalculado = millis();
-      
       sonarConfirmacion();
     }
   }
