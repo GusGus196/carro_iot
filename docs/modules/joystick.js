@@ -14,7 +14,7 @@ const touchJoystick = () => {
 
     if (!sendInterval) {
         sendInterval = setInterval(() => {
-            enviar(TOPICS.joystick, latestMsg); // Toma el último valor 'latestMsg' y lo envía por MQTT
+            enviar(TOPICS.joystick, latestMsg); // Toma el último valor "latestMsg" y lo envía por MQTT
         }, FRECUENCIA_MS);
     }
 };
@@ -30,33 +30,33 @@ function aplicarZonaMuerta(valor) {
 
 // Función para inicializar todo el joystick
 export function iniciarJoystick() {
-    container = document.getElementById('joystick-container'); // Contenedor del joystick
-    puck = document.getElementById('joystick-puck'); // Control (puck)
-    btnClaxon = document.getElementById('btnClaxon'); // Botón del claxon
-    valX = document.getElementById('valX'); // Valor X
-    valY = document.getElementById('valY'); // Valor Y
+    container = document.getElementById("joystick-container"); // Contenedor del joystick
+    puck = document.getElementById("joystick-puck"); // Control (puck)
+    btnClaxon = document.getElementById("btnClaxon"); // Botón del claxon
+    valX = document.getElementById("valX"); // Valor X
+    valY = document.getElementById("valY"); // Valor Y
 
     /*
         Se eliminan los event listeners y se vuelven a crear cada vez que se llama a iniciarJoystick(),
-        debido a que esta función se ejecuta cada vez que cambiamos al 'modo manual'.
+        debido a que esta función se ejecuta cada vez que cambiamos al "modo manual".
         Si no hacemos esto, los event listeners se duplicarán, generando mensajes duplicados al tópico.
     */
 
-    puck.removeEventListener('mousedown', touchJoystick);
-    puck.removeEventListener('touchstart', handleTouchStart);
-    window.removeEventListener('mousemove', moverJoystick);
-    window.removeEventListener('mouseup', detenerJoystick);
-    window.removeEventListener('touchmove', moverJoystick);
-    window.removeEventListener('touchend', detenerJoystick);
+    puck.removeEventListener("mousedown", touchJoystick);
+    puck.removeEventListener("touchstart", handleTouchStart);
+    window.removeEventListener("mousemove", moverJoystick);
+    window.removeEventListener("mouseup", detenerJoystick);
+    window.removeEventListener("touchmove", moverJoystick);
+    window.removeEventListener("touchend", detenerJoystick);
 
-    puck.addEventListener('mousedown', touchJoystick);
-    puck.addEventListener('touchstart', handleTouchStart, { passive: false });
-    window.addEventListener('mousemove', moverJoystick);
-    window.addEventListener('touchmove', moverJoystick, { passive: false });
-    window.addEventListener('mouseup', detenerJoystick);
-    window.addEventListener('touchend', detenerJoystick);
+    puck.addEventListener("mousedown", touchJoystick);
+    puck.addEventListener("touchstart", handleTouchStart, { passive: false });
+    window.addEventListener("mousemove", moverJoystick);
+    window.addEventListener("touchmove", moverJoystick, { passive: false });
+    window.addEventListener("mouseup", detenerJoystick);
+    window.addEventListener("touchend", detenerJoystick);
 
-    // Envía '1' al topic 'claxon' cuando se presiona el botón
+    // Envía "1" al topic "claxon" cuando se presiona el botón
     btnClaxon.onclick = () => enviar(TOPICS.claxon, "1");
 }
 

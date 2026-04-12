@@ -11,11 +11,11 @@ Control web modular para un Smart Car. Utiliza el protocolo [MQTT](https://mqtt.
 │
 ├── /modules            # Módulos JavaScript
 │   ├── /assets         # Imágenes SVG usadas en el módulo GPS
-│   ├── alert.js        # Alerta personalizada para el modo 'navegación GPS'
+│   ├── alert.js        # Alerta personalizada para el modo "navegación GPS"
 │   ├── gps.js          # Lógica de navegación GPS (Leaflet + rastreo en tiempo real)
-│   ├── joystick.js     # Control del modo 'manual' y eventos táctiles del joystick
+│   ├── joystick.js     # Control del modo "manual" y eventos táctiles del joystick
 │   ├── mqtt.js         # Configuración del cliente MQTT y envío de mensajes
-│   ├── seguidor.js     # Lógica del modo 'seguidor de línea'
+│   ├── seguidor.js     # Lógica del modo "seguidor de línea"
 │   └── topics.js       # Diccionario de tópicos MQTT
 │
 ├── index.html          # HTML principal

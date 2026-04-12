@@ -6,7 +6,7 @@ let mapa, destino, carroMarcador, destinoMarcador;
 
 // Ícono para el Smart Car
 const carroIcono = L.icon({
-    iconUrl: 'modules/assets/car-front.svg',
+    iconUrl: "modules/assets/car-front.svg",
     iconSize: [35, 35],
     iconAnchor: [17.5, 17.5],
     popupAnchor: [0, -18]
@@ -14,21 +14,21 @@ const carroIcono = L.icon({
 
 // Ícono para el destino
 const destinoIcono = L.icon({
-    iconUrl: 'modules/assets/geo-fill.svg',
+    iconUrl: "modules/assets/geo-fill.svg",
     iconSize: [32, 32], // Tamaño del ícono
     iconAnchor: [16, 32], // Centrar punta inferior
     popupAnchor: [0, -32], // Mensaje emergente sobre el ícono
     
     // Sombra
-    shadowUrl: 'modules/assets/marker-shadow.png',
+    shadowUrl: "modules/assets/marker-shadow.png",
     shadowSize: [35, 35],
     shadowAnchor: [10, 35]
 });
 
-// Función para enviar el destino por MQTT al presionar el botón 'btnEnviar'
+// Función para enviar el destino por MQTT al presionar el botón "btnEnviar"
 const enviarDestino = () => {
     if (destino) {
-        const msg = `${destino.lat.toFixed(6)},${destino.lng.toFixed(6)}`; // Mensaje 'lat, lon' del destino
+        const msg = `${destino.lat.toFixed(6)},${destino.lng.toFixed(6)}`; // Mensaje "lat, lon" del destino
         enviar(TOPICS.destino, msg); // Enviamos el mensaje
         mostrarAlerta("NAVEGACIÓN GPS", "Destino enviado correctamente."); // Mostramos una alerta personalizada
     } else {
@@ -54,7 +54,7 @@ export function iniciarMapa() {
     }
 
     // Configuramos el mapa para que no se pueda salir de los límites
-    mapa = L.map('mapa', {
+    mapa = L.map("mapa", {
         center: [19.248, -103.700],
         zoom: 15,
         maxBounds: limites, // Bloquea el desplazamiento fuera de la zona
@@ -62,11 +62,11 @@ export function iniciarMapa() {
     });
 
     // Definimos la capa de imágenes y aplicamos los límites
-    L.tileLayer('mapa/{z}/{x}/{y}.png', {
+    L.tileLayer("mapa/{z}/{x}/{y}.png", {
         minZoom: 15,
         maxZoom: 19,
         bounds: limites, // Además, evita que Leaflet solicite tiles fuera de rango
-        attribution: '&copy; OpenStreetMap (Offline)',
+        attribution: "&copy; OpenStreetMap (Offline)",
         noWrap: true // Evita que el mapa se repita infinitamente
     }).addTo(mapa);
 
@@ -81,34 +81,34 @@ export function iniciarMapa() {
     }, 1000);
     
     // Evento de clic sobre el mapa
-    mapa.on('click', function(evento) {
+    mapa.on("click", function(evento) {
         destino = evento.latlng;
 
         // Crear marcador con ícono y texto flotante del destino seleccionado
         if (!destinoMarcador) {
-            destinoMarcador = L.marker(evento.latlng, { icon: destinoIcono })
+            destinoMarcador = L.marker(evento.latlng, {icon: destinoIcono})
                 .addTo(mapa)
                 .bindPopup("Destino");
         } else {
             destinoMarcador.setLatLng(evento.latlng);
         }
 
-        document.getElementById('latD').innerText = evento.latlng.lat.toFixed(4); // Latitud del destino
-        document.getElementById('lonD').innerText = evento.latlng.lng.toFixed(4); // Longitud del destino
+        document.getElementById("latD").innerText = evento.latlng.lat.toFixed(4); // Latitud del destino
+        document.getElementById("lonD").innerText = evento.latlng.lng.toFixed(4); // Longitud del destino
 
         // Nota: mostramos 4 decimales para optimizar el espacio, aunque se deben enviar 6 para mejorar la precisión
     });
     
-    // Evento del botón 'btnEnviar' para enviar el destino
-    const btnEnviar = document.getElementById('btnEnviar');
-    btnEnviar.removeEventListener('click', enviarDestino); 
-    btnEnviar.addEventListener('click', enviarDestino);
+    // Evento del botón "btnEnviar" para enviar el destino
+    const btnEnviar = document.getElementById("btnEnviar");
+    btnEnviar.removeEventListener("click", enviarDestino); 
+    btnEnviar.addEventListener("click", enviarDestino);
 };
 
 export function actualizarPosicion(lat, lon) {
     // Solo actualizamos la ubicación del Smart Car si estamos en el modo navegación GPS
-    const latC = document.getElementById('latC');
-    const lonC = document.getElementById('lonC');
+    const latC = document.getElementById("latC");
+    const lonC = document.getElementById("lonC");
     
     if (latC && lonC) {
         latC.innerText = lat.toFixed(4);
@@ -120,10 +120,10 @@ export function actualizarPosicion(lat, lon) {
         
         // Si el marcador no existe, lo creamos; de lo contrario, solo actualizamos su posición
         if (!carroMarcador) {
-            carroMarcador = L.marker(posicion, { icon: carroIcono })
+            carroMarcador = L.marker(posicion, {icon: carroIcono})
                 .addTo(mapa)
                 .bindPopup("Smart Car");
-            mapa.panTo(posicion, { animate: true, duration: 0.5 }); // Seguir la posición del Smart Car
+            mapa.panTo(posicion, {animate: true, duration: 0.5}); // Seguir la posición del Smart Car
         } else {
             carroMarcador.setLatLng(posicion); // Actualizar posición del marcador si ya existe
         }
@@ -142,8 +142,8 @@ export function reiniciarDestino() {
         destino = null;
     }
     
-    const latD = document.getElementById('latD');
-    const lonD = document.getElementById('lonD');
+    const latD = document.getElementById("latD");
+    const lonD = document.getElementById("lonD");
     if (latD && lonD) {
         latD.innerText = "0.0000";
         lonD.innerText = "0.0000";
