@@ -66,7 +66,7 @@ export function iniciarMapa() {
         minZoom: 15,
         maxZoom: 19,
         bounds: limites, // Además, evita que Leaflet solicite tiles fuera de rango
-        attribution: "&copy; OpenStreetMap (Offline)",
+        attribution: "&copy; OpenStreetMap contributors (offline)",
         noWrap: true // Evita que el mapa se repita infinitamente
     }).addTo(mapa);
 
