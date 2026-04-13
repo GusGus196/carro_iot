@@ -9,7 +9,7 @@ let mapa, destino, carroMarcador, destinoMarcador;
 
 // Ícono para el Smart Car
 const carroIcono = L.icon({
-    iconUrl: "modules/assets/car-front.svg",
+    iconUrl: "assets/car-front.svg",
     iconSize: [35, 35],
     iconAnchor: [17.5, 17.5],
     popupAnchor: [0, -18]
@@ -17,13 +17,13 @@ const carroIcono = L.icon({
 
 // Ícono para el destino
 const destinoIcono = L.icon({
-    iconUrl: "modules/assets/geo-fill.svg",
+    iconUrl: "assets/geo-fill.svg",
     iconSize: [32, 32], // Tamaño del ícono
     iconAnchor: [16, 32], // Centrar punta inferior
     popupAnchor: [0, -32], // Mensaje emergente sobre el ícono
     
     // Sombra
-    shadowUrl: "modules/assets/marker-shadow.png",
+    shadowUrl: "assets/marker-shadow.png",
     shadowSize: [35, 35],
     shadowAnchor: [10, 35]
 });
