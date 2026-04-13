@@ -1,0 +1,19 @@
+{
+  "name": "control-web",
+  "version": "1.0.0",
+  "description": "Control web para Smart Car utilizando el prótocolo MQTT",
+  "license": "GPL-3.0",
+  "author": "anon",
+  "type": "module",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "leaflet": "^1.9.4",
+    "mqtt": "^5.15.1"
+  },
+  "devDependencies": {
+    "vite": "^8.0.8"
+  }
+}
