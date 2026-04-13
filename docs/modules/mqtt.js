@@ -1,3 +1,5 @@
+import mqtt from "mqtt";
+
 import {TOPICS} from "./topics.js";
 
 // Generar un ID de cliente
