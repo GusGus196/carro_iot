@@ -1,32 +1,67 @@
 import mqtt from "mqtt";
 
-import {TOPICS} from "./topics.js";
+import { TOPICS } from "./topics.js";
+import { mostrarAlerta } from "./alert.js";
 
-// Generar un ID de cliente
-const clientId = "web-" + crypto.randomUUID();
+const MQTT_HOST = import.meta.env.VITE_MQTT_HOST;
+const MQTT_PORT = import.meta.env.VITE_MQTT_PORT;
 
-// Cliente conectado al broker público HiveMQ utilizando WebSockets
-export const client = mqtt.connect("wss://broker.hivemq.com:8884/mqtt", {
-    clientId: clientId,
-    clean: true
-});
+/*
+    Selección automática de protocolo:
+    Si el puerto es 8883, 8884 o 443, usamos 'wss' (Secure WebSockets).
+    De lo contrario, usamos 'ws' (WebSockets)
+*/
+const protocol = (MQTT_PORT === "8883" || MQTT_PORT === "8884" || MQTT_PORT === "443") ? "wss" : "ws";
+const connectURL = `${protocol}://${MQTT_HOST}:${MQTT_PORT}`;
 
+// Cliente MQTT
+export const client = mqtt.connect(connectURL, {
+    clientId: "control-web-" + Math.random().toString(16).slice(2, 8), // Generar ID aleatorio
+    clean: true,
+    reconnectPeriod: 1000, // Reintenta reconectar cada segundo
+    connectTimeout: 5000 // Tiempo de espera para considerar error
+})
+
+// Evento: conectado
 client.on("connect", () => {
-    console.log("MQTT conectado");
-    client.subscribe(TOPICS.ubicacion); // El GPS puede tardar en obtener un "fix" inicial o ubicación, nos suscribimos desde el inicio para recibirla en cuanto esté disponible
-    client.subscribe(TOPICS.llegada); // El GPS enviara un mensaje "1" cuando se encuentre dentro del área de llegada
+    mostrarAlerta("CLIENTE MQTT", "CONECTADO");
+    console.log(`Conexión exitosa via ${protocol} a ${MQTT_HOST}`);
+
+    // Suscripciones MQTT por defecto
+    client.subscribe(TOPICS.ubicacion); // Escuchar la ubicación del Smart Car
+    client.subscribe(TOPICS.llegada); // Esperar notificación de llegada al destino en modo "Navegación web"
 });
 
-client.on("reconnect", () => console.warn("Reconectando al servidor MQTT..."));
-client.on("error", (err) => console.error("Error de conexión MQTT:", err));
-client.on("offline", () => console.error("Estado offline, revisa tu conexión"));
+// Evento: reconectar
+client.on("reconnect", () => {
+    mostrarAlerta("BROKER MQTT", "RECONECTANDO..");
+});
 
-// Función para enviar mensajes al broker
+// Evento: error
+client.on("error", (err) => {
+    mostrarAlerta("BROKER MQTT", "ERROR");
+    console.error("Error MQTT:", err);
+});
+
+// Evento: desconectado
+client.on("offline", () => {
+    mostrarAlerta("BROKER MQTT", "DESCONECTADO");
+});
+
+// Función global para publicar mensajes
 export function enviar(topic, message) {
-    if (client.connected) {
-        client.publish(topic, message);
-    
-        // Comentar la siguiente linea para dejar de mostrar los mensajes enviados
-        console.log(`${topic}: ${message}`);
-    };
-};
+    if (!client.connected) {
+        mostrarAlerta("BROKER MQTT", "DESCONECTADO");
+        console.warn("Intento de envío fallido: cliente MQTT no conectado.");
+        return;
+    }
+
+    client.publish(topic, message, (err) => {
+        if (!err) {
+            // Debug de salida, comentar para producción
+            console.log(`[ENVIADO] ${topic}: ${message}`);
+        } else {
+            console.error("Error al publicar:", err);
+        }
+    });
+}
