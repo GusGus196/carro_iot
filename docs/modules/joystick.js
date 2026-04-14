@@ -1,5 +1,5 @@
-import {TOPICS} from "./topics.js";
-import {enviar} from "./mqtt.js";
+import { TOPICS } from "./topics.js";
+import { enviar } from "./mqtt.js";
 
 let container, puck, btnClaxon, valX, valY;
 let dragging = false; // Indica si el usuario está moviendo el joystick

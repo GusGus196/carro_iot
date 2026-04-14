@@ -1,9 +1,9 @@
-import {mostrarAlerta} from "./modules/alert.js"; // Alerta personalizada
-import {iniciarMapa, actualizarPosicion, reiniciarDestino} from "./modules/gps.js"; // Funciones del mapa para modo "navegación gps"
-import {iniciarJoystick, detenerJoystick} from "./modules/joystick.js"; // Funciones del joystick para el modo "manual"
-import {client, enviar} from "./modules/mqtt.js"; // Cliente MQTT y función enviar()
-import {iniciarSeguidor} from "./modules/seguidor.js"; // Activar y desactivar el modo "seguidor de línea"
-import {TOPICS} from "./modules/topics.js" // Tópicos MQTT
+import { mostrarAlerta } from "./modules/alert.js"; // Alerta personalizada
+import { iniciarMapa, actualizarPosicion, reiniciarDestino } from "./modules/gps.js"; // Funciones del mapa para modo "navegación gps"
+import { iniciarJoystick, detenerJoystick } from "./modules/joystick.js"; // Funciones del joystick para el modo "manual"
+import { client, enviar } from "./modules/mqtt.js"; // Cliente MQTT y función enviar()
+import { iniciarSeguidor } from "./modules/seguidor.js"; // Activar y desactivar el modo "seguidor de línea"
+import { TOPICS } from "./modules/topics.js" // Tópicos MQTT
 
 const modeSelect = document.getElementById("modeSelect"); // Select del modo
 const interfaceSpace = document.getElementById("interfaceSpace"); // Interfaz del modo
@@ -19,7 +19,7 @@ client.on("message", (topic, message) => {
             actualizarPosicion(lat, lon);
             
             // Debug de entrada, comentar para producción
-            console.log(`${topic}: ${lat}, ${lon}`);
+            console.log(`[RECIBIDO] ${topic}: ${lat}, ${lon}`);
         }
     };
 

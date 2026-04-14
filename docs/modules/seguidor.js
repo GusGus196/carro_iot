@@ -1,5 +1,5 @@
-import {TOPICS} from "./topics.js";
-import {enviar} from "./mqtt.js";
+import { TOPICS } from "./topics.js";
+import { enviar } from "./mqtt.js";
 
 export function iniciarSeguidor() {
     const btnSensor = document.getElementById("btnSensor");

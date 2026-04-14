@@ -1,9 +1,9 @@
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-import {TOPICS} from "./topics.js";
-import {enviar} from "./mqtt.js";
-import {mostrarAlerta} from "./alert.js";
+import { TOPICS } from "./topics.js";
+import { enviar } from "./mqtt.js";
+import { mostrarAlerta } from "./alert.js";
 
 let mapa, destino, carroMarcador, destinoMarcador;
 
