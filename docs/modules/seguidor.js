@@ -4,6 +4,7 @@ import {enviar} from "./mqtt.js";
 export function iniciarSeguidor() {
     const btnSensor = document.getElementById("btnSensor");
     
+    // Si el botón no existe, salir
     if (!btnSensor) return;
 
     btnSensor.addEventListener("click", () => {
@@ -16,4 +17,4 @@ export function iniciarSeguidor() {
         // Si el botón no contiene la clase "btn-action" enviar un 1, de lo contrario envía 0
         enviar(TOPICS.seguidor, !btnSensor.classList.contains("btn-action") ? "1" : "0");
     });
-};
+}

@@ -6,4 +6,4 @@ export const TOPICS = {
     destino: "smartcar/control/destino",
     ubicacion: "smartcar/estado/ubicacion",
     llegada: "smartcar/estado/llegada"
-};
+}

@@ -14,4 +14,4 @@ export function mostrarAlerta(title, message) {
             alert.classList.remove("alert-visible"); // Ocultamos la alerta a los 2 segundos
         }, 2000);
     };
-};
+}

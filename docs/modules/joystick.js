@@ -14,7 +14,7 @@ const touchJoystick = () => {
 
     if (!sendInterval) {
         sendInterval = setInterval(() => {
-            enviar(TOPICS.joystick, latestMsg); // Toma el último valor "latestMsg" y lo envía por MQTT
+            enviar(TOPICS.joystick, latestMsg); // Toma el último valor "latestMsg" y lo envía la broker MQTT
         }, FRECUENCIA_MS);
     }
 };
@@ -39,7 +39,7 @@ export function iniciarJoystick() {
     /*
         Se eliminan los event listeners y se vuelven a crear cada vez que se llama a iniciarJoystick(),
         debido a que esta función se ejecuta cada vez que cambiamos al "modo manual".
-        Si no hacemos esto, los event listeners se duplicarán, generando mensajes duplicados al tópico.
+        Si no hacemos esto, los event listeners se duplicarán, generando mensajes duplicados al tópico
     */
 
     puck.removeEventListener("mousedown", touchJoystick);
