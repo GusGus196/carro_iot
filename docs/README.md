@@ -19,6 +19,8 @@ Control web modular para un Smart Car. Utiliza el protocolo [MQTT](https://mqtt.
 │   ├── seguidor.js    # Lógica del modo seguidor de línea
 │   └── topics.js      # Diccionario de tópicos MQTT
 │
+├── .env               # (No incluido) Configuración local generada a partir de .env.example
+├── .env.example       # Plantilla de configuración de red y guía de conexión al broker MQTT (variables de entorno)
 ├── index.html         # HTML principal
 ├── main.js            # Programa principal (gestión del selector de modos y DOM)
 ├── package.json       # Dependencias (MQTT, Leaflet) y scripts de Vite
