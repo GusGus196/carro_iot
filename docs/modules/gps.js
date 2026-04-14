@@ -99,7 +99,7 @@ export function iniciarMapa() {
         document.getElementById("latD").innerText = evento.latlng.lat.toFixed(4); // Latitud del destino
         document.getElementById("lonD").innerText = evento.latlng.lng.toFixed(4); // Longitud del destino
 
-        // Nota: mostramos 4 decimales para optimizar el espacio, pero se deben enviar 6 para mejorar la precisión
+        // NOTA: mostramos 4 decimales para optimizar el espacio, pero se deben enviar 6 para mejorar la precisión
     });
     
     // Evento del botón "btnEnviar" para enviar el destino

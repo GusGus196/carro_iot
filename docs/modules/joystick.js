@@ -37,7 +37,7 @@ export function iniciarJoystick() {
     valY = document.getElementById("valY"); // Valor Y
 
     /*
-        Se eliminan los event listeners y se vuelven a crear cada vez que se llama a iniciarJoystick(),
+        NOTA: se eliminan los event listeners y se vuelven a crear cada vez que se llama a iniciarJoystick(),
         debido a que esta función se ejecuta cada vez que cambiamos al "modo manual".
         Si no hacemos esto, los event listeners se duplicarán, generando mensajes duplicados al tópico
     */

@@ -18,18 +18,18 @@ client.on("message", (topic, message) => {
         if (!isNaN(lat) && !isNaN(lon)) {
             actualizarPosicion(lat, lon);
             
-            // Comentar la siguiente linea para dejar de mostrar mensajes de ubicación recibidos
+            // Debug de entrada, comentar para producción
             console.log(`${topic}: ${lat}, ${lon}`);
         }
     };
 
     /* 
-        Esta condición solo se cumple cuando el Smart Car ha llegado a su destino.
+        NOTA: esta condición solo se cumple cuando el Smart Car ha llegado a su destino.
         Se establece un radio de llegada debido al error de precisión del módulo GY-GPS6MV2
     */
     if (topic === TOPICS.llegada) {
         mostrarAlerta("NAVEGACIÓN GPS", "¡Se ha llegado al destino!"); // Mostramos una alerta personalizada
-        reiniciarDestino(); // Función para reiniciar los valores de destino
+        reiniciarDestino(); // Función para reiniciar los valores de destino y marcador
     }
 });
 
