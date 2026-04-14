@@ -57,4 +57,6 @@ extern String modo;
 extern unsigned long ultimaVezRecibido;
 extern float velocidadConstante;
 
+extern float momentum; 
+
 #endif

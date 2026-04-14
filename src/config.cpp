@@ -1,8 +1,8 @@
 #include "config.h"
 
 // Variables de configuración WIFI y MQTT
-const char* ssid = "";
-const char* password = "";
+const char* ssid = "gusgus";
+const char* password = "gusgus19++";
 const char* mqtt_server = "broker.hivemq.com";
 
 // TOPICS MQTT de entrada (subscribe)
@@ -60,6 +60,8 @@ bool hayDestino = false;
 double destinoDistancia = 0.0;
 double destinoRumbo = 0.0;
 double actualRumbo = 0.0;
+
+float momentum = 0;
 
 // Variables de estado
 String modo = "indefinido"; // Modo seleccionado (control, linea o gps)
