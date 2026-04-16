@@ -1,15 +1,49 @@
 # Smart Car
 
-Material:
+Ecosistema de control robótico basado en el protocolo [MQTT](https://mqtt.org). Este repositorio integra el firmware para ESP32, una interfaz de control web y la configuración de un broker MQTT local (opcional).
 
-- ⁠⁠ESP32 con shield.
-- ⁠Chasis.
-- 2 ruedas.
-- ⁠⁠DRV8833.
-- GY-GPS6MV2.
-- ⁠⁠Sensor ultrasónico HC-SR04.
-- Array de 5 sensores reflectivos TCRT5000.
-- ⁠⁠Pilas 18650 o 3.7V.
-- Regulador De voltaje LM2596.
+## Contenido general
+
+  * **`/`**: código fuente del hardware (PlatformIO).
+  * **`/docs`**: interfaz de control web (Vite + JavaScript).
+  * **`/mosquitto`**: configuración de [Eclipse Mosquitto](https://mosquitto.org/) + reglas de red/firewall para Windows y Linux.
+
+## Instalación
+
+**Clonar el repositorio:**
+    ```bash
+    git clone https://github.com/gusgus196/carro_iot.git
+    cd carro_iot
+    ```
+
+**Configurar el Broker:** 
+
+Sigue la guía en [`./mosquitto/README.md`](./mosquitto/README.md)
+
+**Lanzar la web:**
+
+Sigue la guía en [`./docs/README.md`](./docs/README.md)
+
+**Cargar Firmware:**
+
+Descargar la extensión platformIO...
+
+## Material
+
+**Control**
+- ESP32 + Shield.
 - Buzzer pasivo.
-- Jumpers.
+
+**Motores**
+- Chasis 2WD.
+- Driver ⁠⁠DRV8833.
+
+**Sensores**
+- GPS Neo-6M.
+- Ultrasonido HC-SR04.
+- Array 5x TCRT5000.
+
+**Energía**
+- ⁠⁠Pilas 18650 + portapilas.
+- Regulador LM2596.
+- Capacitor 1000uF.

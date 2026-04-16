@@ -1,6 +1,6 @@
 # Control Web
 
-Control web modular para un Smart Car. Utiliza el protocolo [MQTT](https://mqtt.org/) para la comunicación en tiempo real y una interfaz dinámica que cambia según el modo seleccionado.
+Interfaz dínamica de control para un Smart Car. Utiliza el protocolo MQTT sobre WebSockets para la comunicación en tiempo real.
 
 ## Contenido
 
@@ -27,11 +27,9 @@ Control web modular para un Smart Car. Utiliza el protocolo [MQTT](https://mqtt.
 └── vite.config.js     # Configuración de Vite
 ```
 
-## Arquitectura
+## Arquitectura de comunicación MQTT
 
-### Comunicación MQTT (publicación / suscripción)
-
-La comunicación se centraliza en el módulo [mqtt-client.js](./modules/mqtt.js), haciendo uso de los canales definidos en [topics.js](./modules/topics.js), donde los tópicos se dividen en **control** (comandos hacia el Smart Car) y **estado** (datos desde el Smart Car).
+La comunicación con el broker MQTT se realiza a través de WebSockets y se centraliza en el módulo [mqtt.js](./modules/mqtt.js), haciendo uso de los tópicos definidos en [topics.js](./modules/topics.js), donde estos se dividen en **control** (publicación) y **estado** (suscripción).
 
 |Tópico MQTT|Dirección|Descripción|
 |:---|:---|:---|
@@ -39,8 +37,8 @@ La comunicación se centraliza en el módulo [mqtt-client.js](./modules/mqtt.js)
 |`smartcar/control/joystick`|Publica|Envía coordenadas normalizadas `x,y` (rango de -1 a 1)|
 |`smartcar/control/claxon`|Publica|Activa el buzzer del vehículo|
 |`smartcar/control/sensor`|Publica|Activa/desactiva el modo seguidor de línea|
-|`smartcar/control/destino`|Publica|Envía coordenadas GPS del destino|
-|`smartcar/estado/ubicacion`|Suscribe|Recibe posición actual del Smart Car (lat, lon)|
+|`smartcar/control/destino`|Publica|Envía coordenadas del destino `lat,lon`|
+|`smartcar/estado/ubicacion`|Suscribe|Recibe posición actual del Smart Car `lat,lon`|
 |`smartcar/estado/llegada`|Suscribe|Recibe confirmación de llegada al destino|
 
 ## Instalación

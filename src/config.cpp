@@ -3,7 +3,7 @@
 // Variables de configuración WIFI y MQTT
 const char* ssid = "";
 const char* password = "";
-const char* mqtt_server = "broker.hivemq.com";
+const char* mqtt_server = "";
 
 // TOPICS MQTT de entrada (subscribe)
 const char* topic_modo = "smartcar/control/modo";
