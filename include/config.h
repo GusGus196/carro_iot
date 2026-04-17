@@ -57,6 +57,11 @@ extern String modo;
 extern unsigned long ultimaVezRecibido;
 extern float velocidadConstante;
 
-extern float momentum; 
+extern float momentum;
 
+extern const int pinR;
+extern const int pinG;
+extern const int pinB;
+extern const int pinLedIzq;
+extern const int pinLedDer;
 #endif

@@ -4,10 +4,9 @@
 #include <Arduino.h>
 
 #include "config.h"
-
 void iniciarBuzzer();
 void claxon();
 void sonarConfirmacion();
 void sonarError();
-
+void ledRGB(int color[3]);
 #endif

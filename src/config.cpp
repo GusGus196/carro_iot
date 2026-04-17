@@ -67,3 +67,14 @@ float momentum = 0;
 String modo = "indefinido"; // Modo seleccionado (control, linea o gps)
 unsigned long ultimaVezRecibido = 0; // Última vez recibido un mensaje MQTT para joystick
 float velocidadConstante = 0.00; // Velocidad constante para modo 'seguidor de línea'
+
+
+
+
+
+//pines LEDS, ESTABLECER
+const int pinR = 45;
+const int pinG = 60;
+const int pinB = 233;
+const int pinLedIzq = 3122;
+const int pinLedDer = 4;
