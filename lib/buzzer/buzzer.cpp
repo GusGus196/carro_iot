@@ -35,23 +35,61 @@ void sonarError() {
 //funcion que da color al led
 void ledRGB(int color[3])
 {
-    analogWrite(pinR, color[0]);
-    analogWrite(pinG, color[1]);
-    analogWrite(pinB, color[2]);    
+    ledcWrite(pinR, color[0]);
+    ledcWrite(pinG, color[1]);
+    ledcWrite(pinB, color[2]);    
 }
+
+void controlLucesTraseras(int velocidadX, int velocidadY)
+{   
+    bool freno = ledFreno(velocidadY);
+    
+    if(freno == false)
+    {
+        direccionales(velocidadX);
+    }
+}
+
 
 void direccionales(int velocidadX)
 {
-    if(velocidadX > abs(tolerancia))
-    velocidadX > 0 ? parpadeo(pinLedDer) : parpadeo(pinLedIzq);
+    if(abs(velocidadX) <= tolerancia) {
+        digitalWrite(pinLedDer, LOW);
+        digitalWrite(pinLedIzq, LOW);
+        return;
+    }
+    int pinActivo   = (velocidadX > 0) ? pinLedDer : pinLedIzq;
+    int pinInactivo = (velocidadX > 0) ? pinLedIzq : pinLedDer;
+
+    digitalWrite(pinInactivo, LOW);
+    parpadeo(pinActivo);
+}
+
+bool ledFreno(int velocidadY)
+{   
+    static int ultimaVelocidad = 0;
+    static bool freno = false;
+    if(abs(velocidadY) < abs(ultimaVelocidad))
+    {
+        ultimaVelocidad = velocidadY;
+        digitalWrite(pinLedDer, HIGH);
+        digitalWrite(pinLedIzq, HIGH); 
+        return true;         
+    }
+    ultimaVelocidad = velocidadY;
+    digitalWrite(pinLedDer, LOW);
+    digitalWrite(pinLedIzq, LOW);
+    return false;
 }
 
 void parpadeo(int pinLed)
 {
-    static int estado = LOW;
-    digitalWrite(pinLedDer, HIGH);
-    static int tiempo = 0;
-    while(millis() - tiempo > intervalo){}
+    static unsigned long tiempoAnterior = 0; 
 
-    tiempo = millis();
+    if(millis() - tiempoAnterior >= intervalo) {
+
+        tiempoAnterior = millis();   
+        bool estadoActual = digitalRead(pinLed);
+        digitalWrite(pinLed, !estadoActual); 
+    }
 }
