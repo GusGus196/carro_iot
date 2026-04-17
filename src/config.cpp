@@ -1,8 +1,8 @@
 #include "config.h"
 
 // Variables de configuración WIFI y MQTT
-const char* ssid = "";
-const char* password = "";
+const char* ssid = "gusgus";
+const char* password = "gusgus19++";
 const char* mqtt_server = "broker.hivemq.com";
 
 // TOPICS MQTT de entrada (subscribe)
@@ -47,6 +47,10 @@ const int pinS2 = 33;
 const int pinS3 = 25;
 const int pinS4 = 26;
 const int pinS5 = 27;
+
+// Sensores de velocidad
+const int sensorVelDer = 34;
+const int sensorVelIzq = 35;
 
 // Pines del módulo GPS GY-GPS6MV2
 const int gpsRX = 16;
