@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="./css/style.css">
   </head>
   <body>
-    <!--Div para el select del modo-->
+    <!--Div para el select del modo y estado del broker MQTT-->
     <div class="header-nav">
       <select id="modeSelect">
         <option value="0" disabled selected>Selecciona un modo</option>
@@ -16,6 +16,11 @@
         <option value="2">Seguidor de línea</option>
         <option value="3">Navegación GPS</option>
       </select>
+
+      <div id="mqtt-status">
+        <span id="status-dot"></span>
+        <span id="status-text">CONECTANDO...</span>
+      </div>
     </div>
 
     <!--Div para la interfaz del modo-->
