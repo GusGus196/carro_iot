@@ -1,5 +1,5 @@
-import { mostrarAlerta } from "./modules/alert.js"; // Alerta personalizada
-import { iniciarMapa, actualizarPosicion, reiniciarDestino } from "./modules/gps.js"; // Funciones del mapa para modo "navegación gps"
+import { mostrarAlerta } from "./modules/feedback.js"; // Alerta personalizada
+import { iniciarMapa, actualizarPosicion, reiniciarDestino } from "./modules/gps.js"; // Funciones del mapa para modo "navegación GPS"
 import { iniciarJoystick, detenerJoystick } from "./modules/joystick.js"; // Funciones del joystick para el modo "manual"
 import { client, enviar } from "./modules/mqtt.js"; // Cliente MQTT y función enviar()
 import { iniciarSeguidor } from "./modules/seguidor.js"; // Activar y desactivar el modo "seguidor de línea"
@@ -19,7 +19,7 @@ client.on("message", (topic, message) => {
             actualizarPosicion(lat, lon);
             
             // Debug de entrada, comentar para producción
-            console.log(`[RECIBIDO] ${topic}: ${lat}, ${lon}`);
+            console.log(`[SUBSCRIBE] ${topic}: ${lat}, ${lon}`);
         }
     };
 
@@ -28,7 +28,7 @@ client.on("message", (topic, message) => {
         Se establece un radio de llegada debido al error de precisión del módulo GY-GPS6MV2
     */
     if (topic === TOPICS.llegada) {
-        mostrarAlerta("NAVEGACIÓN GPS", "¡Se ha llegado al destino!"); // Mostramos una alerta personalizada
+        mostrarAlerta("NAVEGACIÓN GPS", "Se ha llegado al destino!"); // Mostramos una alerta personalizada
         reiniciarDestino(); // Función para reiniciar los valores de destino y marcador
     }
 });
@@ -37,7 +37,7 @@ client.on("message", (topic, message) => {
 modeSelect.addEventListener("change", () => {
     const value = modeSelect.value;
 
-    detenerJoystick(); // Detener al cambiar de modo (envía "0.0,0.0")
+    detenerJoystick(); // Detener al cambiar de modo (publicar "0.0,0.0")
 
     switch (value) {
         case "1": // Modo manual
