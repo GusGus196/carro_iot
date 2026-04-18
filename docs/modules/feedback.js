@@ -1,6 +1,6 @@
 /*
     Función para mostrar una alerta temporal en la parte superior central.
-    Utilizado en el módulo GPS para envío de destino y notificación de llegada.
+    Utilizado en el módulo GPS para envío de destino y notificación de llegada
 */
 export function mostrarAlerta(title, message) {
     const alert = document.getElementById("custom-alert"); // Contenedor
@@ -20,18 +20,17 @@ export function mostrarAlerta(title, message) {
     }
 }
 
-/*
-    Actualiza el indicador visual del estado de conexión MQTT en la parte superior derecha del HTML.
-    Modifica el texto descriptivo y el color del círculo de estado.
+/* 
+    Actualiza el indicador visual de conexión MQTT:
+    - Mensaje: texto a mostrar en el contenedor (ej. "Conectado")
+    - Clase: estlo de color para el círculo (ej. status-conectado)
 */
 export function actualizarStatusMQTT(mensaje, clase) {
-    const dot = document.getElementById("status-dot"); // Círculo de estado
+    const dot = document.getElementById("status-dot"); // Círculo de color
     const text = document.getElementById("status-text"); // Texto
     
     if(dot && text) {
-        // Actualizamos el texto y agregamos la clase por defecto "status-dot" y la clase dinámica
         text.innerText = mensaje;
-
-        dot.className = `status-dot ${clase}`; // Reescribimos las clases para evitar duplicados
+        dot.className = `status-dot ${clase}`; // Limpia clases anteriores y aplica la nueva
     }
 }
