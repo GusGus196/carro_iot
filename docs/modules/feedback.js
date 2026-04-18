@@ -2,7 +2,6 @@
 Función para mostrar una alerta temporal en la parte superior central.
 Utilizado en el módulo GPS para envío de destino y notificación de llegada
 */
-
 let alertTimeout;
 
 export function mostrarAlerta(title, message) {
@@ -37,10 +36,11 @@ export function actualizarStatusMQTT(mensaje, clase) {
         "status-start",
         "status-online",
         "status-offline",
-        "status-connecting",
         "status-reconnecting",
         "status-error"
     ];
+
+    if (dot.classList.contains(clase)) return; // Si la clase nueva es igual a la actual, salir
 
     if(dot && text) {
         text.innerText = mensaje;
