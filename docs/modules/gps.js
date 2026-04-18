@@ -1,5 +1,5 @@
 import L from "leaflet"; // Objeto "L" de la librería Leaflet
-import "leaflet/dist/leaflet.css"; // Estilos CSS usados Leaflet
+import "leaflet/dist/leaflet.css"; // Estilos CSS usados por Leaflet
 
 import { TOPICS } from "./topics.js";
 import { enviar } from "./mqtt.js";
@@ -73,7 +73,7 @@ export function iniciarMapa() {
         noWrap: true // Evita que el mapa se repita infinitamente
     }).addTo(mapa);
 
-    // Animación flyTo de dos segundos desde el punto inicial (zoom 15) hasta un punto con zoom 19
+    // Animación flyTo de dos segundos desde el punto inicial (zoom 16) hasta un punto con zoom 19
     setTimeout(() => {
         mapa.invalidateSize();
         mapa.flyTo([19.2491, -103.6974], 19, {
