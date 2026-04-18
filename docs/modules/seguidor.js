@@ -3,18 +3,24 @@ import { enviar } from "./mqtt.js";
 
 export function iniciarSeguidor() {
     const btnSensor = document.getElementById("btnSensor");
-    
-    // Si el botón no existe, salir
     if (!btnSensor) return;
 
+    let activo = false;
+
     btnSensor.addEventListener("click", () => {
-        btnSensor.classList.toggle("btn-action");
-        btnSensor.classList.toggle("btn-desactivado");
-        
-        // Cambiar texto contenido
-        btnSensor.textContent = btnSensor.classList.contains("btn-action") ? "Activar" : "Desactivar";
-        
-        // Si el botón no contiene la clase "btn-action" enviar un 1, de lo contrario envía 0
-        enviar(TOPICS.seguidor, !btnSensor.classList.contains("btn-action") ? "1" : "0");
+        activo = !activo;
+
+        // Polarizar la clase, texto y mensaje al hacer click
+        if (activo) {
+            btnSensor.classList.remove("btn-state-off");
+            btnSensor.classList.add("btn-state-on");
+            btnSensor.textContent = "Desactivar";
+            enviar(TOPICS.seguidor, "1");
+        } else {
+            btnSensor.classList.remove("btn-state-on");
+            btnSensor.classList.add("btn-state-off");
+            btnSensor.textContent = "Activar";
+            enviar(TOPICS.seguidor, "0");
+        }
     });
 }
