@@ -1,6 +1,8 @@
 #include "buzzer.h"
-const int tolerancia;
-const int intervalo;
+bool preventivasActivas = false;
+bool direccionalDerActiva = false;
+bool direccionalIzqActiva = false;
+const int intervalo = 500;
 void iniciarBuzzer() {
     ledcSetup(canalBuzzer, freqBuzzer, resolucion);
     ledcAttachPin(pinBuzzer, canalBuzzer);
@@ -40,31 +42,45 @@ void ledRGB(int color[3])
     ledcWrite(pinB, color[2]);    
 }
 
-void controlLucesTraseras(int velocidadX, int velocidadY)
+
+
+
+
+
+//si solo tenemos un par de leds usar este 
+void controlLucesTraseras(int velocidadY, String instruccion)
 {   
     bool freno = ledFreno(velocidadY);
     
     if(freno == false)
     {
-        direccionales(velocidadX);
+        direccionales(instruccion);
     }
 }
 
-
-void direccionales(int velocidadX)
+void direccionales(String instruccion)
 {
-    if(abs(velocidadX) <= tolerancia) {
+
+    if(instruccion == "" || instruccion == "Apagado") 
+    { 
         digitalWrite(pinLedDer, LOW);
         digitalWrite(pinLedIzq, LOW);
-        return;
+    } 
+    else if (instruccion == "Derecha")
+    {
+        digitalWrite(pinLedIzq, LOW);
+        parpadeoDirec(pinLedDer);
     }
-    int pinActivo   = (velocidadX > 0) ? pinLedDer : pinLedIzq;
-    int pinInactivo = (velocidadX > 0) ? pinLedIzq : pinLedDer;
-
-    digitalWrite(pinInactivo, LOW);
-    parpadeo(pinActivo);
+    else if (instruccion == "Izquierda")
+    {
+        digitalWrite(pinLedDer, LOW); 
+        parpadeoDirec(pinLedIzq);
+    }
+    else if (instruccion == "Preventivas")
+    {
+        parpadeoInter(pinLedDer, pinLedIzq);
+    }
 }
-
 bool ledFreno(int velocidadY)
 {   
     static int ultimaVelocidad = 0;
@@ -82,14 +98,25 @@ bool ledFreno(int velocidadY)
     return false;
 }
 
-void parpadeo(int pinLed)
+void parpadeoDirec(int pinLed)
 {
     static unsigned long tiempoAnterior = 0; 
-
-    if(millis() - tiempoAnterior >= intervalo) {
-
+    if(millis() - tiempoAnterior >= intervalo) 
+    {
         tiempoAnterior = millis();   
         bool estadoActual = digitalRead(pinLed);
         digitalWrite(pinLed, !estadoActual); 
+    }
+}
+
+void parpadeoInter(int pin1, int pin2)
+{
+    static unsigned long tiempoAnterior = 0; 
+    if(millis() - tiempoAnterior >= intervalo) 
+    {
+        tiempoAnterior = millis();   
+        bool estadoActual = digitalRead(pin1);
+        digitalWrite(pin1, !estadoActual); 
+        digitalWrite(pin2, !estadoActual); 
     }
 }
