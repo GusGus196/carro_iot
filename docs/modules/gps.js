@@ -1,5 +1,5 @@
-import L from "leaflet";
-import "leaflet/dist/leaflet.css";
+import L from "leaflet"; // Objeto "L" de la librería Leaflet
+import "leaflet/dist/leaflet.css"; // Estilos CSS usados Leaflet
 
 import { TOPICS } from "./topics.js";
 import { enviar } from "./mqtt.js";
@@ -33,9 +33,9 @@ const enviarDestino = () => {
     if (destino) {
         const msg = `${destino.lat.toFixed(6)},${destino.lng.toFixed(6)}`; // Mensaje "lat, lon" del destino
         enviar(TOPICS.destino, msg); // Enviamos el mensaje
-        mostrarAlerta("NAVEGACIÓN GPS", "Destino enviado correctamente."); // Mostramos una alerta personalizada
+        mostrarAlerta("Navegación GPS", "¡El destino fue enviado!"); // Mostramos una alerta personalizada
     } else {
-        mostrarAlerta("NAVEGACIÓN GPS", "Selecciona un destino antes de enviar.");
+        mostrarAlerta("Navegación GPS", "Selecciona un destino antes de enviar");
     }
 }
 
@@ -44,11 +44,11 @@ export function iniciarMapa() {
     // Definimos los límites de nuestro mapa local
     const inferiorIzquierda = L.latLng(19.244693, -103.705745);
     const superiorDerecha = L.latLng(19.251293, -103.695145);
-    const limites = L.latLngBounds(inferiorIzquierda, superiorDerecha); // Rectángulo formado
+    const limites = L.latLngBounds(inferiorIzquierda, superiorDerecha); // Area formada
 
     /* 
-        Si el mapa ya fue inicializado y ocurrió un cambio de modo,
-        creamos uno nuevo y borramos los marcadores anteriores. De lo contrario, se crearán duplicados
+    Si el mapa ya fue inicializado y ocurrió un cambio de modo,
+    creamos uno nuevo y borramos los marcadores anteriores. De lo contrario, se crearán duplicados
     */
     if (mapa) {
         mapa.remove();
@@ -134,9 +134,9 @@ export function actualizarPosicion(lat, lon) {
 }
 
 /*
-    Esta función se ejecuta una vez que el Smart Car ha llegado a su destino.
-    Elimina el pin del destino, el objeto, la coordenada y los valores de latitud y longitud mostrados en pantalla.
-    De este modo, podemos definir un nuevo destino e iniciar la ruta nuevamente
+Esta función se ejecuta una vez que el Smart Car ha llegado a su destino.
+Elimina el pin del destino, el objeto, la coordenada y los valores de latitud y longitud mostrados en pantalla.
+De este modo, podemos definir un nuevo destino e iniciar la ruta nuevamente
 */
 export function reiniciarDestino() {
     if (mapa && destinoMarcador) {
