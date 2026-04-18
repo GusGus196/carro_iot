@@ -14,7 +14,8 @@ const touchJoystick = () => {
 
     if (!sendInterval) {
         sendInterval = setInterval(() => {
-            enviar(TOPICS.joystick, latestMsg); // Toma el último valor "latestMsg" y lo envía la broker MQTT
+            // Toma el último valor "latestMsg" y lo envía la broker MQTT
+            enviar(TOPICS.joystick, latestMsg);
         }, FRECUENCIA_MS);
     }
 };
@@ -37,9 +38,9 @@ export function iniciarJoystick() {
     valY = document.getElementById("valY"); // Valor Y
 
     /*
-        NOTA: se eliminan los event listeners y se vuelven a crear cada vez que se llama a iniciarJoystick(),
-        debido a que esta función se ejecuta cada vez que cambiamos al "modo manual".
-        Si no hacemos esto, los event listeners se duplicarán, generando mensajes duplicados al tópico
+    NOTA: se eliminan los event listeners y se vuelven a crear cada vez que se llama a iniciarJoystick(),
+    debido a que esta función se ejecuta cada vez que cambiamos al "modo manual".
+    Si no hacemos esto, los event listeners se duplicarán, generando mensajes duplicados al tópico
     */
 
     puck.removeEventListener("mousedown", touchJoystick);
@@ -121,5 +122,5 @@ export function detenerJoystick() {
     if (valX) valX.innerText = "0.00";
     if (valY) valY.innerText = "0.00";
     
-    enviar(TOPICS.joystick, "0.00,0.00"); // Detiene el vehículo
+    enviar(TOPICS.joystick, "0.00,0.00"); // Detiene el Smart Car
 }
