@@ -3,7 +3,7 @@ import "leaflet/dist/leaflet.css";
 
 import { TOPICS } from "./topics.js";
 import { enviar } from "./mqtt.js";
-import { mostrarAlerta } from "./alert.js";
+import { mostrarAlerta } from "./feedback.js";
 
 let mapa, destino, carroMarcador, destinoMarcador;
 
@@ -66,7 +66,7 @@ export function iniciarMapa() {
 
     // Definimos la capa de imágenes y aplicamos los límites
     L.tileLayer("mapa/{z}/{x}/{y}.png", {
-        minZoom: 15,
+        minZoom: 16,
         maxZoom: 19,
         bounds: limites, // Además, evita que Leaflet solicite tiles fuera de rango
         attribution: "&copy; OpenStreetMap contributors (offline)",
