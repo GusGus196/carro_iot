@@ -4,6 +4,7 @@
 const char* ssid = "";
 const char* password = "";
 const char* mqtt_server = "";
+const int port = 1883;
 
 // TOPICS MQTT de entrada (subscribe)
 const char* topic_modo = "smartcar/control/modo";

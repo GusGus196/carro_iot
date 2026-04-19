@@ -20,7 +20,7 @@ void setup() {
   setup_wifi();
   WiFi.setTxPower(WIFI_POWER_19_5dBm);
 
-  client.setServer(mqtt_server, 1883);
+  client.setServer(mqtt_server, port);
   client.setCallback(callback);
 
   iniciarBuzzer(); // Configuración del canal PWM del buzzer pasivo

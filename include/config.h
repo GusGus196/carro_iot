@@ -6,6 +6,7 @@
 extern const char* ssid;
 extern const char* password;
 extern const char* mqtt_server;
+extern const int port;
 
 extern const char* topic_modo;
 extern const char* topic_joystick;
