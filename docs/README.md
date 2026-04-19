@@ -57,10 +57,12 @@ Los tópicos se dividen en:
 
 ```text
    Control Web
+        ▲
         │
         │ MQTT sobre WebSockets
         ▼
    Broker MQTT
+        ▲
         │
         │ MQTT directo
         ▼
@@ -71,7 +73,7 @@ Los tópicos se dividen en:
 
 ### Requisitos
 
-* Node.js y npm (versión 18.0 o superior).
+* [Node.js y npm](https://nodejs.org) (versión 18.0 o superior).
 * Broker MQTT (local o público) con soporte para WebSockets.
 
 Dependencias:
