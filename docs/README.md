@@ -26,7 +26,7 @@ El sistema soporta múltiples modos de control:
 ├── public/              # Recursos estáticos (Vite)
 │   ├── assets/          # Imágenes SVG
 │   ├── mapa/            # Capas del mapa
-│   └── favicon.svg
+│   └── favicon.svg      # Icono de la página
 ├── .env.example         # Ejemplo de configuración
 ├── index.html           # Entrada principal
 ├── main.js              # Lógica principal
@@ -40,8 +40,8 @@ La comunicación con el broker MQTT se realiza mediante WebSockets y se centrali
 
 Los tópicos se dividen en:
 
-* **Control** (publicación).
-* **Estado** (suscripción).
+* **Control** (Publicación).
+* **Estado** (Suscripción).
 
 |Tópico MQTT|Tipo|Descripción|
 |:--|:--|:--|
@@ -64,7 +64,7 @@ Los tópicos se dividen en:
    Broker MQTT
         ▲
         │
-        │ MQTT directo
+        │ MQTT estándar
         ▼
     Smart Car
 ```
@@ -73,8 +73,8 @@ Los tópicos se dividen en:
 
 ### Requisitos
 
-* [Node.js y npm](https://nodejs.org) (versión 18.0 o superior).
-* Broker MQTT (local o público) con soporte para WebSockets.
+* [Node.js y npm](https://nodejs.org) (Versión 18.0 o superior).
+* Broker MQTT (Público o local) con soporte para WebSockets.
 
 Dependencias:
 
@@ -91,14 +91,13 @@ npm install
 
 ### 2. Configurar variables de entorno
 
-Copia el archivo de ejemplo y renómbralo a `.env`:
+Copia el archivo de ejemplo `.env.example` y renómbralo a `.env`:
 
 ```bash
 cp .env.example .env
 ```
 
-Edita el archivo `.env` con la configuración de tu broker MQTT.  
-Consulta `.env.example` para ver las variables requeridas.
+Edita el archivo con la configuración de tu broker MQTT. Este incluye comentarios detallados sobre cada parámetro requerido.
 
 ### 3. Configuración del broker
 
@@ -106,7 +105,10 @@ Asegúrate de que tu broker MQTT soporte WebSockets.
 
 #### Local
 
-Puedes instalar y configurar cualquier broker MQTT, en este repositorio se incluye una guía para configurar Eclipse Mosquitto. Consulta el [README.md](../mosquitto/README.md) si deseas usarlo.
+Puedes instalar y configurar cualquier broker MQTT de tu preferencia.
+
+> [!NOTE] 
+> En este repositorio se incluye una guía detallada para instalar y configurar Eclipse Mosquitto específicamente para este proyecto. Consulta el archivo [mosquitto/README.md](../mosquitto/README.md).
 
 #### Público
 
@@ -118,9 +120,11 @@ Puedes usar brokers como:
 
 ## Instrucciones de uso
 
-### Opción 1: ejecutar en desarrollo
+### Opción 1. Ejecutar en desarrollo
 
-Este repositorio utiliza [Vite.js](https://vite.dev/) para correr un servidor de desarrollo con host accesible en una red LAN. Si deseas cambiar el puerto del servidor de desarrollo, modifica el archivo [vite.config.js](./vite.config.js).
+Este proyecto utiliza [Vite.js](https://vite.dev) para servir la aplicación. El servidor está configurado para ser accesible desde cualquier dispositivo en tu red local (LAN), lo que facilita el control del Smart Car desde un dispositivo en la misma red.
+
+Para iniciar el entorno de desarrollo, asegúrate de estar dentro del directorio `docs` y ejecuta:
 
 ```bash
 npm run dev
@@ -128,15 +132,26 @@ npm run dev
 
 La aplicación estará disponible en:
 
-```
-http://localhost:3000  
-o en la red local, utiliza la IP mostrada por Vite
-```
+- **Local:** <http://localhost:3000>
+- **Red local:** utiliza la dirección IP que se muestra en la terminal para acceder desde otros dispositivos.
 
-### Opción 2: generar versión de producción
+> [!TIP] 
+> Puedes modificar el puerto o la visibilidad del host en el archivo [vite.config.js](./vite.config.js).
 
-Genera la carpeta `/dist` con archivos optimizados listos para producción (HTML, CSS y JavaScript). Solo debes subir el contenido de la carpeta `/dist` a tu servicio de hosting.
+### Opción 2. Generar versión de producción (Build)
+
+Si deseas desplegar la interfaz en un servidor web definitivo (como GitHub Pages, Render, Netlify, etc.), debes generar los archivos optimizados:
+
+1. **Compilar el proyecto:** ejecuta el siguiente comando para generar la carpeta `/dist`:
+
+    ```bash
+    npm run build
+    ```
+
+2. **Desplegar:** sube el contenido de la carpeta `/dist` resultante a tu servicio de hosting.
+
+Si quieres verificar que el paquete de producción funciona correctamente antes de subirlo, puedes previsualizarlo localmente con:
 
 ```bash
-npm run build
+npm run preview
 ```
