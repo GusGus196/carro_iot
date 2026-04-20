@@ -43,6 +43,9 @@ extern const int pinS3;
 extern const int pinS4;
 extern const int pinS5;
 
+extern const int sensorVelDer;
+extern const int sensorVelIzq;
+
 extern const int gpsRX;
 extern const int gpsTX;
 
@@ -57,5 +60,7 @@ extern double actualRumbo;
 extern String modo;
 extern unsigned long ultimaVezRecibido;
 extern float velocidadConstante;
+
+extern float momentum; 
 
 #endif

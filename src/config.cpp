@@ -49,6 +49,10 @@ const int pinS3 = 25;
 const int pinS4 = 26;
 const int pinS5 = 27;
 
+// Sensores de velocidad
+const int sensorVelDer = 34;
+const int sensorVelIzq = 35;
+
 // Pines del módulo GPS GY-GPS6MV2
 const int gpsRX = 16;
 const int gpsTX = 17;
@@ -61,6 +65,8 @@ bool hayDestino = false;
 double destinoDistancia = 0.0;
 double destinoRumbo = 0.0;
 double actualRumbo = 0.0;
+
+float momentum = 0;
 
 // Variables de estado
 String modo = "indefinido"; // Modo seleccionado (control, linea o gps)

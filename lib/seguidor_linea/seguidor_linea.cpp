@@ -1,12 +1,11 @@
 #include "seguidor_linea.h"
 const float kP = 0.8;  // más alto = más agresivo
-const float kD = 0.6;  // más alto = más suavizado
+const float kD = 0.5;  // más alto = más suavizado
 
 const float kMomentum   = 0.4;   // Qué tanto se hereda el giro anterior (0.0 - 1.0)
 const float kDecaimiento = 0.7;  // Qué tan rápido se "olvida" el giro (0.0 = olvido inmediato, 1.0 = nunca olvida)
 
 float errorAnterior = 0;
-float momentum = 0;  // Acumulador de dirección de giro reciente
 
 void iniciarSeguidor() {
     pinMode(pinS1, INPUT); // Extremo Izquierdo (-1.0) 33
@@ -26,7 +25,7 @@ void ejecutarSeguidorLinea() {
     float sumaLecturas = s1 + s2 + s3 + s4 + s5;
 
     if (sumaLecturas > 0) {
-        float error = (s1 * -0.5 + s2 * -0.25 + s4 * 0.25 + s5 * 0.5) / sumaLecturas;
+        float error = (s1 * -0.65 + s2 * -0.375 + s4 * 0.375 + s5 * 0.65) / sumaLecturas;
 
         float derivada = error - errorAnterior;
         errorAnterior = error;
@@ -47,7 +46,7 @@ void ejecutarSeguidorLinea() {
         driver(correccion, velocidadConstante);
     } else {
         // Sin línea detectada: mantener momentum para intentar recuperarla
-        driver(-(momentum * 0.5), velocidadConstante * 0.5);
+        driver(momentum * 0.5, velocidadConstante * 0.5);
     }
 }
 

@@ -4,6 +4,7 @@
 #include <Arduino.h>
 
 #include "config.h"
+#include "sensor_velocidad.h"
 
 // Compensación utilizada para igualar potencia de los motores DC
 extern const float compensacionIzquierda;
@@ -16,6 +17,11 @@ extern const float zonaMuerta;
 extern const int minPWM;
 extern const int maxPWM;
 extern const int rangoPWM;
+
+extern const float Kp;
+
+extern const float biasForward;
+extern const float biasReverse;
 
 void driver(float valorX, float valorY);
 int calibrarMotor(float motor);
