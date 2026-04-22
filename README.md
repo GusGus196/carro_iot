@@ -1,12 +1,5 @@
 # Smart Car
 
-
-![License](https://img.shields.io/badge/License-GPL_3.0-blue.svg)
-![MQTT](https://img.shields.io/badge/-MQTT-660066?style=flat&logo=mqtt&logoColor=white)
-![Espressif](https://img.shields.io/badge/-Espressif-E7352C?style=flat&logo=espressif&logoColor=white)
-![PlatformIO](https://img.shields.io/badge/-PlatformIO-F5822A?style=flat&logo=platformio&logoColor=white)
-![WebSockets](https://img.shields.io/badge/Real--Time-WebSockets-010101?style=flat&logo=socketdotio&logoColor=white)
-
 ## Descripción
 
 ## Contenido
@@ -82,3 +75,5 @@ Descargar la extensión PlatformIO y cargar el proyecto al ESP32.
 
 >[!CAUTION]
 > Verificar que la suma de los amperajes de todos los componentes no supere el amperaje que proporciona la fuente de energía.
+
+## Licencia
