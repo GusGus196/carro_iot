@@ -40,8 +40,9 @@ const controlarDestino = () => {
             
             // Actulizamos la variable de estado y estilo del botón
             navegando = true;
-            btnDestino.innerText = "Detener destino";
-            btnDestino.classList.add("btn-stop");
+            btnDestino.classList.remove("btn-state-off");
+            btnDestino.classList.add("btn-state-on");
+            btnDestino.textContent = "Detener destino";
 
         } else {
             mostrarAlerta("Navegación GPS", "Selecciona un destino en el mapa");
@@ -54,8 +55,9 @@ const controlarDestino = () => {
 
         // Actualizamos la variable de estado y reiniciamos el estilo del botón
         navegando = false;
-        btnDestino.innerText = "Enviar Destino";
-        btnDestino.classList.remove("btn-stop");
+        btnDestino.classList.remove("btn-state-on");
+        btnDestino.classList.add("btn-state-off");
+        btnDestino.textContent = "Enviar destino";
     }
 }
 
@@ -164,6 +166,10 @@ export function reiniciarDestino() {
         destinoMarcador = null;
         destino = null;
     }
+
+    btnDestino.classList.remove("btn-state-on");
+    btnDestino.classList.add("btn-state-off");
+    btnDestino.textContent = "Enviar destino";
 
     const latD = document.getElementById("latD");
     const lonD = document.getElementById("lonD");

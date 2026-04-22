@@ -262,7 +262,7 @@ body {
     box-shadow: none;
 }
 
-/* ------------------------- Estados del botón para modo "seguidor de línea" ------------------------- */
+/* ------------------------- Estados del botón para modo "seguidor de línea" y "navegación GPS" ------------------------- */
 .btn-state-on {
     background-color: var(--primary-btn-hover);
     box-shadow: 0 0 14px rgba(63, 134, 189, 0.35);
