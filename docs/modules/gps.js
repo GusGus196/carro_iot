@@ -6,6 +6,7 @@ import { enviar } from "./mqtt.js";
 import { mostrarAlerta } from "./feedback.js";
 
 let mapa, destino, carroMarcador, destinoMarcador;
+let btnEnviar, navegando = false; // Estado actual del módulo
 
 // Ícono para el Smart Car
 const carroIcono = L.icon({
@@ -30,12 +31,18 @@ const destinoIcono = L.icon({
 
 // Función para enviar el destino al broker MQTT al presionar el botón "btnEnviar"
 const enviarDestino = () => {
-    if (destino) {
-        const msg = `${destino.lat.toFixed(6)},${destino.lng.toFixed(6)}`; // Mensaje "lat, lon" del destino
-        enviar(TOPICS.destino, msg); // Enviamos el mensaje
-        mostrarAlerta("Navegación GPS", "¡El destino fue enviado!"); // Mostramos una alerta personalizada
+    if(!navegando) {
+        if (destino) {
+            const msg = `${destino.lat.toFixed(6)},${destino.lng.toFixed(6)}`; // Mensaje "lat, lon" del destino
+            enviar(TOPICS.destino, msg); // Enviamos el mensaje
+            mostrarAlerta("Navegación GPS", "¡Destino enviado! Iniciadno ruta..."); // Mostramos una alerta
+            navegando = true; // Actulizamos la variable de estado
+
+        } else {
+            mostrarAlerta("Navegación GPS", "Selecciona un destino antes de enviar");
+        }
     } else {
-        mostrarAlerta("Navegación GPS", "Selecciona un destino antes de enviar");
+
     }
 }
 
@@ -102,8 +109,8 @@ export function iniciarMapa() {
         // NOTA: mostramos 4 decimales para optimizar el espacio, pero se deben enviar 6 para mejorar la precisión
     });
     
-    // Evento del botón "btnEnviar" para enviar el destino
-    const btnEnviar = document.getElementById("btnEnviar");
+    // Evento click del botón "btnEnviar" para enviar el destino
+    btnEnviar = document.getElementById("btnEnviar");
     btnEnviar.removeEventListener("click", enviarDestino); 
     btnEnviar.addEventListener("click", enviarDestino);
 }
