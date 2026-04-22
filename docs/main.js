@@ -5,8 +5,8 @@ import { client, enviar } from "./modules/mqtt.js"; // Cliente MQTT y función e
 import { iniciarSeguidor } from "./modules/seguidor.js"; // Activar y desactivar el modo "seguidor de línea"
 import { TOPICS } from "./modules/topics.js" // Tópicos MQTT
 
-const modeSelect = document.getElementById("modeSelect"); // Select del modo
-const interfaceSpace = document.getElementById("interfaceSpace"); // Interfaz del modo
+const modeSelect = document.getElementById("mode-select"); // Select del modo
+const interfaceSpace = document.getElementById("interface-space"); // Interfaz del modo
 
 client.on("message", (topic, message) => {
     // Actualizar la posición del Smart Car
