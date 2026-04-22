@@ -6,7 +6,7 @@ import { enviar } from "./mqtt.js";
 import { mostrarAlerta } from "./feedback.js";
 
 let mapa, destino, carroMarcador, destinoMarcador;
-let btnDestino, navegando = false; // Estado actual del módulo y botón para enviar/detener destino
+let btnDestino, navegando = false; // Estado actual del módulo y botón para enviar/detener el destino
 
 // Ícono para el Smart Car
 const carroIcono = L.icon({
@@ -29,20 +29,32 @@ const destinoIcono = L.icon({
     shadowAnchor: [10, 35] // Punto de la sombra que se posiciona sobre la coordenada
 });
 
-// Función para enviar el destino al broker MQTT al presionar el botón "btnEnviar"
-const enviarDestino = () => {
+// Función para enviar/detener el destino al broker MQTT al presionar el botón "btnDestino"
+const controlarDestino = () => {
+    // Lógica para iniciar la navegación
     if(!navegando) {
         if (destino) {
             const msg = `${destino.lat.toFixed(6)},${destino.lng.toFixed(6)}`; // Mensaje "lat, lon" del destino
             enviar(TOPICS.destino, msg); // Enviamos el mensaje
             mostrarAlerta("Navegación GPS", "¡Destino enviado! Iniciadno ruta..."); // Mostramos una alerta
-            navegando = true; // Actulizamos la variable de estado
+            
+            // Actulizamos la variable de estado y estilo del botón
+            navegando = true;
+            btnDestino.innerText = "Detener destino";
+            btnDestino.classList.add("btn-stop");
 
         } else {
             mostrarAlerta("Navegación GPS", "Selecciona un destino antes de enviar");
         }
+    
+    // Lógica para detener la navegación
     } else {
-
+        enviar(TOPICS.destino, "msg"); // Mensaje para detener el destino
+        
+        // Actualizamos la variable de estado y reiniciamos el estilo del botón
+        navegando = false;
+        btnDestino.innerText = "Enviar Destino";
+        btnDestino.classList.remove("btn-stop");
     }
 }
 
@@ -111,8 +123,8 @@ export function iniciarMapa() {
     
     // Evento click del botón "btnEnviar" para enviar el destino
     btnDestino = document.getElementById("btnEnviar");
-    btnDestino.removeEventListener("click", enviarDestino); 
-    btnDestino.addEventListener("click", enviarDestino);
+    btnDestino.removeEventListener("click", controlarDestino); 
+    btnDestino.addEventListener("click", controlarDestino);
 }
 
 export function actualizarPosicion(lat, lon) {
