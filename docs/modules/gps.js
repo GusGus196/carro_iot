@@ -36,7 +36,7 @@ const controlarDestino = () => {
         if (destino) {
             const msg = `${destino.lat.toFixed(6)},${destino.lng.toFixed(6)}`; // Mensaje "lat, lon" del destino
             enviar(TOPICS.destino, msg); // Enviamos el mensaje
-            mostrarAlerta("Navegación GPS", "¡Destino enviado! Iniciando ruta..."); // Mostramos una alerta
+            mostrarAlerta("Navegación GPS", "¡Destino enviado! Iniciando navegación..."); // Mostramos una alerta
             
             // Actulizamos la variable de estado y estilo del botón
             navegando = true;
@@ -44,13 +44,14 @@ const controlarDestino = () => {
             btnDestino.classList.add("btn-stop");
 
         } else {
-            mostrarAlerta("Navegación GPS", "Selecciona un destino antes de enviar");
+            mostrarAlerta("Navegación GPS", "Selecciona un destino en el mapa");
         }
     
     // Lógica para detener la navegación
     } else {
         enviar(TOPICS.destino, "msg"); // Mensaje para detener el destino
-        
+        mostrarAlerta("Navegación GPS", "Navegación cancelada"); // Mostramos una alerta
+
         // Actualizamos la variable de estado y reiniciamos el estilo del botón
         navegando = false;
         btnDestino.innerText = "Enviar Destino";
@@ -121,7 +122,7 @@ export function iniciarMapa() {
         // NOTA: mostramos 4 decimales para optimizar el espacio, pero se deben enviar 6 para mejorar la precisión
     });
     
-    // Evento click del botón "btnEnviar" para enviar el destino
+    // Remover y agregar listener click del botón "btnDestino"
     btnDestino = document.getElementById("btnDestino");
     btnDestino.removeEventListener("click", controlarDestino); 
     btnDestino.addEventListener("click", controlarDestino);
