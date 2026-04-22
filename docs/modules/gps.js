@@ -6,7 +6,7 @@ import { enviar } from "./mqtt.js";
 import { mostrarAlerta } from "./feedback.js";
 
 let mapa, destino, carroMarcador, destinoMarcador;
-let btnEnviar, navegando = false; // Estado actual del módulo
+let btnDestino, navegando = false; // Estado actual del módulo y botón para enviar/detener destino
 
 // Ícono para el Smart Car
 const carroIcono = L.icon({
@@ -110,9 +110,9 @@ export function iniciarMapa() {
     });
     
     // Evento click del botón "btnEnviar" para enviar el destino
-    btnEnviar = document.getElementById("btnEnviar");
-    btnEnviar.removeEventListener("click", enviarDestino); 
-    btnEnviar.addEventListener("click", enviarDestino);
+    btnDestino = document.getElementById("btnEnviar");
+    btnDestino.removeEventListener("click", enviarDestino); 
+    btnDestino.addEventListener("click", enviarDestino);
 }
 
 export function actualizarPosicion(lat, lon) {
