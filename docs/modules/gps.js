@@ -36,7 +36,7 @@ const controlarDestino = () => {
         if (destino) {
             const msg = `${destino.lat.toFixed(6)},${destino.lng.toFixed(6)}`; // Mensaje "lat, lon" del destino
             enviar(TOPICS.destino, msg); // Enviamos el mensaje
-            mostrarAlerta("Navegación GPS", "¡Destino enviado! Iniciadno ruta..."); // Mostramos una alerta
+            mostrarAlerta("Navegación GPS", "¡Destino enviado! Iniciando ruta..."); // Mostramos una alerta
             
             // Actulizamos la variable de estado y estilo del botón
             navegando = true;
@@ -122,7 +122,7 @@ export function iniciarMapa() {
     });
     
     // Evento click del botón "btnEnviar" para enviar el destino
-    btnDestino = document.getElementById("btnEnviar");
+    btnDestino = document.getElementById("btnDestino");
     btnDestino.removeEventListener("click", controlarDestino); 
     btnDestino.addEventListener("click", controlarDestino);
 }
@@ -163,7 +163,7 @@ export function reiniciarDestino() {
         destinoMarcador = null;
         destino = null;
     }
-    
+
     const latD = document.getElementById("latD");
     const lonD = document.getElementById("lonD");
 
