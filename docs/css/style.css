@@ -287,6 +287,63 @@ body {
     margin-top: 5px;
 }
 
+.controls-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+/* ------------------------- Luces ------------------------- */
+.light-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.btn-light {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.btn-light img {
+    width: 25px;
+    height: 25px;
+    opacity: inherit;
+    pointer-events: none;
+}
+
+.btn-light.btn-state-on {
+    background-color: var(--primary-btn-hover);
+    animation: blinking-lights 0.8s infinite ease-in-out;
+    transform: translateY(1px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+@keyframes blinking-lights {
+    0% {
+        opacity: 1;
+        box-shadow: 0 0 15px var(--accent-glow);
+    }
+    50% {
+        opacity: 0.5;
+        box-shadow: 0 0 5px var(--accent-glow);
+    }
+    100% {
+        opacity: 1;
+        box-shadow: 0 0 15px var(--accent-glow);
+    }
+}
+
 /* ------------------------- Alerta ------------------------- */
 #custom-alert {
     position: fixed;
