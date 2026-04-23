@@ -4,6 +4,7 @@ export const TOPICS = {
     claxon: "smartcar/control/claxon",
     seguidor: "smartcar/control/seguidor",
     obstaculos: "smartcar/control/obstaculos",
+    luces: "smartcar/control/luces",
     destino: "smartcar/control/destino",
     ubicacion: "smartcar/estado/ubicacion",
     llegada: "smartcar/estado/llegada"

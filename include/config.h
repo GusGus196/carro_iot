@@ -13,6 +13,7 @@ extern const char* topic_joystick;
 extern const char* topic_claxon;
 extern const char* topic_seguidor;
 extern const char* topic_obstaculos;
+extern const char* topic_luces;
 extern const char* topic_destino;
 
 extern const char* topic_ubicacion;

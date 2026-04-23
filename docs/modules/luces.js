@@ -41,7 +41,7 @@ const prev = () => {
     }
     
     actualizarInterfaz();
-    enviar(TOPICS.preventivas, estadoLuces.prev ? "1" : "0");
+    enviar(TOPICS.luces, estadoLuces.prev ? "1" : "0");
 };
 
 export function iniciarLuces() {

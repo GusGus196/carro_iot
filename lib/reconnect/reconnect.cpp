@@ -20,6 +20,7 @@ void reconnect() {
         client.subscribe(topic_claxon);
         client.subscribe(topic_seguidor);
         client.subscribe(topic_obstaculos);
+        client.subscribe(topic_luces);
         client.subscribe(topic_destino);
       }
     }
