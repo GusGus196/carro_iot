@@ -89,7 +89,6 @@ bool ledFreno(float velocidadY, int zonaMuerta) {
 
     static bool ultimoEstado = false;
     if (estadoFreno != ultimoEstado) {
-        // En el PCF8574 de RobTillaart, .write() es el equivalente a digitalWrite
         pcf.write(pinLedDer, estadoFreno ? HIGH : LOW);
         pcf.write(pinLedIzq, estadoFreno ? HIGH : LOW);
         ultimoEstado = estadoFreno;
