@@ -11,6 +11,7 @@ const char* topic_modo = "smartcar/control/modo";
 const char* topic_joystick = "smartcar/control/joystick";
 const char* topic_claxon = "smartcar/control/claxon";
 const char* topic_seguidor = "smartcar/control/seguidor";
+const char* topic_obstaculos = "smartcar/control/obstaculos";
 const char* topic_destino = "smartcar/control/destino";
 
 // TOPICS MQTT de salida (publish)
