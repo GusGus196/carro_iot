@@ -96,4 +96,6 @@ void driver(float valorX, float valorY) {
   // 6. Aplicar a motores
   aplicarGiro(motorIzquierdo, velocidadIzqPWM, canalA1, canalA2);
   aplicarGiro(motorDerecho, velocidadDerPWM, canalB1, canalB2);
+  ledFreno(valorY, zonaMuerta);
 }
+

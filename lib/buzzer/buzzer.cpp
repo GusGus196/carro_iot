@@ -45,9 +45,9 @@ void ledRGB(int color[3])
 }
 
 //si solo tenemos un par de leds usar este 
-void controlLucesTraseras(int velocidadY, String instruccion)
+void controlLucesTraseras(int velocidadY, String instruccion, int zonaMuerta)
 {   
-    bool freno = ledFreno(velocidadY);
+    bool freno = ledFreno(velocidadY, zonaMuerta);
     
     if(freno == false)
     {
@@ -58,42 +58,45 @@ void controlLucesTraseras(int velocidadY, String instruccion)
 void direccionales(String instruccion)
 {
 
-    if(instruccion == "" || instruccion == "Apagado") 
+    if(instruccion == "" || instruccion == "off") 
     { 
         digitalWrite(pinLedDer, LOW);
         digitalWrite(pinLedIzq, LOW);
     } 
-    else if (instruccion == "Derecha")
+    else if (instruccion == "der")
     {
         pcf.write(pinLedIzq, LOW);
         parpadeoDirec(pinLedDer);
     }
-    else if (instruccion == "Izquierda")
+    else if (instruccion == "izq")
     {
         pcf.write(pinLedDer, LOW); 
         parpadeoDirec(pinLedIzq);
     }
-    else if (instruccion == "Preventivas")
+    else if (instruccion == "prev")
     {
         parpadeoInter(pinLedDer, pinLedIzq);
     }
 }
 
-bool ledFreno(int velocidadY)
-{   
-    static int ultimaVelocidad = 0;
-    static bool freno = false;
-    if(abs(velocidadY) < abs(ultimaVelocidad))
-    {
-        ultimaVelocidad = velocidadY;
-        pcf.write(pinLedDer, HIGH);
-        pcf.write(pinLedIzq, HIGH); 
-        return true;         
+bool ledFreno(float velocidadY, int zonaMuerta) {   
+    static float ultimaVelocidad = 0;
+    bool estadoFreno = false;
+
+    if ((abs(velocidadY) < abs(ultimaVelocidad) - 0.05) || (abs(velocidadY) < zonaMuerta)) {
+        estadoFreno = true;
     }
+
+    static bool ultimoEstado = false;
+    if (estadoFreno != ultimoEstado) {
+        // En el PCF8574 de RobTillaart, .write() es el equivalente a digitalWrite
+        pcf.write(pinLedDer, estadoFreno ? HIGH : LOW);
+        pcf.write(pinLedIzq, estadoFreno ? HIGH : LOW);
+        ultimoEstado = estadoFreno;
+    }
+
     ultimaVelocidad = velocidadY;
-    pcf.write(pinLedDer, LOW);
-    pcf.write(pinLedIzq, LOW);
-    return false;
+    return estadoFreno;
 }
 
 void parpadeoDirec(int pinLed)

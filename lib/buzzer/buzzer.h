@@ -14,7 +14,7 @@ void sonarError();
 
 //funciones Led
 void ledRGB(int color[3]);
-bool ledFreno(int velocidadY);
+bool ledFreno(float velocidadY, int zonaMuerta);
 void direccionales(String velocidadX);
 
 //Funciones auxiliares leds
