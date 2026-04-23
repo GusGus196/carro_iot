@@ -17,7 +17,8 @@ const dirIzq = () => {
     }
     
     actualizarInterfaz();
-    enviar(TOPICS.luces, estadoLuces.izq ? "left" : "off");
+    const valor = estadoLuces.izq ? "izq" : "off";
+    enviar(TOPICS.luces, JSON.stringify({luces: valor}));
 };
 
 // Direccional derecha
@@ -29,7 +30,8 @@ const dirDer = () => {
     }
     
     actualizarInterfaz();
-    enviar(TOPICS.luces, estadoLuces.der ? "right" : "off");
+    const valor = estadoLuces.der ? "der" : "off";
+    enviar(TOPICS.luces, JSON.stringify({luces: valor}));
 };
 
 // Preventivas
@@ -41,7 +43,8 @@ const prev = () => {
     }
     
     actualizarInterfaz();
-    enviar(TOPICS.luces, estadoLuces.prev ? "1" : "0");
+    const valor = estadoLuces.prev ? "prev" : "off";
+    enviar(TOPICS.luces, JSON.stringify({luces: valor}));
 };
 
 export function iniciarLuces() {
