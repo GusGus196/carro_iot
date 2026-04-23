@@ -325,7 +325,7 @@ body {
 .btn-light.btn-state-on {
     background-color: var(--primary-btn-hover);
     animation: blinking-lights 0.8s infinite ease-in-out;
-    transform: translateY(1px);
+    transform: translateY(0.5px);
     border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
