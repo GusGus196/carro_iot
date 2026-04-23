@@ -106,7 +106,7 @@ modeSelect.addEventListener("change", () => {
                         Lat: <span id="latC">0.00</span> | Lon: <span id="lonC">0.00</span>
                     </div>
                     <div class="controls">
-                        <button id="btnDestino" class="btn-action btn-state-off">Enviar destino</button>
+                        <button id="btnGPS" class="btn-action btn-state-off">Enviar destino</button>
                     </div>
                 </div>
             `;

@@ -6,7 +6,7 @@ import { enviar } from "./mqtt.js";
 import { mostrarAlerta } from "./feedback.js";
 
 let mapa, destino, carroMarcador, destinoMarcador;
-let btnDestino, navegando = false; // Estado actual del módulo y botón para enviar/detener el destino
+let btnGPS, navegando = false; // Estado actual del módulo y botón para enviar/detener el destino
 
 // Ícono para el Smart Car
 const carroIcono = L.icon({
@@ -29,7 +29,7 @@ const destinoIcono = L.icon({
     shadowAnchor: [10, 35] // Punto de la sombra que se posiciona sobre la coordenada
 });
 
-// Función para enviar/detener el destino al broker MQTT al presionar el botón "btnDestino"
+// Función para enviar/detener el destino al broker MQTT al presionar el botón "btnGPS"
 const controlarDestino = () => {
     // Lógica para iniciar la navegación
     if(!navegando) {
@@ -40,9 +40,9 @@ const controlarDestino = () => {
             
             // Actulizamos la variable de estado y estilo del botón
             navegando = true;
-            btnDestino.classList.remove("btn-state-off");
-            btnDestino.classList.add("btn-state-on");
-            btnDestino.textContent = "Detener destino";
+            btnGPS.classList.remove("btn-state-off");
+            btnGPS.classList.add("btn-state-on");
+            btnGPS.textContent = "Detener destino";
 
         } else {
             mostrarAlerta("Navegación GPS", "Selecciona un destino en el mapa");
@@ -55,9 +55,9 @@ const controlarDestino = () => {
 
         // Actualizamos la variable de estado y reiniciamos el estilo del botón
         navegando = false;
-        btnDestino.classList.remove("btn-state-on");
-        btnDestino.classList.add("btn-state-off");
-        btnDestino.textContent = "Enviar destino";
+        btnGPS.classList.remove("btn-state-on");
+        btnGPS.classList.add("btn-state-off");
+        btnGPS.textContent = "Enviar destino";
     }
 }
 
@@ -124,10 +124,10 @@ export function iniciarMapa() {
         // NOTA: mostramos 4 decimales para optimizar el espacio, pero se deben enviar 6 para mejorar la precisión
     });
     
-    // Remover y agregar listener click del botón "btnDestino"
-    btnDestino = document.getElementById("btnDestino");
-    btnDestino.removeEventListener("click", controlarDestino); 
-    btnDestino.addEventListener("click", controlarDestino);
+    // Remover y agregar listener click del botón "btnGPS"
+    btnGPS = document.getElementById("btnGPS");
+    btnGPS.removeEventListener("click", controlarDestino); 
+    btnGPS.addEventListener("click", controlarDestino);
 }
 
 export function actualizarPosicion(lat, lon) {
@@ -167,9 +167,9 @@ export function reiniciarDestino() {
         destino = null;
     }
 
-    btnDestino.classList.remove("btn-state-on");
-    btnDestino.classList.add("btn-state-off");
-    btnDestino.textContent = "Enviar destino";
+    btnGPS.classList.remove("btn-state-on");
+    btnGPS.classList.add("btn-state-off");
+    btnGPS.textContent = "Enviar destino";
 
     const latD = document.getElementById("latD");
     const lonD = document.getElementById("lonD");
