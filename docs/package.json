@@ -1,7 +1,7 @@
 {
   "name": "control-web",
   "version": "1.0.0",
-  "description": "Control web para Smart Car utilizando el prótocolo MQTT",
+  "description": "Control web para Smart Car utilizando el protocolo MQTT",
   "license": "GPL-3.0",
   "author": "anon",
   "type": "module",
