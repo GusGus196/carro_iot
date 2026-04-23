@@ -76,9 +76,9 @@ unsigned long ultimaVezRecibido = 0; // Última vez recibido un mensaje MQTT par
 float velocidadConstante = 0.00; // Velocidad constante para modo 'seguidor de línea'
 
 
-//pines LEDS, ESTABLECER
-const int pinR = 45;
-const int pinG = 60;
-const int pinB = 233;
-const int pinLedIzq = 3122;
+//pines LEDS
+const int pinR = 0;
+const int pinG = 1;
+const int pinB = 2;
+const int pinLedIzq = 3;
 const int pinLedDer = 4;

@@ -3,6 +3,8 @@ bool preventivasActivas = false;
 bool direccionalDerActiva = false;
 bool direccionalIzqActiva = false;
 const int intervalo = 500;
+PCF8574 pcf(0x20);
+
 void iniciarBuzzer() {
     ledcSetup(canalBuzzer, freqBuzzer, resolucion);
     ledcAttachPin(pinBuzzer, canalBuzzer);
@@ -37,9 +39,9 @@ void sonarError() {
 //funcion que da color al led
 void ledRGB(int color[3])
 {
-    ledcWrite(pinR, color[0]);
-    ledcWrite(pinG, color[1]);
-    ledcWrite(pinB, color[2]);    
+    pcf.write(pinR, color[0]);
+    pcf.write(pinG, color[1]);
+    pcf.write(pinB, color[2]);    
 }
 
 //si solo tenemos un par de leds usar este 
@@ -63,12 +65,12 @@ void direccionales(String instruccion)
     } 
     else if (instruccion == "Derecha")
     {
-        digitalWrite(pinLedIzq, LOW);
+        pcf.write(pinLedIzq, LOW);
         parpadeoDirec(pinLedDer);
     }
     else if (instruccion == "Izquierda")
     {
-        digitalWrite(pinLedDer, LOW); 
+        pcf.write(pinLedDer, LOW); 
         parpadeoDirec(pinLedIzq);
     }
     else if (instruccion == "Preventivas")
@@ -84,13 +86,13 @@ bool ledFreno(int velocidadY)
     if(abs(velocidadY) < abs(ultimaVelocidad))
     {
         ultimaVelocidad = velocidadY;
-        digitalWrite(pinLedDer, HIGH);
-        digitalWrite(pinLedIzq, HIGH); 
+        pcf.write(pinLedDer, HIGH);
+        pcf.write(pinLedIzq, HIGH); 
         return true;         
     }
     ultimaVelocidad = velocidadY;
-    digitalWrite(pinLedDer, LOW);
-    digitalWrite(pinLedIzq, LOW);
+    pcf.write(pinLedDer, LOW);
+    pcf.write(pinLedIzq, LOW);
     return false;
 }
 
@@ -101,7 +103,7 @@ void parpadeoDirec(int pinLed)
     {
         tiempoAnterior = millis();   
         bool estadoActual = digitalRead(pinLed);
-        digitalWrite(pinLed, !estadoActual); 
+        pcf.write(pinLed, !estadoActual); 
     }
 }
 
@@ -112,7 +114,7 @@ void parpadeoInter(int pin1, int pin2)
     {
         tiempoAnterior = millis();   
         bool estadoActual = digitalRead(pin1);
-        digitalWrite(pin1, !estadoActual); 
-        digitalWrite(pin2, !estadoActual); 
+        pcf.write(pin1, !estadoActual); 
+        pcf.write(pin2, !estadoActual); 
     }
 }

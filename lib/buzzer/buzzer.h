@@ -2,6 +2,8 @@
 #define BUZZER_H
 
 #include <Arduino.h>
+#include <PCF8574.h>
+#include <Wire.h>
 
 #include "config.h"
 //Funciones buzzer
@@ -20,7 +22,7 @@ void parpadeoDirec(int pinLed);
 void parpadeoInter(int pinLed1, int pinLed2);
 
 extern const int intervalo;
-extern bool preventivasActivas = false;
-extern bool direccionalDerActiva = false;
-extern bool direccionalIzqActiva = false;
+extern bool preventivasActivas;
+extern bool direccionalDerActiva;
+extern bool direccionalIzqActiva;
 #endif
