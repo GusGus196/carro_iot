@@ -1,12 +1,14 @@
-import {mostrarAlerta} from "./modules/alert.js"; // Alerta personalizada
-import {iniciarMapa, actualizarPosicion, reiniciarDestino} from "./modules/gps.js"; // Funciones del mapa para modo "navegación gps"
-import {iniciarJoystick, detenerJoystick} from "./modules/joystick.js"; // Funciones del joystick para el modo "manual"
-import {client, enviar} from "./modules/mqtt.js"; // Cliente MQTT y función enviar()
-import {iniciarSeguidor} from "./modules/seguidor.js"; // Activar y desactivar el modo "seguidor de línea"
-import {TOPICS} from "./modules/topics.js" // Tópicos MQTT
+import { mostrarAlerta } from "./modules/feedback.js"; // Alerta personalizada
+import { iniciarMapa, actualizarPosicion, reiniciarDestino } from "./modules/gps.js"; // Funciones del mapa para modo "navegación GPS"
+import { iniciarJoystick, detenerJoystick } from "./modules/joystick.js"; // Funciones del joystick para el modo "manual"
+import { iniciarLuces } from "./modules/luces.js"; // Función para inicializar los botones direccionales y preventivas
+import { client, enviar } from "./modules/mqtt.js"; // Cliente MQTT y función enviar()
+import { iniciarSeguidor } from "./modules/seguidor.js"; // Activar y desactivar el modo "seguidor de línea"
+import { iniciarObstaculos } from "./modules/obstaculos.js"; // Activar y desactivar el modo "evitar obstáculos"
+import { TOPICS } from "./modules/topics.js" // Tópicos MQTT
 
-const modeSelect = document.getElementById("modeSelect"); // Select del modo
-const interfaceSpace = document.getElementById("interfaceSpace"); // Interfaz del modo
+const modeSelect = document.getElementById("mode-select"); // Select del modo
+const interfaceSpace = document.getElementById("interface-space"); // Interfaz del modo
 
 client.on("message", (topic, message) => {
     // Actualizar la posición del Smart Car
@@ -18,18 +20,18 @@ client.on("message", (topic, message) => {
         if (!isNaN(lat) && !isNaN(lon)) {
             actualizarPosicion(lat, lon);
             
-            // Comentar la siguiente linea para dejar de mostrar mensajes de ubicación recibidos
-            console.log(`${topic}: ${lat}, ${lon}`);
+            // Debug de entrada, comentar para producción
+            console.log(`[SUBSCRIBE] ${topic}: ${lat}, ${lon}`);
         }
     };
 
     /* 
-        Esta condición solo se cumple cuando el Smart Car ha llegado a su destino.
-        Se establece un radio de llegada debido al error de precisión del módulo GY-GPS6MV2
+    NOTA: esta condición solo se cumple cuando el Smart Car ha llegado a su destino.
+    Se establece un radio de llegada debido al error de precisión del módulo GY-GPS6MV2
     */
     if (topic === TOPICS.llegada) {
-        mostrarAlerta("NAVEGACIÓN GPS", "¡Se ha llegado al destino!"); // Mostramos una alerta personalizada
-        reiniciarDestino(); // Función para reiniciar los valores de destino
+        mostrarAlerta("Navegación GPS", "¡Se ha llegado al destino!"); // Mostramos una alerta personalizada
+        reiniciarDestino(); // Función para reiniciar los valores de destino y marcador
     }
 });
 
@@ -37,7 +39,7 @@ client.on("message", (topic, message) => {
 modeSelect.addEventListener("change", () => {
     const value = modeSelect.value;
 
-    detenerJoystick(); // Detener al cambiar de modo (envía "0.0,0.0")
+    detenerJoystick(); // Detener al cambiar de modo (publicar "0.0,0.0")
 
     switch (value) {
         case "1": // Modo manual
@@ -48,19 +50,31 @@ modeSelect.addEventListener("change", () => {
                 <div class="stats">
                     X: <span id="valX">0.00</span> | Y: <span id="valY">0.00</span>
                 </div>
-                <div class="controls">
+                <div class="controls-grid">
+                    <div class="light-group">
+                        <button id="btnDirIzq" class="btn-light btn-state-off">
+                            <img src="assets/arrow-left.svg" alt="L">
+                        </button>
+                        <button id="btnPrev" class="btn-light btn-state-off">
+                            <img src="assets/warning.svg" alt="P">
+                        </button>
+                        <button id="btnDirDer" class="btn-light btn-state-off">
+                            <img src="assets/arrow-right.svg" alt="R">
+                        </button>
+                    </div>
                     <button id="btnClaxon" class="btn-action">Claxon</button>
                 </div>
             `;
 
             enviar(TOPICS.modo, "control");
             iniciarJoystick();
+            iniciarLuces();
             break;
 
         case "2": // Seguidor de línea
             interfaceSpace.innerHTML = `
                 <div class="mode-card">
-                    <button id="btnSensor" type="button" class="btn-action">Activar</button>
+                    <button id="btnSeguidor" type="button" class="btn-action btn-state-off">Activar</button>
                 </div>
             `;
 
@@ -68,7 +82,18 @@ modeSelect.addEventListener("change", () => {
             iniciarSeguidor();
             break;
 
-        case "3": // Navegación GPS
+        case "3": // Evitar obstáculos
+            interfaceSpace.innerHTML = `
+                <div class="mode-card">
+                    <button id="btnObstaculos" type="button" class="btn-action btn-state-off">Activar</button>
+                </div>
+            `;
+
+            enviar(TOPICS.modo, "obstaculos");
+            iniciarObstaculos();
+            break;
+
+        case "4": // Navegación GPS
             interfaceSpace.innerHTML = `
                 <div class="mode-card">
                     <div id="mapa"></div>
@@ -81,7 +106,7 @@ modeSelect.addEventListener("change", () => {
                         Lat: <span id="latC">0.00</span> | Lon: <span id="lonC">0.00</span>
                     </div>
                     <div class="controls">
-                        <button id="btnEnviar" class="btn-action">Enviar destino</button>
+                        <button id="btnDestino" class="btn-action btn-state-off">Enviar destino</button>
                     </div>
                 </div>
             `;

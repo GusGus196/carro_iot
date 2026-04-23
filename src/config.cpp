@@ -1,15 +1,18 @@
 #include "config.h"
 
 // Variables de configuración WIFI y MQTT
-const char* ssid = "gusgus";
-const char* password = "gusgus19++";
-const char* mqtt_server = "broker.hivemq.com";
+const char* ssid = "";
+const char* password = "";
+const char* mqtt_server = "";
+const int port = 1883;
 
 // TOPICS MQTT de entrada (subscribe)
 const char* topic_modo = "smartcar/control/modo";
 const char* topic_joystick = "smartcar/control/joystick";
 const char* topic_claxon = "smartcar/control/claxon";
 const char* topic_seguidor = "smartcar/control/seguidor";
+const char* topic_obstaculos = "smartcar/control/obstaculos";
+const char* topic_luces = "smartcar/control/luces";
 const char* topic_destino = "smartcar/control/destino";
 
 // TOPICS MQTT de salida (publish)
@@ -47,6 +50,10 @@ const int pinS2 = 33;
 const int pinS3 = 25;
 const int pinS4 = 26;
 const int pinS5 = 27;
+
+// Sensores de velocidad
+const int sensorVelDer = 34;
+const int sensorVelIzq = 35;
 
 // Pines del módulo GPS GY-GPS6MV2
 const int gpsRX = 16;

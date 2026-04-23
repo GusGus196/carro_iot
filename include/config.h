@@ -6,11 +6,14 @@
 extern const char* ssid;
 extern const char* password;
 extern const char* mqtt_server;
+extern const int port;
 
 extern const char* topic_modo;
 extern const char* topic_joystick;
 extern const char* topic_claxon;
 extern const char* topic_seguidor;
+extern const char* topic_obstaculos;
+extern const char* topic_luces;
 extern const char* topic_destino;
 
 extern const char* topic_ubicacion;
@@ -41,6 +44,9 @@ extern const int pinS2;
 extern const int pinS3;
 extern const int pinS4;
 extern const int pinS5;
+
+extern const int sensorVelDer;
+extern const int sensorVelIzq;
 
 extern const int gpsRX;
 extern const int gpsTX;

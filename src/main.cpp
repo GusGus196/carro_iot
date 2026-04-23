@@ -12,6 +12,7 @@
 #include "seguidor_linea.h" // Funciones para configurar los pines del array de sensores reflectivos TCRT5000 y ejecutar el seguidor de línea
 #include "setup_wifi.h" // Función para configurar la conexión WiFi
 #include "ultrasonico.h" // Funciones del sensor ultrasónico HC-SR04 (inicializar, distancia y distancia filtrada)
+#include "sensor_velocidad.h" // Funciones para los sensores de velocidad
 
 void setup() {
   Serial.begin(115200);
@@ -20,7 +21,7 @@ void setup() {
   setup_wifi();
   WiFi.setTxPower(WIFI_POWER_19_5dBm);
 
-  client.setServer(mqtt_server, 1883);
+  client.setServer(mqtt_server, port);
   client.setCallback(callback);
 
   iniciarBuzzer(); // Configuración del canal PWM del buzzer pasivo
@@ -28,6 +29,7 @@ void setup() {
   iniciarJoystick(); // Iniciar los canales PWM de los motores del driver
   iniciarSeguidor(); // Configuración de los pines de los sensores reflectivos como input
   iniciarUltrasonico(); // Configuración de los pines del sensor ultrasónico como input (echo) y output (trig)
+  iniciarSensoresVelocidad(); // Configuración de los pines de los sensores de velocidad.
 }
 
 void loop() {
@@ -38,6 +40,7 @@ void loop() {
   client.loop();
 
   enviarUbicacion(); // Enviar ubicación al controlador web siempre
+  medirVelocidad();
   
   // Ejecutar lógica según el modo
   if (modo == "control") {
