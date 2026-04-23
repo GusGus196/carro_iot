@@ -3,6 +3,7 @@ import { iniciarMapa, actualizarPosicion, reiniciarDestino } from "./modules/gps
 import { iniciarJoystick, detenerJoystick } from "./modules/joystick.js"; // Funciones del joystick para el modo "manual"
 import { client, enviar } from "./modules/mqtt.js"; // Cliente MQTT y función enviar()
 import { iniciarSeguidor } from "./modules/seguidor.js"; // Activar y desactivar el modo "seguidor de línea"
+import { iniciarObstaculos } from "./modules/obstaculos.js"; // Activar y desactivar el modo "evitar obstáculos"
 import { TOPICS } from "./modules/topics.js" // Tópicos MQTT
 
 const modeSelect = document.getElementById("mode-select"); // Select del modo
@@ -60,7 +61,7 @@ modeSelect.addEventListener("change", () => {
         case "2": // Seguidor de línea
             interfaceSpace.innerHTML = `
                 <div class="mode-card">
-                    <button id="btnSensor" type="button" class="btn-action btn-state-off">Activar</button>
+                    <button id="btnSeguidor" type="button" class="btn-action btn-state-off">Activar</button>
                 </div>
             `;
 
@@ -68,7 +69,18 @@ modeSelect.addEventListener("change", () => {
             iniciarSeguidor();
             break;
 
-        case "3": // Navegación GPS
+        case "3": // Evitar obstáculos
+            interfaceSpace.innerHTML = `
+                <div class="mode-card">
+                    <button id="btnObstaculos" type="button" class="btn-action btn-state-off">Activar</button>
+                </div>
+            `;
+
+            enviar(TOPICS.modo, "obstaculos");
+            iniciarObstaculos();
+            break;
+
+        case "4": // Navegación GPS
             interfaceSpace.innerHTML = `
                 <div class="mode-card">
                     <div id="mapa"></div>
