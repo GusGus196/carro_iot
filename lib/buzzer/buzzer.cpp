@@ -42,11 +42,6 @@ void ledRGB(int color[3])
     ledcWrite(pinB, color[2]);    
 }
 
-
-
-
-
-
 //si solo tenemos un par de leds usar este 
 void controlLucesTraseras(int velocidadY, String instruccion)
 {   
@@ -81,6 +76,7 @@ void direccionales(String instruccion)
         parpadeoInter(pinLedDer, pinLedIzq);
     }
 }
+
 bool ledFreno(int velocidadY)
 {   
     static int ultimaVelocidad = 0;
