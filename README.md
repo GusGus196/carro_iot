@@ -71,9 +71,9 @@ Descargar la extensión PlatformIO y cargar el proyecto al ESP32.
 ### Indicadores
 
 * 4 LEDs (rojo y ámbar)
-* Resistencias (220–330 Ω)
+* Resistencias (100 Ω)
 
->[!CAUTION]
+> [!CAUTION]
 > Verificar que la suma de los amperajes de todos los componentes no supere el amperaje que proporciona la fuente de energía.
 
 ## Licencia
