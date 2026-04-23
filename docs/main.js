@@ -1,6 +1,7 @@
 import { mostrarAlerta } from "./modules/feedback.js"; // Alerta personalizada
 import { iniciarMapa, actualizarPosicion, reiniciarDestino } from "./modules/gps.js"; // Funciones del mapa para modo "navegación GPS"
 import { iniciarJoystick, detenerJoystick } from "./modules/joystick.js"; // Funciones del joystick para el modo "manual"
+import { iniciarLuces } from "./modules/luces.js"; // Función para inicializar los botones direccionales y preventivas
 import { client, enviar } from "./modules/mqtt.js"; // Cliente MQTT y función enviar()
 import { iniciarSeguidor } from "./modules/seguidor.js"; // Activar y desactivar el modo "seguidor de línea"
 import { iniciarObstaculos } from "./modules/obstaculos.js"; // Activar y desactivar el modo "evitar obstáculos"
@@ -49,13 +50,25 @@ modeSelect.addEventListener("change", () => {
                 <div class="stats">
                     X: <span id="valX">0.00</span> | Y: <span id="valY">0.00</span>
                 </div>
-                <div class="controls">
+                <div class="controls-grid">
+                    <div class="light-group">
+                        <button id="btnDirIzq" class="btn-light btn-state-off">
+                            <img src="assets/arrow-left.svg" alt="L">
+                        </button>
+                        <button id="btnPrev" class="btn-light btn-state-off">
+                            <img src="assets/warning.svg" alt="P">
+                        </button>
+                        <button id="btnDirDer" class="btn-light btn-state-off">
+                            <img src="assets/arrow-right.svg" alt="R">
+                        </button>
+                    </div>
                     <button id="btnClaxon" class="btn-action">Claxon</button>
                 </div>
             `;
 
             enviar(TOPICS.modo, "control");
             iniciarJoystick();
+            iniciarLuces();
             break;
 
         case "2": // Seguidor de línea
