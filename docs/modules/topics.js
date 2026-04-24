@@ -1,11 +1,18 @@
-export const TOPICS = {
-    modo: "smartcar/control/modo",
-    joystick: "smartcar/control/joystick",
-    claxon: "smartcar/control/claxon",
-    seguidor: "smartcar/control/seguidor",
-    obstaculos: "smartcar/control/obstaculos",
-    luces: "smartcar/control/luces",
-    destino: "smartcar/control/destino",
-    ubicacion: "smartcar/estado/ubicacion",
-    llegada: "smartcar/estado/llegada"
+export const topics = {
+    control: {
+        modo: "smartcar/control/modo",
+        claxon: "smartcar/control/claxon",
+        luces: "smartcar/control/luces",      
+    },
+    
+    modo: {
+        manual: "smartcar/modo/manual",
+        seguidor: "smartcar/modo/seguidor",
+        obstaculos: "smartcar/modo/obstaculos",
+        gps: "smartcar/modo/gps",
+    },
+
+    estado: {
+        ubicacion: "smartcar/estado/ubicacion"
+    }
 }
