@@ -78,8 +78,8 @@ const gps = {
 
         // Animación de 3 segundos desde la coordenada central inicial hasta el punto dado
         setTimeout(() => {
-            mapa.invalidateSize(); // Evitar errores de visualización (áreas grises)
-            mapa.flyTo([19.2491, -103.6974], 19, {
+            this.mapa.invalidateSize(); // Evitar errores de visualización (áreas grises)
+            this.mapa.flyTo([19.2491, -103.6974], 19, {
                 animate: true,
                 duration: 3,
                 easeLinearity: 0.25
@@ -95,7 +95,7 @@ const gps = {
         if(!this.marcadorD) {
             this.marcadorD = L.marker(latlng, {
                 icon: this.iconos.destino
-            }).addTo(mapa).bindPopup("Destino");
+            }).addTo(this.mapa).bindPopup("Destino");
         } else {    
             this.marcadorD.setLatLng(latlng);
         }
@@ -109,7 +109,7 @@ const gps = {
     controlarDestino() {
         // Si no se esta navegando, enviamos el destino seleccionado y la acción "iniciar"
         if(!this.navegando) {
-            if(!this.destino) {
+            if(this.destino) {
                 const msg = {
                     lat: parseFloat(this.destino.lat.toFixed(6)),
                     lon: parseFloat(this.destino.lng.toFixed(6)),
