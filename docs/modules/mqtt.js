@@ -1,68 +1,103 @@
-import mqtt from "mqtt"; // Objeto mqtt con los métodos de la librería MQTT
-
-import { TOPICS } from "./topics.js";
-import { mostrarAlerta, actualizarStatusMQTT } from "./feedback.js";
+import mqtt from "mqtt"; // Objeto "mqtt" de la librería MQTT.js
+import {topics} from "./topics.js";
+import {estadoMQTT} from "./feedback.js";
 
 // Variables de entorno
 const MQTT_HOST = import.meta.env.VITE_MQTT_HOST;
 const MQTT_PORT = import.meta.env.VITE_MQTT_PORT;
 
-/*
-Selección automática de protocolo:
-Si el puerto es 443, 8883, o 8884 usamos 'wss' (Secure WebSockets).
-De lo contrario, usamos 'ws' (WebSockets)
-*/
-const PROTOCOL = (MQTT_PORT === "443" || MQTT_PORT === "8883" || MQTT_PORT === "8884") ? "wss" : "ws";
-const connectURL = `${PROTOCOL}://${MQTT_HOST}:${MQTT_PORT}`;
+// Seleccionar protocolo basado en el puerto y generar URL para conectarse al bróker
+const PROTOCOL = ["443", "8883", "8884"].includes(MQTT_PORT) ? "wss" : "ws";
+const URL = `${PROTOCOL}://${MQTT_HOST}:${MQTT_PORT}`;
 
-// Cliente MQTT
-export const client = mqtt.connect(connectURL, {
-    clientId: "control-web-" + Math.random().toString(16).slice(2, 8), // Generar ID aleatorio
-    clean: true,
-    reconnectPeriod: 1000, // Reintenta reconectar cada segundo
-    connectTimeout: 5000 // Tiempo de espera para considerar error
-})
+// Objeto para monitorear toda la comunicación MQTT del Control Web
+const mqttService = {
+    cliente: null, // Instancia para el objeto "cliente" definido por la librería MQTT.js en el método conectar
 
-// Estado: conectado
-client.on("connect", () => {
-    actualizarStatusMQTT("CONECTADO", "status-online");
-    console.log(`[MQTT] Conexión establecida vía ${PROTOCOL} en ${MQTT_HOST}:${MQTT_PORT}`);
+    conectar() {
+        this.cliente = mqtt.connect(URL, {
+            clientId: "control-web-" + Math.random().toString(16).slice(2, 6),
+            clean: true,
+            reconnectPeriod: 1000,
+            connectTimeout: 5000
+        });
 
-    // Suscripciones MQTT por defecto
-    client.subscribe(TOPICS.ubicacion); // Escuchar la ubicación del Smart Car
-    client.subscribe(TOPICS.llegada); // Esperar notificación de llegada al destino en modo "Navegación GPS"
-});
+        this.configurar();
+    },
 
-// Estado: desconectado
-client.on("offline", () => {
-    actualizarStatusMQTT("DESCONECTADO", "status-offline");
-});
+    // Eventos de la comunicación MQTT
+    configurar() {
+        this.cliente.on("connect", () => {
+            estadoMQTT("CONECTADO", "status-online");
+            console.info(`[MQTT] Conectado a ${URL}`);
+            
+            // Suscripción permanente a los tópicos de estado
+            this.cliente.subscribe(topics.estado.ubicacion);
+        });
 
-// Estado: reconectando
-client.on("reconnect", () => {
-    actualizarStatusMQTT("RECONECTANDO", "status-reconnecting");
-});
+        this.cliente.on("reconnect", () => {
+            estadoMQTT("RECONECTANDO", "status-reconnecting");
+            console.info(`[MQTT] Reconectando a ${URL}`);
+        });
+        
+        this.cliente.on("error", (error) => {
+            estadoMQTT("ERROR", "status-error");
+            console.error(`[MQTT] ${error}`);
+        });
 
-// Estado: error
-client.on("error", (err) => {
-    actualizarStatusMQTT("ERROR", "status-error");
-    console.error("[MQTT]", err);
-});
+        this.cliente.on("offline", () => {
+            estadoMQTT("DESCONECTADO", "status-offline");
+            console.warn("[MQTT] Desconectado")
+        });
 
-// Función global para publicar mensajes al broker NQTT
-export function enviar(topic, message) {
-    if (!client.connected) {
-        actualizarStatusMQTT("DESCONECTADO", "status-offline");
-        console.warn("[PUBLISH] Fallido: cliente desconectado");
-        return;
-    }
+        // Lectura de los mensajes entrantes de los tópicos de estado
+        this.cliente.on("message", (topic, message) => {
+            try {
+                // Parsear el payload entrante y llamar al método para procesar el mensaje
+                const payload = JSON.parse(message.toString());
+                this.procesarMensaje(topic, payload);
+            } catch (error) {
+                console.error(`[MQTT] Subscribe: ${error}`);
+            }
+        });
+    },
 
-    client.publish(topic, message, (err) => {
-        if (!err) {
-            // Debug de salida, comentar para producción
-            console.log(`[PUBLISH] ${topic}: ${message}`);
-        } else {
-            console.error("[PUBLISH]", err);
+    // Procesa la carga útil del mensaje con diferente lógica según el tópico de estado entrante
+    procesarMensaje(topic, data) {
+        if (topic === topics.estado.ubicacion) {
+            /* NOTA: agregar actualización de posición, 
+                actualizar satélites y rumbo en interfaz, 
+                agregar validación de llegada al destino,
+                agregar console.log
+            */
         }
-    });
-}
+    },
+
+    // Función para publicar mensajes MQTT con formato JSON
+    publicar(topic, message) {
+        if (!this.cliente || !this.cliente.connected) {
+            console.warn(`[MQTT] Publish: cliente desconectado`);
+            return;
+        }
+
+        // Validar que el mensaje a enviar sea un objeto y convertirlo a JSON
+        let payload;
+
+        if(typeof message === "object") {
+            JSON.stringify(message);
+        } else {
+            console.error(`[MQTT] Publish: el mensaje debe ser un objeto`);
+        };
+
+        this.cliente.publish(topic, payload, {qos: 0}, (err) => {
+            if (!err) {
+                console.log(`[MQTT] Publish: ${topic}: ${payload}`);
+            } else {
+                console.error(`[MQTT] Publish: ${err}`);
+            }
+        });
+    }
+};
+
+mqttService.conectar(); // Ejecutar el método conectar al cargar el módulo
+export default mqttService; // Exportar el objeto
