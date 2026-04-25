@@ -2,8 +2,8 @@ import mqttService from "./mqttService.js";
 import {topics} from "./topics.js";
 
 const obstaculos = {
-    btnObstaculos: null,
-    activo: false,
+    btnObstaculos: null, // Elemento HTML del botón
+    activo: false, // Estado lógico del modo
 
     iniciar() {
         this.btnObstaculos = document.getElementById("btnObstaculos");
@@ -18,6 +18,7 @@ const obstaculos = {
     },
 
     controlar() {
+        // Alternar estado, estilo visual del botón y payload del mensaje
         this.activo = !this.activo;
 
         this.btnObstaculos.classList.toggle("btn-state-on", this.activo);
@@ -33,8 +34,9 @@ const obstaculos = {
             this.btnObstaculos.onclick = null;
         }
         
+        // Medida de seguridad: apagar el modo si se cambia de menú mientras estaba activo
         if(this.activo) {
-            mqttService.publicar(topics.modo.obstaculos, {accion: "Desactivar"});
+            mqttService.publicar(topics.modo.obstaculos, {accion: "desactivar"});
         }
 
         this.btnObstaculos = null;

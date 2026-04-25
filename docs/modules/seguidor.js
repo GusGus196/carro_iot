@@ -2,8 +2,8 @@ import mqttService from "./mqttService.js";
 import {topics} from "./topics.js";
 
 const seguidor = {
-    btnSeguidor: null,
-    activo: false,
+    btnSeguidor: null, // Elemento HTML del botón
+    activo: false, // Estado lógico del modo
 
     iniciar() {
         this.btnSeguidor = document.getElementById("btnSeguidor");
@@ -18,6 +18,7 @@ const seguidor = {
     },
 
     controlar() {
+        // Alternar estado, estilo visual del botón y payload del mensaje
         this.activo = !this.activo;
 
         this.btnSeguidor.classList.toggle("btn-state-on", this.activo);
@@ -33,8 +34,9 @@ const seguidor = {
             this.btnSeguidor.onclick = null;
         }
         
+        // Medida de seguridad: apagar el modo si se cambia de menú mientras estaba activo
         if(this.activo) {
-            mqttService.publicar(topics.modo.seguidor, {accion: "Desactivar"});
+            mqttService.publicar(topics.modo.seguidor, {accion: "desactivar"});
         }
 
         this.btnSeguidor = null;
