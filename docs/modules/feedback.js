@@ -19,17 +19,26 @@ export function notificar(title, message) {
     }
 }
 
-export function estadoMQTT(mensaje, clase) {
+// Actualiza indicador visual con el estado de la comunicación MQTT (utilizada en el módulo mqttService.js)
+export function actualizarEstado(message, status) {
     const dot = document.getElementById("status-dot");
     const text = document.getElementById("status-text");
     
-    const estados = ["status-start", "status-online", "status-offline", "status-reconnecting", "status-error"];
+    const estados = [
+        "status-connecting",
+        "status-online",
+        "status-offline",
+        "status-reconnecting",
+        "status-error"
+    ];
 
     if (dot && text) {
-        if (dot.classList.contains(clase)) return;
+        if (dot.classList.contains(status)) {
+            return;
+        } 
 
-        text.textContent = mensaje;
+        text.textContent = message;
         dot.classList.remove(...estados);
-        dot.classList.add(clase);
+        dot.classList.add(status);
     }
 }

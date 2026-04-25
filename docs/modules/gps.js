@@ -76,12 +76,12 @@ const gps = {
             this.btnGPS.onclick = () => this.controlarDestino();
         }
 
-        // Animación de 3 segundos desde la coordenada central inicial hasta el punto dado
+        // Animación de 1.5 segundos desde la coordenada central inicial hasta el punto dado
         setTimeout(() => {
             this.mapa.invalidateSize(); // Evitar errores de visualización (áreas grises)
             this.mapa.flyTo([19.2491, -103.6974], 19, {
                 animate: true,
-                duration: 3,
+                duration: 1.5,
                 easeLinearity: 0.25
             });
         }, 1000);

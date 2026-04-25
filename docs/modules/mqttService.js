@@ -1,6 +1,6 @@
 import mqtt from "mqtt"; // Objeto "mqtt" de la librería MQTT.js
 import {topics} from "./topics.js";
-import {estadoMQTT} from "./feedback.js";
+import {actualizarEstado} from "./feedback.js";
 
 // Variables de entorno
 const MQTT_HOST = import.meta.env.VITE_MQTT_HOST;
@@ -28,7 +28,7 @@ const mqttService = {
     // Eventos de la comunicación MQTT
     configurar() {
         this.cliente.on("connect", () => {
-            estadoMQTT("CONECTADO", "status-online");
+            actualizarEstado("CONECTADO", "status-online");
             console.info(`[MQTT] Conectado a ${URL}`);
             
             // Suscripción permanente a los tópicos de estado
@@ -36,17 +36,17 @@ const mqttService = {
         });
 
         this.cliente.on("reconnect", () => {
-            estadoMQTT("RECONECTANDO", "status-reconnecting");
+            actualizarEstado("RECONECTANDO", "status-reconnecting");
             console.info(`[MQTT] Reconectando a ${URL}`);
         });
         
         this.cliente.on("error", (error) => {
-            estadoMQTT("ERROR", "status-error");
+            actualizarEstado("ERROR", "status-error");
             console.error(`[MQTT] ${error}`);
         });
 
         this.cliente.on("offline", () => {
-            estadoMQTT("DESCONECTADO", "status-offline");
+            actualizarEstado("DESCONECTADO", "status-offline");
             console.warn("[MQTT] Desconectado")
         });
 
@@ -84,7 +84,7 @@ const mqttService = {
         let payload;
 
         if(typeof message === "object") {
-            JSON.stringify(message);
+            payload = JSON.stringify(message);
         } else {
             console.error(`[MQTT] Publish: el mensaje debe ser un objeto`);
         };
