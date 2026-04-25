@@ -2,64 +2,61 @@ import mqttService from "./mqttService.js";
 import {topics} from "./topics.js";
 
 const manual = {
-    // Referencias a elementos DOM del josytick
+    // Referencias a elementos del DOM del joystick
     container: null,
     puck: null,
     valX: null,
     valY: null,
 
-    // Referencias a elementos DOM de los botones
+    // Referencias a elementos del DOM de los botones
     btnClaxon: null,
     btnDirIzq: null,
     btnPrev: null,
     btnDirDer: null,
 
-    // Estado interno
+    // Estado interno y flujo de datos
     dragging: false,
     latestMsg: {x: 0, y: 0},
     sendInterval: null,
-    estadoLuces: {izq: false, der: false, prev: false},
-    abortController: null,
+    estadoLuces: {izq: false, prev: false, der: false},
+    abortController: null, // Control de limpieza masiva de eventos
 
-    // Configuración ténica
-    FRECUENCIA_MS: 50,
-    DEADZONE: 0.10,
+    // Configuración técnica
+    FRECUENCIA_MS: 50, // Intervalo de envío de datos (uno cada 50 ms)
+    DEADZONE: 0.10, // Radio de la zona muerta del joystick
 
-    // Método para inicializar los eventos window del objeto joystick,
-    // listeners del botón claxon y los botones para luces direccionales y preventivas
+    // Inicializa el control manual y vincula todos los eventos
     iniciar() {
-        // Si ya existía un controlador para el joystick, lo removemos
+        // Si existía un controlador previo, lo abortamos para evitar fugas de memoria
         if (this.abortController) {
             this.abortController.abort();
         }
 
-        // Crear una nueva señal de control
+        // Señal para eliminar automáticamente todos los listeners al cambiar de modo
         this.abortController = new AbortController();
         const {signal} = this.abortController;
 
-        // Vincular elementos del DOM
         this.container = document.getElementById("joystick-container");
         this.puck = document.getElementById("joystick-puck");
         this.valX = document.getElementById("valX");
         this.valY = document.getElementById("valY");
         this.btnClaxon = document.getElementById("btnClaxon");
         this.btnDirIzq = document.getElementById("btnDirIzq");
-        this.btnDirDer = document.getElementById("btnDirDer");
         this.btnPrev = document.getElementById("btnPrev");
+        this.btnDirDer = document.getElementById("btnDirDer");
 
         if (!this.puck || !this.container) return;
 
-        // Registrar eventos usando signal
-        
-        // Mouse
-        this.puck.addEventListener("mousedown", (event) => this.iniciarJoystick(event), {signal});
+        // Eventos de interacción en window (mouse y touch)
+
+        this.puck.addEventListener("mousedown", () => this.iniciarJoystick(), {signal});
         window.addEventListener("mousemove", (event) => this.moverJoystick(event), {signal});
         window.addEventListener("mouseup", () => this.detenerJoystick(), {signal});
 
-        // Touch (con preventDefault para evitar scroll en móviles)
+        // Touch: preventDefault evita el scroll de la pantalla
         this.puck.addEventListener("touchstart", (event) => {
             event.preventDefault();
-            this.iniciarJoystick(event);
+            this.iniciarJoystick();
         }, {signal, passive: false});
 
         window.addEventListener("touchmove", (event) => {
@@ -68,48 +65,42 @@ const manual = {
         }, {signal, passive: false});
 
         window.addEventListener("touchend", () => this.detenerJoystick(), {signal});
+        window.addEventListener("touchcancel", () => this.detenerJoystick(), {signal});
 
-        // Eventos listener de los botones
+        // Listeners de botones
+
         if (this.btnClaxon) {
             this.btnClaxon.onclick = () => {
                 mqttService.publicar(topics.accion.claxon, {estado: 1});
             };
         }
 
-        if(this.btnDirIzq) {
-            this.btnDirIzq.onclick = () => this.controlarLuces("izq");
-        };
-        
-        if(this.btnDirDer) {
-            this.btnDirDer.onclick = () => this.controlarLuces("der");
-        };
-
-        if(this.btnPrev) {
-            this.btnPrev.onclick = () => this.controlarLuces("prev");
-        };
+        if(this.btnDirIzq) this.btnDirIzq.onclick = () => this.controlarLuces("izq");
+        if(this.btnPrev) this.btnPrev.onclick = () => this.controlarLuces("prev");
+        if(this.btnDirDer) this.btnDirDer.onclick = () => this.controlarLuces("der");
 
         this.actualizarLuces();
     },
 
-    // Método activado al momento de tocar el joystick
+    // Activa el seguimiento del joystick e inicia el bucle de envío MQTT
     iniciarJoystick() {
         this.dragging = true;
 
         if (!this.sendInterval) {
+            // Enviamos el último mensaje a una tasa constante (20 Hz) para no saturar el broker
             this.sendInterval = setInterval(() => {
                 mqttService.publicar(topics.modo.manual, this.latestMsg);
             }, this.FRECUENCIA_MS);
         }
     },
 
-    // Método para calcular la posición del joystick en x, y al detectar movimiento
+    // Calcula coordenadas, limita el movimiento al círculo y normaliza valores (-1 a 1)
     moverJoystick(evento) {
         if (!this.dragging) return;
 
         const rect = this.container.getBoundingClientRect();
         const radius = this.container.offsetWidth / 2;
         
-        // Detectar posición según el tipo de entrada
         const clientX = evento.touches ? evento.touches[0].clientX : evento.clientX;
         const clientY = evento.touches ? evento.touches[0].clientY : evento.clientY;
 
@@ -118,31 +109,28 @@ const manual = {
 
         const distance = Math.sqrt(dx * dx + dy * dy);
         
-        // Si la distancia es mayor que el radio, evitamos que el joystick salga del área circular
+        // Restricción física del "puck" dentro del contenedor circular
         if (distance > radius) {
             dx *= radius / distance;
             dy *= radius / distance;
         }
 
-        // Mover el Puck visualmente
         this.puck.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
         
-        // Normalización de los valores entre -1.00 a 1.00
+        // Normalización y aplicación de zona muerta
         const rawX = dx / radius;
-        const rawY = (dy / radius) * -1;
+        const rawY = (dy / radius) * -1; // Invertimos Y para que arriba sea positivo y abajo negativo
 
-        // Aplicar zona muerta y formatear
         const x = Math.abs(rawX) < this.DEADZONE ? 0 : parseFloat(rawX.toFixed(2));
         const y = Math.abs(rawY) < this.DEADZONE ? 0 : parseFloat(rawY.toFixed(2));
 
-        this.latestMsg = {x, y}; // La posición se enviará en el siguiente intervalo
+        this.latestMsg = {x, y};
 
-        // Mostrar los valores x, y en stats
         if (this.valX) this.valX.innerText = x.toFixed(2);
         if (this.valY) this.valY.innerText = y.toFixed(2);
     },
 
-    // Método activo al soltar el joystick
+    // Detiene el envío de datos y restablece la posición del joystick
     detenerJoystick() {
         if (!this.dragging) return;
         this.dragging = false;
@@ -152,33 +140,32 @@ const manual = {
             this.sendInterval = null;
         }
 
-        // Reiniciar el joystick a su posición inicial y reiniciar los valores a 0.00
         this.puck.style.transform = `translate(-50%, -50%)`;
-        this.latestMsg = { x: 0, y: 0 };
+        this.latestMsg = {x: 0, y: 0};
         
         if (this.valX) this.valX.innerText = "0.00";
         if (this.valY) this.valY.innerText = "0.00";
 
-        // Enviar posición cero para detener
+        // Enviar mensaje de detención
         mqttService.publicar(topics.modo.manual, {x: 0, y: 0});
     },
 
-    // Método para controlar el comportamiento de las luces y publicar mensaje
+    // Gestiona la lógica de exclusión mutua de las luces (solo una activa a la vez)
     controlarLuces(tipo) {
         if(this.estadoLuces[tipo]) {
             this.estadoLuces[tipo] = false;
         } else {
-            this.estadoLuces = {izq: false, der: false, prev: false};
+            this.estadoLuces = {izq: false, prev: false, der: false};
             this.estadoLuces[tipo] = true;
         }
     
         this.actualizarLuces();
 
         const estado = this.estadoLuces[tipo] ? tipo : "off";
-        mqttService.publicar(topics.accion.luces, {luces: estado})
+        mqttService.publicar(topics.accion.luces, {luces: estado});
     },
 
-    // Método para alternar clases de los botones direccionales y preventiva
+    // Refleja el estado de las luces en las clases CSS de los botones
     actualizarLuces() {
         if(!this.btnDirIzq || !this.btnDirDer || !this.btnPrev) return;
 
@@ -192,20 +179,16 @@ const manual = {
         this.btnDirDer.classList.toggle("btn-state-off", !this.estadoLuces.der);
     },
 
-    /*
-    NOTA: este método es necesario llamarlo cuando se cambia de modo en main.js,
-    se encarga de eliminar los event listeners del objeto window y el joystick.
-    Si no hacemos esto, los event listeners se duplicarán cuando volvamos a iniciar este modo,
-    generando mensajes duplicados al tópico del modo manual
-    */
+    // Limpieza total de recursos y listeners para evitar listeners duplicados al cambiar de modo
     eliminar() {
         if (this.abortController) {
-            this.abortController.abort(); // Elimina todos los listeners de window y puck
+            this.abortController.abort();
             this.abortController = null;
         }
 
-        this.detenerJoystick(); // Reinicia intervalos y variables
+        this.detenerJoystick();
 
+        // Liberación de referencias al DOM para el recolector de basura
         this.container = null;
         this.puck = null;
         this.valX = null;
