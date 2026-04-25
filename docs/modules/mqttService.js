@@ -97,7 +97,7 @@ const mqttService = {
             }
         });
     }
-};
+}
 
 mqttService.conectar(); // Ejecutar el método conectar al cargar el módulo
 export default mqttService; // Exportar el objeto
