@@ -344,8 +344,8 @@ body {
     }
 }
 
-/* ------------------------- Alerta ------------------------- */
-#custom-alert {
+/* ------------------------- Notificación ------------------------- */
+#custom-notification {
     position: fixed;
     top: 25px;
     left: 50%;
@@ -369,12 +369,12 @@ body {
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
 }
 
-#custom-alert.alert-visible {
+#custom-notification.notification-visible {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
 }
 
-#alert-title {
+#notification-title {
     display: block;
     font-size: 0.7rem;
     font-weight: 600;
@@ -384,7 +384,7 @@ body {
     text-transform: uppercase;
 }
 
-#alert-body {
+#notification-body {
     font-size: 0.95rem;
     font-weight: 400;
     color: #e6edf3;

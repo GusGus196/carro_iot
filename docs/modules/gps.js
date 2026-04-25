@@ -2,7 +2,7 @@ import L from "leaflet"; // Objeto "L" de la librería Leaflet
 import "leaflet/dist/leaflet.css"; // Estilos CSS usados por Leaflet
 import mqttService from "./mqttService.js";
 import {topics} from "./topics.js";
-import {mostrarAlerta} from "./feedback.js";
+import {notificar} from "./feedback.js";
 
 const gps = {
     mapa: null,
@@ -118,16 +118,16 @@ const gps = {
 
                 // Publicamos el mensaje y mostramos una alerta
                 mqttService.publicar(topics.modo.gps, msg);
-                mostrarAlerta("Navegación GPS", "¡Destino enviado! Iniciando navegación...");
+                notificar("Navegación GPS", "¡Destino enviado! Iniciando navegación...");
 
                 this.navegando = true; // Invertimos la propiedad de control
                 this.actualizarBoton(true); // Llamamos al método para actualizar el botón
             } else {
-                mostrarAlerta("Navegación GPS", "Selecciona un destino para enviar");
+                notificar("Navegación GPS", "Selecciona un destino para enviar");
             }
         } else {
             mqttService.publicar(topics.modo.gps, {accion: "detener"});
-            mostrarAlerta("Navegación GPS", "Navegación detenida");
+            notificar("Navegación GPS", "Navegación detenida");
 
             this.navegando = false;
             this.actualizarBoton(false);
