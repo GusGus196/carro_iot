@@ -1,4 +1,4 @@
-import L, { control } from "leaflet"; // Objeto "L" de la librería Leaflet
+import L from "leaflet"; // Objeto "L" de la librería Leaflet
 import "leaflet/dist/leaflet.css"; // Estilos CSS usados por Leaflet
 import mqttService from "./mqttService.js";
 import {topics} from "./topics.js";
@@ -18,7 +18,7 @@ const gpsManager = {
             iconAnchor: [17.5, 17.5], // Píxel del ícono donde se posiciona la coordenada
             popupAnchor: [0, -18] // Posición del mensaje emergente sobre el ícono
         }),
-        destino: L.icon = ({
+        destino: L.icon({
             iconUrl: "assets/geo-fill.svg",
             iconSize: [32, 32],
             iconAnchor: [16, 32],
@@ -64,7 +64,7 @@ const gpsManager = {
             bounds: limites, // Evita que Leaflet solicite tiles (imágenes) fuera del área
             attribution: "&copy; OpenStreetMap contributors (offline)",
             noWrap: true // Evita que el mapa se repita infinitamente
-        }).addTo(mapa);
+        }).addTo(this.mapa);
 
         // Evento click sobre el mapa, llamamos al método seleccionarDestino
         this.mapa.on("click", (event) => this.seleccionarDestino(event.latlng));
@@ -89,15 +89,17 @@ const gpsManager = {
 
     // Método para leer la coordenada seleccionada, mostrarla y configurar el marcador del destino
     seleccionarDestino(latlng) {
+        this.destino = latlng;
+
         // Si el marcador no existe se crea, de lo contrario solo se actualiza su posición
         if(!this.marcadorD) {
-            this.marcadorD = L.marker(latlng), {
+            this.marcadorD = L.marker(latlng, {
                 icon: this.iconos.destino
-            }.addTo(mapa).bindPopup("Destino");
-        } else {
+            }).addTo(mapa).bindPopup("Destino");
+        } else {    
             this.marcadorD.setLatLng(latlng);
         }
-
+        
         // NOTA: solo se muestran 4 decimales en la interfaz, pero se deben enviar 6 al Smart Car
         document.getElementById("latD").innerHTML = latlng.lat.toFixed(4); // Latitud del destino
         document.getElementById("lonD").innerHTML = latlng.lng.toFixed(4); // Longitud del destino
@@ -187,7 +189,7 @@ const gpsManager = {
         
         const latD = document.getElementById("latD");
         const lonD = document.getElementById("lonD");
-        
+
         if (latD && lonD) {
             latD.innerText = "0.0000";
             lonD.innerText = "0.0000";
