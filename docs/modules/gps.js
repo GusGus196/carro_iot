@@ -4,7 +4,7 @@ import mqttService from "./mqttService.js";
 import {topics} from "./topics.js";
 import {mostrarAlerta} from "./feedback.js";
 
-const gpsManager = {
+const gps = {
     mapa: null,
     destino: null,
     marcadorSC: null, // Marcador del Smart Car
@@ -197,4 +197,4 @@ const gpsManager = {
     }
 };
 
-export default gpsManager;
+export default gps;
