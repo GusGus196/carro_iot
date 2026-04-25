@@ -1,26 +1,41 @@
-import { TOPICS } from "./topics.js";
-import { enviar } from "./mqtt.js";
+import mqttService from "./mqttService.js";
+import {topics} from "./topics.js";
 
-export function iniciarObstaculos() {
-    const btnObstaculos = document.getElementById("btnObstaculos");
-    if (!btnObstaculos) return;
+const obstaculos = {
+    btnObstaculos: null,
+    activo: false,
 
-    let activo = false;
-
-    btnObstaculos.addEventListener("click", () => {
-        activo = !activo;
-
-        // Polarizar la clase, texto y mensaje al hacer click
-        if (activo) {
-            btnObstaculos.classList.remove("btn-state-off");
-            btnObstaculos.classList.add("btn-state-on");
-            btnObstaculos.textContent = "Desactivar";
-            enviar(TOPICS.obstaculos, "1");
+    iniciar() {
+        this.btnObstaculos = document.getElementById("btnObstaculos");
+        
+        if(!this.btnObstaculos) {
+            return;
         } else {
-            btnObstaculos.classList.remove("btn-state-on");
-            btnObstaculos.classList.add("btn-state-off");
-            btnObstaculos.textContent = "Activar";
-            enviar(TOPICS.obstaculos, "0");
+            this.btnObstaculos.onclick = () => {
+                this.controlar();
+            }
         }
-    });
+    },
+
+    controlar() {
+        this.activo = !this.activo;
+
+        this.btnObstaculos.classList.toggle("btn-state-on", this.activo);
+        this.btnObstaculos.classList.toggle("btn-state-off", !this.activo);
+        this.btnObstaculos.textContent = this.activo ? "Desactivar" : "Activar";
+        
+        const msg = {accion: this.activo ? "activar" : "desactivar"};
+        mqttService.publicar(topics.modo.obstaculos, msg);
+    },
+
+    eliminar() {
+        if (this.btnObstaculos) {
+            this.btnObstaculos.onclick = null;
+        }
+        
+        this.btnObstaculos = null;
+        this.activo = false;
+    }
 }
+
+export default obstaculos;
