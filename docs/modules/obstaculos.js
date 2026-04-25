@@ -33,6 +33,10 @@ const obstaculos = {
             this.btnObstaculos.onclick = null;
         }
         
+        if(this.activo) {
+            mqttService.publicar(topics.modo.obstaculos, {accion: "Desactivar"});
+        }
+
         this.btnObstaculos = null;
         this.activo = false;
     }
