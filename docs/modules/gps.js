@@ -1,5 +1,6 @@
-import L from "leaflet"; // Objeto "L" de la librería Leaflet
-import "leaflet/dist/leaflet.css"; // Estilos CSS usados por Leaflet
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+
 import mqttService from "./mqttService.js";
 import {topics} from "./topics.js";
 import {notificar} from "./feedback.js";
@@ -7,140 +8,141 @@ import {notificar} from "./feedback.js";
 const gps = {
     mapa: null,
     destino: null,
-    marcadorSC: null, // Marcador del Smart Car
-    marcadorD: null, // Marcador del destino
-    btnGPS: null, // Botón GPS
-    navegando: false, // Propiedad de control de navegación
-    iconos: { // Iconos de los marcadores
+    marcadorD: null, // Marcador del destino seleccionado
+    marcadorSC: null, // Marcador dinámico del Smart Car
+    
+    // Referencias a elementos del DOM (botón de acción GPS y contenedor visual de coordenadas)
+    btnGPS: null,
+    latD: null,
+    lonD: null,
+    latSC: null,
+    lonSC: null,
+
+    navegando: false, // Flag de control de estado de navegación
+
+    iconos: {
         smartcar: L.icon({
-            iconUrl: "assets/car-front.svg", // URL local del ícono
-            iconSize: [35, 35], // Tamaño del ícono
-            iconAnchor: [17.5, 17.5], // Píxel del ícono donde se posiciona la coordenada
-            popupAnchor: [0, -18] // Posición del mensaje emergente sobre el ícono
+            iconUrl: "assets/car-front.svg",
+            iconSize: [35, 35],
+            iconAnchor: [17.5, 17.5], // Píxel del icono donde se posiciona la coordenada
+            popupAnchor: [0, -18]
         }),
         destino: L.icon({
             iconUrl: "assets/geo-fill.svg",
             iconSize: [32, 32],
             iconAnchor: [16, 32],
             popupAnchor: [0, -32],
-            
-            shadowUrl: "assets/marker-shadow.png", // URL local de la sombra
-            shadowSize: [35, 35], // Tamaño de la sombra
-            shadowAnchor: [10, 35] // Píxel de la sombra donde se posiciona la coordenada
+            shadowUrl: "assets/marker-shadow.png",
+            shadowSize: [35, 35],
+            shadowAnchor: [10, 35]
         })
     },
 
-    // Método para crear y configurar el mapa y sus eventos
+    // Configura la instancia del mapa, límites geográficos y capas de imágenes
     iniciarMapa() {
-        // Límites del mapa local
+        // Definición de perímetros de seguridad (Bounding Box) para el mapa local
         const inferiorIzq = L.latLng(19.244693, -103.705745);
         const superiorDer = L.latLng(19.251293, -103.695145);
         const limites = L.latLngBounds(inferiorIzq, superiorDer);
     
-        // Si el mapa ya fue creado anteriormente o se cambio de modo,
-        // se vuelve a crear al igual que los marcadores para evitar duplicados
+        // Limpieza de instancia previa para evitar fugas de memoria o duplicidad
         if (this.mapa) {
             this.mapa.remove();
             this.marcadorSC = null;
             this.marcadorD = null;
         }
 
-        // L.map crea una instancia de la clase Map de la librería Leaflet.
-        // Se encarga de definir el contenedor, configuración y estado del mapa,
-        // los eventos (click, arrastre), conversión de coordenadas a píxeles, etc.
         this.mapa = L.map("mapa", {
-            center: [19.248, -103.700], // Coordenada central inicial del mapa
-            zoom: 15, // Nivel de zoom inicial del mapa
-            maxBounds: limites, // Área rectangular permitida
-            maxBoundsViscosity: 1.0 // Bloquear el desplazamiento fuera de la zona límite
+            center: [19.248, -103.700],
+            zoom: 15,
+            maxBounds: limites,
+            maxBoundsViscosity: 1.0 // Evita el "rebote" fuera de los límites
         });
 
-        // L.tileLayer crea una instancia de la clase Layer.
-        // Gestiona de forma asíncrona la cuadrícula de imágenes mediante un sistema de plantillas URL,
-        // construye la visualización del mapa a partir de los eventos (click, arrastre) del usuario
+        // Carga las imágenes locales (public/mapa) para rellenar el mapa
         L.tileLayer("mapa/{z}/{x}/{y}.png", {
-            minZoom: 16, // Nivel de zoom mínimo
-            maxZoom: 19, // Nivel de zoom máximo
-            bounds: limites, // Evita que Leaflet solicite tiles (imágenes) fuera del área
+            minZoom: 16,
+            maxZoom: 19,
+            bounds: limites,
             attribution: "&copy; OpenStreetMap contributors (offline)",
             noWrap: true // Evita que el mapa se repita infinitamente
         }).addTo(this.mapa);
 
-        // Evento click sobre el mapa, llamamos al método seleccionarDestino
+        // Eventos click del mapa, referencias y evento del botón
         this.mapa.on("click", (event) => this.seleccionarDestino(event.latlng));
 
-        // Configurar botón del modo GPS para controlar el destino,
-        // utilizando el método controlarDestino
         this.btnGPS = document.getElementById("btnGPS");
-        if(this.btnGPS) {
-            this.btnGPS.onclick = () => this.controlarDestino();
-        }
-
-        // Animación de 1.5 segundos desde la coordenada central inicial hasta el punto dado
+        if(this.btnGPS) this.btnGPS.onclick = () => this.controlarDestino();
+        
+        this.latD = document.getElementById("latD");
+        this.lonD = document.getElementById("lonD");
+        this.latSC = document.getElementById("latSC");
+        this.lonSC = document.getElementById("lonSC");
+        
+        // Ajuste de renderizado post-carga para evitar áreas grises y animación de 1.5 segundos de desplazamiento
         setTimeout(() => {
-            this.mapa.invalidateSize(); // Evitar errores de visualización (áreas grises)
-            this.mapa.flyTo([19.2491, -103.6974], 19, {
-                animate: true,
-                duration: 1.5,
-                easeLinearity: 0.25
-            });
+            if(this.mapa) {
+                this.mapa.invalidateSize();
+                this.mapa.flyTo([19.2491, -103.6974], 19, {
+                    animate: true,
+                    duration: 1.5,
+                });   
+            }
         }, 1000);
     },
 
-    // Método para leer la coordenada seleccionada, mostrarla y configurar el marcador del destino
+    // Controlar la selección visual y lógica del punto de destino
     seleccionarDestino(latlng) {
         this.destino = latlng;
 
-        // Si el marcador no existe se crea, de lo contrario solo se actualiza su posición
         if(!this.marcadorD) {
             this.marcadorD = L.marker(latlng, {
                 icon: this.iconos.destino
             }).addTo(this.mapa).bindPopup("Destino");
         } else {    
-            this.marcadorD.setLatLng(latlng);
+            this.marcadorD.setLatLng(latlng); // Si ya existe, solo lo actualizamos
         }
         
-        // NOTA: solo se muestran 4 decimales en la interfaz, pero se deben enviar 6 al Smart Car
-        document.getElementById("latD").innerHTML = latlng.lat.toFixed(4); // Latitud del destino
-        document.getElementById("lonD").innerHTML = latlng.lng.toFixed(4); // Longitud del destino
+        // Actualización de interfaz: se toman solo 4 decimales por espacio
+        if (this.latD && this.lonD) {
+            this.latD.innerText = latlng.lat.toFixed(4);
+            this.lonD.innerText = latlng.lng.toFixed(4);
+        }
     },
 
-    // Método para enviar el destino y definir el control (iniciar/detener/reanudar)
+    // Envío de coordenadas al Smart Car y tipo de acción
     controlarDestino() {
-        // Si no se esta navegando, enviamos el destino seleccionado y la acción "iniciar"
         if(!this.navegando) {
             if(this.destino) {
+                // El Smart Car requiere precisión de 6 decimales para navegación GPS
                 const msg = {
                     lat: parseFloat(this.destino.lat.toFixed(6)),
                     lon: parseFloat(this.destino.lng.toFixed(6)),
                     accion: "iniciar"
-                }
+                };
 
-                // Publicamos el mensaje y mostramos una alerta
                 mqttService.publicar(topics.modo.gps, msg);
-                notificar("Navegación GPS", "¡Destino enviado! Iniciando navegación...");
+                notificar("NAVEGACIÓN GPS", "¡Destino enviado! Iniciando navegación...");
 
-                this.navegando = true; // Invertimos la propiedad de control
-                this.actualizarBoton(true); // Llamamos al método para actualizar el botón
+                this.navegando = true;
+                this.actualizarBoton(true);
             } else {
-                notificar("Navegación GPS", "Selecciona un destino para enviar");
+                notificar("NAVEGACIÓN GPS", "Selecciona un destino en el mapa.");
             }
         } else {
             mqttService.publicar(topics.modo.gps, {accion: "detener"});
-            notificar("Navegación GPS", "Navegación detenida");
+            notificar("NAVEGACIÓN GPS", "¡Navegación interrumpida! Esperando acción...");
 
             this.navegando = false;
             this.actualizarBoton(false);
         }
     },
 
+    // Actualiza la posición del Smart Car con la información recibida en el tópico de estado "ubicación"
     actualizarPosicion(lat, lon) {
-        const latSC = document.getElementById("latSC");
-        const lonSC = document.getElementById("lonSC");
-
-        if (latSC && latSC) {
-            latSC.innerText = lat.toFixed(4);
-            lonSC.innerText = lon.toFixed(4);
+        if (this.latSC && this.lonSC) {
+            this.latSC.innerText = lat.toFixed(4);
+            this.lonSC.innerText = lon.toFixed(4);
         }
 
         if (this.mapa) {
@@ -150,6 +152,7 @@ const gps = {
                     icon: this.iconos.smartcar
                 }).addTo(this.mapa).bindPopup("Smart Car");
 
+                // Centrar mapa en el marcador del Smart Car en la primera detección
                 this.mapa.panTo(posicion, {
                     animate: true,
                     duration: 1
@@ -160,24 +163,23 @@ const gps = {
         }
     },
 
+    // Cambia el estilo y texto del botón GPS según el estado de la navegación
     actualizarBoton(estado) {
         if (!this.btnGPS) return;
 
         if (estado) {
             this.btnGPS.classList.replace("btn-state-off", "btn-state-on");
-            this.btnGPS.textContent = "Detener destino";
+            this.btnGPS.textContent = "Detener navegación";
         } else {
             this.btnGPS.classList.replace("btn-state-on", "btn-state-off");
             this.btnGPS.textContent = "Enviar destino";
         }
     },
 
-    /*
-    Esta función se ejecuta una vez que el Smart Car ha llegado a su destino.
-    Elimina el pin del destino, el objeto, la coordenada y los valores de latitud y longitud mostrados en pantalla.
-    De este modo, podemos definir un nuevo destino e iniciar la ruta nuevamente
-    */
+    // Limpia el destino actual y su marcador tras completar la ruta
     reiniciarDestino() {
+        notificar("NAVEGACIÓN GPS", "¡Destino alcanzado!");
+        
         if (this.mapa && this.marcadorD) {
             this.mapa.removeLayer(this.marcadorD);
             this.marcadorD = null;
@@ -186,14 +188,35 @@ const gps = {
 
         this.navegando = false;
         this.actualizarBoton(false);
-        
-        const latD = document.getElementById("latD");
-        const lonD = document.getElementById("lonD");
 
-        if (latD && lonD) {
-            latD.innerText = "0.0000";
-            lonD.innerText = "0.0000";
+        if (this.latD && this.lonD) {
+            this.latD.innerText = "0.0000";
+            this.lonD.innerText = "0.0000";
         }
+    },
+
+    eliminar() {
+        // Destruir la instancia del mapa y limpiar memoria de Leaflet
+        if (this.mapa) {
+            this.mapa.off();
+            this.mapa.remove();
+            this.mapa = null;
+        }
+
+        this.marcadorD = null;
+        this.marcadorSC = null;
+        this.destino = null;
+
+        // Liberación de referencias al DOM para el recolector de basura
+        if (this.btnGPS) this.btnGPS.onclick = null;
+        this.btnGPS = null;
+        this.latD = null;
+        this.lonD = null;
+        this.latSC = null;
+        this.lonSC = null;
+
+        // Restablecer flags
+        this.navegando = false;
     }
 };
 
