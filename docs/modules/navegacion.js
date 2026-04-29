@@ -5,7 +5,7 @@ import mqttService from "./mqttService.js";
 import {topics} from "./topics.js";
 import {notificar} from "./feedback.js";
 
-const gps = {
+const navegacion = {
     mapa: null,
     destino: null,
     ultimoDestino: null,
@@ -246,4 +246,4 @@ const gps = {
     }
 };
 
-export default gps;
+export default navegacion;
