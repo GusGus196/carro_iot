@@ -8,23 +8,31 @@ import {notificar} from "./feedback.js";
 const gps = {
     mapa: null,
     destino: null,
-    marcadorD: null, // Marcador del destino seleccionado
+    ultimoDestino: null,
+    marcadorD: null, // Marcador dinámico del destino seleccionado
     marcadorSC: null, // Marcador dinámico del Smart Car
     
-    // Referencias a elementos del DOM (botón de acción GPS y contenedor visual de coordenadas)
+    // Referencias a elementos del DOM
     btnGPS: null,
     latD: null,
     lonD: null,
     latSC: null,
     lonSC: null,
 
-    navegando: false, // Flag de control de estado de navegación
+    /*
+        Estados de navegación:
+        1. REPOSO: mapa creado, sin destino definido.
+        2. LISTO: destino marcado, esperando confirmación de envío.
+        3. NAVEGANDO: el Smart Car está en movimiento.
+        4. PAUSA: detenido con un destino activo.
+    */
+    estado: "REPOSO",
 
     iconos: {
         smartcar: L.icon({
             iconUrl: "assets/car-front.svg",
             iconSize: [35, 35],
-            iconAnchor: [17.5, 17.5], // Píxel del icono donde se posiciona la coordenada
+            iconAnchor: [17.5, 17.5], // Punto del icono que se alinea con la coordenada
             popupAnchor: [0, -18]
         }),
         destino: L.icon({
@@ -38,51 +46,52 @@ const gps = {
         })
     },
 
-    // Configura la instancia del mapa, límites geográficos y capas de imágenes
     iniciarMapa() {
-        // Definición de perímetros de seguridad (Bounding Box) para el mapa local
+        // Perímetros de seguridad (Bounding Box) para el mapa local
         const inferiorIzq = L.latLng(19.244693, -103.705745);
         const superiorDer = L.latLng(19.251293, -103.695145);
         const limites = L.latLngBounds(inferiorIzq, superiorDer);
     
-        // Limpieza de instancia previa para evitar fugas de memoria o duplicidad
+        // Limpieza de instancia previa para evitar fugas de memoria
         if (this.mapa) {
             this.mapa.remove();
-            this.marcadorSC = null;
             this.marcadorD = null;
+            this.marcadorSC = null;
         }
 
         this.mapa = L.map("mapa", {
             center: [19.248, -103.700],
             zoom: 15,
             maxBounds: limites,
-            maxBoundsViscosity: 1.0 // Evita el "rebote" fuera de los límites
+            maxBoundsViscosity: 1.0 // Evita el desplazamiento fuera de los límites
         });
 
-        // Carga las imágenes locales (public/mapa) para rellenar el mapa
         L.tileLayer("mapa/{z}/{x}/{y}.png", {
             minZoom: 16,
             maxZoom: 19,
             bounds: limites,
-            attribution: "&copy; OpenStreetMap contributors (offline)",
-            noWrap: true // Evita que el mapa se repita infinitamente
+            attribution: "&copy; OpenStreetMap Contributors (offline)",
+            noWrap: true
         }).addTo(this.mapa);
 
-        // Eventos click del mapa, referencias y evento del botón
+        // Eventos "click" y referencias
+
         this.mapa.on("click", (event) => this.seleccionarDestino(event.latlng));
 
         this.btnGPS = document.getElementById("btnGPS");
-        if(this.btnGPS) this.btnGPS.onclick = () => this.controlarDestino();
+        if (this.btnGPS) this.btnGPS.onclick = () => this.controlarDestino();
         
         this.latD = document.getElementById("latD");
         this.lonD = document.getElementById("lonD");
         this.latSC = document.getElementById("latSC");
         this.lonSC = document.getElementById("lonSC");
         
-        // Ajuste de renderizado post-carga para evitar áreas grises y animación de 1.5 segundos de desplazamiento
+        // Ajuste de renderizado post-carga para evitar áreas vacías
         setTimeout(() => {
-            if(this.mapa) {
+            if (this.mapa) {
                 this.mapa.invalidateSize();
+
+                // Animación inicial
                 this.mapa.flyTo([19.2491, -103.6974], 19, {
                     animate: true,
                     duration: 1.5,
@@ -91,54 +100,72 @@ const gps = {
         }, 1000);
     },
 
-    // Controlar la selección visual y lógica del punto de destino
     seleccionarDestino(latlng) {
         this.destino = latlng;
 
-        if(!this.marcadorD) {
-            this.marcadorD = L.marker(latlng, {
-                icon: this.iconos.destino
-            }).addTo(this.mapa).bindPopup("Destino");
-        } else {    
-            this.marcadorD.setLatLng(latlng); // Si ya existe, solo lo actualizamos
+        if (!this.marcadorD) {
+            this.marcadorD = L.marker(latlng, {icon: this.iconos.destino}).addTo(this.mapa).bindPopup("Destino");
+        } else {
+            this.marcadorD.setLatLng(latlng);
         }
         
-        // Actualización de interfaz: se toman solo 4 decimales por espacio
         if (this.latD && this.lonD) {
             this.latD.innerText = latlng.lat.toFixed(4);
             this.lonD.innerText = latlng.lng.toFixed(4);
         }
-    },
 
-    // Envío de coordenadas al Smart Car y tipo de acción
-    controlarDestino() {
-        if(!this.navegando) {
-            if(this.destino) {
-                // El Smart Car requiere precisión de 6 decimales para navegación GPS
-                const msg = {
-                    lat: parseFloat(this.destino.lat.toFixed(6)),
-                    lon: parseFloat(this.destino.lng.toFixed(6)),
-                    accion: "iniciar"
-                };
-
-                mqttService.publicar(topics.modo.gps, msg);
-                notificar("NAVEGACIÓN GPS", "¡Destino enviado! Iniciando navegación...");
-
-                this.navegando = true;
-                this.actualizarBoton(true);
-            } else {
-                notificar("NAVEGACIÓN GPS", "Selecciona un destino en el mapa.");
-            }
-        } else {
-            mqttService.publicar(topics.modo.gps, {accion: "detener"});
-            notificar("NAVEGACIÓN GPS", "¡Navegación interrumpida! Esperando acción...");
-
-            this.navegando = false;
-            this.actualizarBoton(false);
+        if (this.estado === "REPOSO") {
+            this.estado = "LISTO";
         }
+
+        this.actualizarBoton();
     },
 
-    // Actualiza la posición del Smart Car con la información recibida en el tópico de estado "ubicación"
+    controlarDestino() {
+        switch (this.estado) {
+            case "REPOSO":
+            case "LISTO":
+                if (!this.destino) return notificar("NAVEGACIÓN GPS", "Por favor, selecciona un punto en el mapa.");
+                
+                this.estado = "NAVEGANDO";
+                this.enviarAccion("iniciar");
+                notificar("NAVEGACIÓN GPS", "¡Destino guardado! Iniciando navegación...");
+                break;
+
+            case "NAVEGANDO":
+                this.estado = "PAUSA";
+                this.enviarAccion("detener");
+                notificar("NAVEGACIÓN GPS", "¡Navegación pausada! Esperando acción...");
+                break;
+            
+            case "PAUSA":
+                // Verifica si el destino cambió significativamente (> 1 metro)
+                if (this.destino.distanceTo(this.ultimoDestino) > 1) {
+                    this.enviarAccion("iniciar");
+                    notificar("NAVEGACIÓN GPS", "¡Destino actualizado! Calculando nueva ruta...");
+                } else {
+                    this.enviarAccion("reanudar");
+                    notificar("NAVEGACIÓN GPS", "Reanudando navegación hacia el destino guardado.");
+                }
+                
+                this.estado = "NAVEGANDO";
+                break;
+        }
+
+        this.actualizarBoton();       
+    },
+
+    enviarAccion(accion) {
+        const msg = {
+            accion: accion,
+            lat: parseFloat(this.destino.lat.toFixed(6)),
+            lon: parseFloat(this.destino.lng.toFixed(6))
+        };
+        
+        mqttService.publicar(topics.modo.gps, msg);
+        this.ultimoDestino = L.latLng(this.destino.lat, this.destino.lng);
+    },
+
     actualizarPosicion(lat, lon) {
         if (this.latSC && this.lonSC) {
             this.latSC.innerText = lat.toFixed(4);
@@ -147,47 +174,47 @@ const gps = {
 
         if (this.mapa) {
             const posicion = [lat, lon];
-            if (!this.marcadorSC) {
-                this.marcadorSC = L.marker(posicion, {
-                    icon: this.iconos.smartcar
-                }).addTo(this.mapa).bindPopup("Smart Car");
 
-                // Centrar mapa en el marcador del Smart Car en la primera detección
-                this.mapa.panTo(posicion, {
-                    animate: true,
-                    duration: 1
-                });
+            if (!this.marcadorSC) {
+                this.marcadorSC = L.marker(posicion, {icon: this.iconos.smartcar}).addTo(this.mapa).bindPopup("Smart Car");
+                this.mapa.panTo(posicion, {animate: true, duration: 1}); // Animación de seguimiento solo al crear el marcador
             } else {
                 this.marcadorSC.setLatLng(posicion);
             }
         }
     },
 
-    // Cambia el estilo y texto del botón GPS según el estado de la navegación
-    actualizarBoton(estado) {
-        if (!this.btnGPS) return;
+    actualizarBoton() {
+        if (!this.btnGPS) return;        
+        this.btnGPS.classList.remove("btn-state-on", "btn-state-off");
 
-        if (estado) {
-            this.btnGPS.classList.replace("btn-state-off", "btn-state-on");
-            this.btnGPS.textContent = "Detener navegación";
+        if (this.estado === "REPOSO" || this.estado === "LISTO") {
+            this.btnGPS.innerText = "Enviar destino";
+            this.btnGPS.classList.add("btn-state-off");
+
+        } else if (this.estado === "NAVEGANDO") {
+            this.btnGPS.innerText = "Detener navegación";
+            this.btnGPS.classList.add("btn-state-on");
+
         } else {
-            this.btnGPS.classList.replace("btn-state-on", "btn-state-off");
-            this.btnGPS.textContent = "Enviar destino";
+            // estado "PAUSA"
+            const haCambiado = this.destino.distanceTo(this.ultimoDestino) > 1;
+            this.btnGPS.innerText = haCambiado ? "Enviar nuevo destino" : "Reanudar navegación";
+            this.btnGPS.classList.add("btn-state-off");
         }
     },
 
-    // Limpia el destino actual y su marcador tras completar la ruta
     reiniciarDestino() {
-        notificar("NAVEGACIÓN GPS", "¡Destino alcanzado!");
+        notificar("NAVEGACIÓN GPS", "¡Destino alcanzado con éxito!");
         
         if (this.mapa && this.marcadorD) {
             this.mapa.removeLayer(this.marcadorD);
-            this.marcadorD = null;
             this.destino = null;
+            this.marcadorD = null;
         }
 
-        this.navegando = false;
-        this.actualizarBoton(false);
+        this.estado = "REPOSO";
+        this.actualizarBoton();
 
         if (this.latD && this.lonD) {
             this.latD.innerText = "0.0000";
@@ -196,27 +223,26 @@ const gps = {
     },
 
     eliminar() {
-        // Destruir la instancia del mapa y limpiar memoria de Leaflet
         if (this.mapa) {
             this.mapa.off();
             this.mapa.remove();
             this.mapa = null;
         }
 
+        this.destino = null;
+        this.ultimoDestino = null;
         this.marcadorD = null;
         this.marcadorSC = null;
-        this.destino = null;
 
-        // Liberación de referencias al DOM para el recolector de basura
         if (this.btnGPS) this.btnGPS.onclick = null;
+
         this.btnGPS = null;
         this.latD = null;
         this.lonD = null;
         this.latSC = null;
         this.lonSC = null;
 
-        // Restablecer flags
-        this.navegando = false;
+        this.estado = "REPOSO";
     }
 };
 
