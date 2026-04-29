@@ -1,6 +1,6 @@
 let notificationTimeout;
 
-// Muestra una notificación flotante de 3 segundos (usada principalmente en GPS)
+// Muestra una notificación flotante de 3 segundos (usada principalmente en navegación)
 export function notificar(title, message) {
     const notification = document.getElementById("custom-notification");
     const notificationTitle = document.getElementById("notification-title");

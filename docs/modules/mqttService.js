@@ -1,4 +1,6 @@
 import mqtt from "mqtt";
+import navegacion from "./navegacion.js";
+
 import {topics} from "./topics.js";
 import {actualizarEstado} from "./feedback.js";
 
@@ -47,7 +49,7 @@ const mqttService = {
         this.configurar();
     },
 
-    // Eventos de la comunicación MQTT
+    // Eventos de la comunicación
     configurar() {
         this.cliente.on("connect", () => {
             actualizarEstado("CONECTADO", "status-online");
@@ -78,6 +80,7 @@ const mqttService = {
                 // Parsear el payload entrante y llamar al método para procesar el mensaje
                 const payload = JSON.parse(message.toString());
                 this.procesarMensaje(topic, payload);
+
             } catch (error) {
                 console.error(`[MQTT] Subscribe: ${error}`);
             }
@@ -87,11 +90,15 @@ const mqttService = {
     // Procesa la carga útil del mensaje con diferente lógica según el tópico de estado entrante
     procesarMensaje(topic, data) {
         if (topic === topics.estado.ubicacion) {
-            /* NOTA: agregar actualización de posición, 
-                actualizar satélites y rumbo en interfaz, 
-                agregar validación de llegada al destino,
-                agregar console.log
-            */
+            const {lat, lon, meta} = data;
+
+            if (lat && lon) {
+                navegacion.actualizarPosicion(lat, lon);
+            }
+
+            if (meta === true) {
+                navegacion.reiniciarDestino();
+            }
         }
     },
 
