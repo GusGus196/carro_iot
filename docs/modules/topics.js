@@ -3,7 +3,7 @@ export const topics = {
         manual: "smartcar/modo/manual",
         seguidor: "smartcar/modo/seguidor",
         obstaculos: "smartcar/modo/obstaculos",
-        gps: "smartcar/modo/gps"
+        navegacion: "smartcar/modo/navegacion"
     },
 
     accion: {

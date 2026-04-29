@@ -162,7 +162,7 @@ const navegacion = {
             lon: parseFloat(this.destino.lng.toFixed(6))
         };
         
-        mqttService.publicar(topics.modo.gps, msg);
+        mqttService.publicar(topics.modo.navegacion, msg);
         this.ultimoDestino = L.latLng(this.destino.lat, this.destino.lng);
     },
 
