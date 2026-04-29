@@ -1,5 +1,5 @@
 import mqttService from "./modules/mqttService.js"; // Objeto para el Servicio MQTT
-import { topics } from "./modules/topics.js"; // Diccionario de los tópicos MQTT
+import {topics} from "./modules/topics.js"; // Diccionario de los tópicos MQTT
 
 // Objeto para cada modo
 import manual from "./modules/manual.js";

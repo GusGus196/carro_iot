@@ -1,16 +1,38 @@
-import mqtt from "mqtt"; // Objeto "mqtt" de la librería MQTT.js
+import mqtt from "mqtt";
 import {topics} from "./topics.js";
 import {actualizarEstado} from "./feedback.js";
 
 // Variables de entorno
+const MQTT_PROTOCOL = import.meta.env.VITE_MQTT_PROTOCOL;
 const MQTT_HOST = import.meta.env.VITE_MQTT_HOST;
-const MQTT_PORT = import.meta.env.VITE_MQTT_PORT;
+const MQTT_PORT = Number(import.meta.env.VITE_MQTT_PORT);
+const MQTT_PATH = import.meta.env.VITE_MQTT_PATH || "";
 
-// Seleccionar protocolo basado en el puerto y generar URL para conectarse al bróker
-const PROTOCOL = ["443", "8883", "8884"].includes(MQTT_PORT) ? "wss" : "ws";
-const URL = `${PROTOCOL}://${MQTT_HOST}:${MQTT_PORT}`;
+if (!MQTT_HOST || !MQTT_PORT) {
+    throw new Error("[MQTT] Configuración: falta HOST o PORT");
+}
 
-// Objeto para monitorear toda la comunicación MQTT del Control Web
+const obtenerURL = () => {
+    let protocolo = MQTT_PROTOCOL;
+
+    if (!protocolo) {
+        protocolo = window.location.protocol === "https:" ? "wss" : "ws";
+    }
+
+    let path = MQTT_PATH.trim();
+
+    if (path && !path.startsWith("/")) {
+        path = `/${path}`;
+    }
+
+    // Evita agregar "undefined" o rutas vacías
+    const finalPath = path || "";
+
+    return `${protocolo}://${MQTT_HOST}:${MQTT_PORT}${finalPath}`;
+};
+
+const URL = obtenerURL();
+
 const mqttService = {
     cliente: null, // Instancia para el objeto "cliente" definido por la librería MQTT.js en el método conectar
 
@@ -83,11 +105,12 @@ const mqttService = {
         // Validar que el mensaje a enviar sea un objeto y convertirlo a JSON
         let payload;
 
-        if(typeof message === "object") {
-            payload = JSON.stringify(message);
-        } else {
+        if (typeof message !== "object") {
             console.error(`[MQTT] Publish: el mensaje debe ser un objeto`);
-        };
+            return;
+        }
+
+        payload = JSON.stringify(message);
 
         this.cliente.publish(topic, payload, {qos: 0}, (err) => {
             if (!err) {
