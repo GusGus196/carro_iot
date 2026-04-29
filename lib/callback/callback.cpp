@@ -5,7 +5,7 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
   memcpy(mensajeChar, payload, length);
   mensajeChar[length] = '\0';
 
-  // Test: Serial.print(topic); Serial.print(": "); Serial.println(mensajeChar);
+  Serial.print(topic); Serial.print(": "); Serial.println(mensajeChar);
 
   if (strcmp(topic, topic_modo) == 0) {
     modo = String(mensajeChar);

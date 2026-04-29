@@ -1,9 +1,9 @@
 #include "config.h"
 
 // Variables de configuración WIFI y MQTT
-const char* ssid = "gusgus";
-const char* password = "gusgus19++";
-const char* mqtt_server = "broker.hivemq.com";
+const char* ssid = "iPhone 13";
+const char* password = "testing-hotspot";
+const char* mqtt_server = "172.20.10.2";
 const int port = 1883;
 
 // TOPICS MQTT de entrada (subscribe)
