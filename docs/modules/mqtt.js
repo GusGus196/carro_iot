@@ -4,8 +4,8 @@ import { TOPICS } from "./topics.js";
 import { mostrarAlerta, actualizarStatusMQTT } from "./feedback.js";
 
 // Variables de entorno
-const MQTT_HOST = "broker.hivemq.com";
-const MQTT_PORT = 8884;
+const MQTT_HOST = import.meta.env.VITE_MQTT_HOST;
+const MQTT_PORT = import.meta.env.VITE_MQTT_PORT;
 
 /*
 Selección automática de protocolo:
