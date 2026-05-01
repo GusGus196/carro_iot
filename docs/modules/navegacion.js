@@ -1,6 +1,5 @@
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-
 import mqttService from "./mqttService.js";
 import {topics} from "./topics.js";
 import {notificar} from "./feedback.js";
@@ -204,7 +203,7 @@ const navegacion = {
         }
     },
 
-    reiniciarDestino() {
+    reiniciar() {
         notificar("NAVEGACIÓN GPS", "¡Destino alcanzado con éxito!");
         
         if (this.mapa && this.marcadorD) {
