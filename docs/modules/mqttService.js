@@ -13,22 +13,15 @@ if (!MQTT_HOST || !MQTT_PORT) {
 }
 
 const obtenerURL = () => {
-    let protocolo = MQTT_PROTOCOL;
-
-    if (!protocolo) {
-        protocolo = window.location.protocol === "https:" ? "wss" : "ws";
-    }
-
-    let path = MQTT_PATH.trim();
-
-    if (path && !path.startsWith("/")) {
+    const protocolo = MQTT_PROTOCOL || (window.location.protocol === "https:" ? "wss" : "ws");
+    
+    let path = (MQTT_PATH || "").trim();
+    
+    if (path.length > 0 && !path.startsWith("/")) {
         path = `/${path}`;
     }
 
-    // Evita agregar "undefined" o rutas vacías
-    const finalPath = path || "";
-
-    return `${protocolo}://${MQTT_HOST}:${MQTT_PORT}${finalPath}`;
+    return `${protocolo}://${MQTT_HOST}:${MQTT_PORT}${path}`;
 };
 
 const URL = obtenerURL();
