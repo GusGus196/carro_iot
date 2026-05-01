@@ -103,33 +103,47 @@ body {
 /* Estados */
 .status-connecting { 
     background-color: #a5dde1;
+    box-shadow: 0 0 8px #a5dde1;
+    animation: blink 1s infinite; 
 }
 
 .status-online {
     background-color: #00ff95; 
     box-shadow: 0 0 8px #00ff95;
-    animation: pulse 2s infinite;
+    animation: pulse-green 2s infinite;
 }
 
 .status-offline { 
-    background-color: #ff4444;
-    box-shadow: 0 0 8px #ff4444;
+    background-color: #666666;
+    box-shadow: 0 0 4px #666666;
 }
 
 .status-reconnecting { 
-    background-color: #00d4ff;
-    box-shadow: 0 0 8px #00d4ff;
+    background-color: #ff9100;
+    box-shadow: 0 0 8px #ff9100;
+    animation: pulse-orange 1.5s infinite;
 }
 
 .status-error { 
-    background-color: #c8ff00;
-    box-shadow: 0 0 8px #c8ff00;
+    background-color: #ff4d4d;
+    box-shadow: 0 0 8px #ff4d4d;
 }
 
-@keyframes pulse {
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+@keyframes pulse-green {
     0% { box-shadow: 0 0 0 0 rgba(0, 255, 149, 0.7); }
     70% { box-shadow: 0 0 0 10px rgba(0, 255, 149, 0); }
     100% { box-shadow: 0 0 0 0 rgba(0, 255, 149, 0); }
+}
+
+@keyframes pulse-orange {
+    0% { box-shadow: 0 0 0 0 rgba(255, 145, 0, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(255, 145, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 145, 0, 0); }
 }
 
 @media (max-width: 600px) {
