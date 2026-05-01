@@ -1,6 +1,4 @@
 import mqtt from "mqtt";
-import navegacion from "./navegacion.js";
-
 import {topics} from "./topics.js";
 import {actualizarEstado} from "./feedback.js";
 
@@ -37,12 +35,13 @@ const URL = obtenerURL();
 
 const mqttService = {
     cliente: null, // Instancia para el objeto "cliente" definido por la librería MQTT.js en el método conectar
+    callback: null,
 
     conectar() {
         this.cliente = mqtt.connect(URL, {
             clientId: "control-web-" + Math.random().toString(16).slice(2, 6),
             clean: true,
-            reconnectPeriod: 1000,
+            reconnectPeriod: 2000,
             connectTimeout: 5000
         });
 
@@ -74,12 +73,14 @@ const mqttService = {
             console.warn("[MQTT] Desconectado")
         });
 
-        // Lectura de los mensajes entrantes de los tópicos de estado
         this.cliente.on("message", (topic, message) => {
             try {
-                // Parsear el payload entrante y llamar al método para procesar el mensaje
                 const payload = JSON.parse(message.toString());
-                this.procesarMensaje(topic, payload);
+
+                
+                if (this.callback) {
+                    this.callback(topic, payload);
+                }
 
             } catch (error) {
                 console.error(`[MQTT] Subscribe: ${error}`);
@@ -87,23 +88,13 @@ const mqttService = {
         });
     },
 
-    // Procesa la carga útil del mensaje con diferente lógica según el tópico de estado entrante
-    procesarMensaje(topic, data) {
-        if (topic === topics.estado.ubicacion) {
-            const {lat, lon, meta} = data;
-
-            if (lat && lon) {
-                navegacion.actualizarPosicion(lat, lon);
-            }
-
-            if (meta === true) {
-                navegacion.reiniciarDestino();
-            }
-        }
+    // Almacenamos las instrucciones de la función definida en main, dentro de la propiedad callback
+    recibir(handler) {
+        this.callback = handler;
     },
-
+    
     // Función para publicar mensajes MQTT con formato JSON
-    publicar(topic, message) {
+    publicar(topic, mensaje) {
         if (!this.cliente || !this.cliente.connected) {
             console.warn(`[MQTT] Publish: cliente desconectado`);
             return;
@@ -112,12 +103,12 @@ const mqttService = {
         // Validar que el mensaje a enviar sea un objeto y convertirlo a JSON
         let payload;
 
-        if (typeof message !== "object") {
+        if (typeof mensaje !== "object") {
             console.error(`[MQTT] Publish: el mensaje debe ser un objeto`);
             return;
         }
 
-        payload = JSON.stringify(message);
+        payload = JSON.stringify(mensaje);
 
         this.cliente.publish(topic, payload, {qos: 0}, (err) => {
             if (!err) {
@@ -129,5 +120,4 @@ const mqttService = {
     }
 }
 
-mqttService.conectar(); // Ejecutar el método conectar al cargar el módulo
 export default mqttService; // Exportar el objeto

@@ -7,6 +7,22 @@ import seguidor from "./modules/seguidor.js";
 import obstaculos from "./modules/obstaculos.js";
 import navegacion from "./modules/navegacion.js";
 
+mqttService.conectar();
+
+mqttService.recibir((topic, payload) => {
+    if (topic === topics.estado.ubicacion) {
+        const {lat, lon, sat, rumbo, alcanzado} = payload;
+        
+        if(lat && lon) {
+            navegacion.actualizarPosicion(lat, lon);
+        }
+
+        if(alcanzado === true) {
+            navegacion.reiniciar();
+        }
+    }
+});
+
 const modeSelect = document.getElementById("mode-select");
 const interfaceSpace = document.getElementById("interface-space");
 
