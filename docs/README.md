@@ -155,3 +155,27 @@ Si quieres verificar que el paquete de producción funciona correctamente antes 
 ```bash
 npm run preview
 ```
+
+## TEMPORAL
+
+### Tópicos del SmartCar
+
+| Tópico | Payload (JSON) | Descripción |
+| :--- | :--- | :--- |
+| `smartcar/accion/modo` | `{"modo":"manual"}` | Cambia el sistema a control manual. |
+| `smartcar/accion/modo` | `{"modo":"seguidor"}` | Cambia al modo seguidor de línea/objetos. |
+| `smartcar/accion/modo` | `{"modo":"obstaculos"}` | Cambia al modo evasión de obstáculos. |
+| `smartcar/accion/modo` | `{"modo":"navegacion"}` | Cambia al modo de navegación GPS. |
+| `smartcar/modo/manual` | `{"x":0.4, "y":0.2}` | Movimiento: Joystick en eje X (0.1). |
+| `smartcar/accion/luces` | `{"luces":"izq"}` | Activa direccional izquierda. |
+| `smartcar/accion/luces` | `{"luces":"der"}` | Activa direccional derecha. |
+| `smartcar/accion/luces` | `{"luces":"prev"}` | Activa luces preventivas (intermitentes). |
+| `smartcar/accion/luces` | `{"luces":"off"}` | Apaga todas las luces. |
+| `smartcar/accion/claxon` | `{"estado":1}` | Activa el claxon / bocina. |
+| `smartcar/modo/seguidor` | `{"accion":"activar"}` | Inicia la rutina de seguimiento. |
+| `smartcar/modo/seguidor` | `{"accion":"desactivar"}` | Detiene la rutina de seguimiento. |
+| `smartcar/modo/obstaculos` | `{"accion":"activar"}` | Activa sensores para evitar colisiones. |
+| `smartcar/modo/obstaculos` | `{"accion":"desactivar"}` | Desactiva el modo evasión. |
+| `smartcar/modo/navegacion` | `{"accion":"iniciar", "lat":19.249158, "lon":-103.697135}` | Inicia ruta hacia coordenadas específicas. |
+| `smartcar/modo/navegacion` | `{"accion":"detener", "lat":19.249158, "lon":-103.697135}` | Detiene la navegación en curso. |
+| `smartcar/modo/navegacion` | `{"accion":"reanudar", "lat":19.249158, "lon":-103.697135}` | Continúa la ruta hacia el destino. |
