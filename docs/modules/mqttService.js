@@ -3,10 +3,10 @@ import {topics} from "./topics.js";
 import {actualizarEstado} from "./feedback.js";
 
 // Variables de entorno
-const MQTT_PROTOCOL = import.meta.env.VITE_MQTT_PROTOCOL;
-const MQTT_HOST = import.meta.env.VITE_MQTT_HOST;
-const MQTT_PORT = Number(import.meta.env.VITE_MQTT_PORT);
-const MQTT_PATH = import.meta.env.VITE_MQTT_PATH || "";
+const MQTT_PROTOCOL = "wss";
+const MQTT_HOST = "broker.hivemq.com";
+const MQTT_PORT = 8884;
+const MQTT_PATH = "/mqtt";
 
 if (!MQTT_HOST || !MQTT_PORT) throw new Error("MQTT_HOST or MQTT_PORT undefined");
 
