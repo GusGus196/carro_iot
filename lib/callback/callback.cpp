@@ -1,42 +1,53 @@
 #include "callback.h"
 
 void callback(char* topic, uint8_t* payload, unsigned int length) {
-  char mensajeChar[length + 1];
-  memcpy(mensajeChar, payload, length);
-  mensajeChar[length] = '\0';
+  // Crear el documento JSON
+  JsonDocument doc;
+  DeserializationError error = deserializeJson(doc, payload, length);
 
-  Serial.print(topic); Serial.print(": "); Serial.println(mensajeChar);
+  // Ignoramos el mensaje si hay un error
+  if (error) {
+    Serial.print(F("Error JSON: "));
+    Serial.println(error.f_str());
+    return;
+  }
 
-  if (strcmp(topic, topic_modo) == 0) {
-    modo = String(mensajeChar);
-    velocidadConstante = 0.0; // Reiniciar la velocidad del modo 'seguidor de línea' a 0
-    hayDestino = false; // Reiniciar el destino del modo 'navegación GPS'
-
-    sonarConfirmacion();
-
-  } else if (strcmp(topic, topic_joystick) == 0) {
-    procesarJoystick(mensajeChar);
-
-  } else if (strcmp(topic, topic_claxon) == 0) {
-    claxon();
-  
-  } else if (strcmp(topic, topic_seguidor) == 0) {
-    momentum = 0;
-    mensajeChar[0] == '1' ? velocidadConstante = 0.4 : velocidadConstante = 0.0;
-
-  } else if (strcmp(topic, topic_destino) == 0) {
-    String msg = String(mensajeChar);
-    int coma = msg.indexOf(','); // posición de la coma, si no encuentra retorna -1
-
-    if(coma != -1) {
-      String stringLat = msg.substring(0, coma);
-      String stringLon = msg.substring(coma + 1);
-
-      destinoLat = stringLat.toDouble();
-      destinoLon = stringLon.toDouble();
-      hayDestino = true;
-
+  // Filtrar por topic
+  if (strcmp(topic, topics.modo) == 0) {
+    const char* nuevoModo = doc["modo"];
+    if (nuevoModo) {
+      modo = String(nuevoModo);
+      velocidadConstante = 0.0;
+      hayDestino = false;
       sonarConfirmacion();
     }
+
+  } else if (strcmp(topic, topics.manual) == 0) {
+    ultimaVezRecibido = millis();
+
+    float valorX = doc["x"] | 0.0f;
+    float valorY = doc["y"] | 0.0f;
+
+    driver(valorX, valorY);
+     
+  } else if (strcmp(topic, topics.seguidor) == 0 || strcmp(topic, topics.obstaculos) == 0) {
+    bool activo = (doc["accion"] == "activar");
+    
+    if (strcmp(topic, topics.seguidor) == 0) {
+        velocidadConstante = activo ? 0.45 : 0.0;
+        momentum = 0;
+
+    } else {
+        // Lógica para modo obstáculos
+    }
+  } else if (strcmp(topic, topics.navegacion) == 0) {
+
+  } else if (strcmp(topic, topics.luces) == 0) {
+    const char* tipo = doc["luces"];
+    // procesar(tipo);
+
+  } else if (strcmp(topic, topics.claxon) == 0) {
+    claxon();
+  
   }
 }

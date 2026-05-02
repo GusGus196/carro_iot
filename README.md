@@ -1,29 +1,15 @@
 # Smart Car
 
-## Descripción
+(Descripción)
 
 ## Contenido
 
 ## Instalación
 
-### Clonar el repositorio
-
-```bash
-git clone https://github.com/gusgus196/carro_iot.git
-cd carro_iot
-```
-
-### Configurar el broker local Eclipse Mosquitto (opcional, solo si no uas público)
-
-Sigue la guía en [`./mosquitto/README.md`](./mosquitto/README.md)
-
-### Control web
-
-Sigue la guía en [`./docs/README.md`](./docs/README.md)
-
-### Firmware
-
-Descargar la extensión PlatformIO y cargar el proyecto al ESP32.
+1. Clonar el repositorio.
+2. Configurar el bróker local Eclipse Mosquitto (opcional), sigue la guía en [`./mosquitto/README.md`](./mosquitto/README.md).
+3. Control Web, sigue la guía en [`./docs/README.md`](./docs/README.md).
+4. Descargar la extensión ![PlatformIO](https://img.shields.io/badge/-PlatformIO-F5822A?style=flat&logo=platformio&logoColor=white) y cargar el proyecto al ESP32.
 
 ## Instrucciones de uso
 

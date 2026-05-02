@@ -8,31 +8,31 @@
     <link rel="stylesheet" href="./css/style.css">
   </head>
   <body>
-    <!--Div para el select del modo y estado del broker MQTT-->
+    <!--Contenedor para la selección de modo y el indicador de estado del broker MQTT-->
     <div class="header-nav">
       <select id="mode-select">
         <option value="0" disabled selected>Selecciona un modo</option>
-        <option value="1">Control manual</option>
-        <option value="2">Seguidor de línea</option>
-        <option value="3">Evitar obstáculos</option>
-        <option value="4">Navegación GPS</option>
+        <option value="1">Manual</option>
+        <option value="2">Seguidor</option>
+        <option value="3">Obstáculos</option>
+        <option value="4">Navegación</option>
       </select>
 
       <div id="mqtt-status">
-        <span id="status-dot" class="status-dot status-start"></span>
+        <span id="status-dot" class="status-dot status-connecting"></span>
         <span id="status-text">CONECTANDO</span>
       </div>
     </div>
 
-    <!--Div para la interfaz del modo-->
+    <!--Contenedor donde se inyectará la interfaz de cada modo dinámicamente-->
     <div id="interface-space">
       <p class="placeholder-text">Selecciona un modo para comenzar</p>
     </div>
 
-    <!--Div para alerta personalizada-->
-    <div id="custom-alert">
-      <span id="alert-title"></span>
-      <div id="alert-body"></div>
+    <!--Contenedor para mostrar notificaciones-->
+    <div id="custom-notification">
+      <span id="notification-title"></span>
+      <div id="notification-body"></div>
     </div>
 
     <script type="module" src="main.js"></script>

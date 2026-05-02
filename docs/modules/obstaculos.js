@@ -1,26 +1,47 @@
-import { TOPICS } from "./topics.js";
-import { enviar } from "./mqtt.js";
+import mqttService from "./mqttService.js";
+import {topics} from "./topics.js";
 
-export function iniciarObstaculos() {
-    const btnObstaculos = document.getElementById("btnObstaculos");
-    if (!btnObstaculos) return;
+const obstaculos = {
+    btnObstaculos: null, // Elemento HTML del botón
+    activo: false, // Estado lógico del modo
 
-    let activo = false;
-
-    btnObstaculos.addEventListener("click", () => {
-        activo = !activo;
-
-        // Polarizar la clase, texto y mensaje al hacer click
-        if (activo) {
-            btnObstaculos.classList.remove("btn-state-off");
-            btnObstaculos.classList.add("btn-state-on");
-            btnObstaculos.textContent = "Desactivar";
-            enviar(TOPICS.obstaculos, "1");
+    iniciar() {
+        this.btnObstaculos = document.getElementById("btnObstaculos");
+        
+        if(!this.btnObstaculos) {
+            return;
         } else {
-            btnObstaculos.classList.remove("btn-state-on");
-            btnObstaculos.classList.add("btn-state-off");
-            btnObstaculos.textContent = "Activar";
-            enviar(TOPICS.obstaculos, "0");
+            this.btnObstaculos.onclick = () => {
+                this.controlar();
+            }
         }
-    });
+    },
+
+    controlar() {
+        // Alternar estado, estilo visual del botón y payload del mensaje
+        this.activo = !this.activo;
+
+        this.btnObstaculos.classList.toggle("btn-state-on", this.activo);
+        this.btnObstaculos.classList.toggle("btn-state-off", !this.activo);
+        this.btnObstaculos.textContent = this.activo ? "Desactivar" : "Activar";
+        
+        const msg = {accion: this.activo ? "activar" : "desactivar"};
+        mqttService.publicar(topics.modo.obstaculos, msg);
+    },
+
+    eliminar() {
+        if (this.btnObstaculos) {
+            this.btnObstaculos.onclick = null;
+        }
+        
+        // Medida de seguridad: apagar el modo si se cambia de menú mientras estaba activo
+        if(this.activo) {
+            mqttService.publicar(topics.modo.obstaculos, {accion: "desactivar"});
+        }
+
+        this.btnObstaculos = null;
+        this.activo = false;
+    }
 }
+
+export default obstaculos;

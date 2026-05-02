@@ -6,18 +6,18 @@ const char* password = "testing-hotspot";
 const char* mqtt_server = "172.20.10.2";
 const int port = 1883;
 
-// TOPICS MQTT de entrada (subscribe)
-const char* topic_modo = "smartcar/control/modo";
-const char* topic_joystick = "smartcar/control/joystick";
-const char* topic_claxon = "smartcar/control/claxon";
-const char* topic_seguidor = "smartcar/control/seguidor";
-const char* topic_obstaculos = "smartcar/control/obstaculos";
-const char* topic_luces = "smartcar/control/luces";
-const char* topic_destino = "smartcar/control/destino";
+const Topics topics = {
+    .manual = "smartcar/modo/manual",
+    .seguidor = "smartcar/modo/seguidor",
+    .obstaculos = "smartcar/modo/obstaculos",
+    .navegacion = "smartcar/modo/navegacion",
 
-// TOPICS MQTT de salida (publish)
-const char* topic_ubicacion = "smartcar/estado/ubicacion";
-const char* topic_llegada = "smartcar/estado/llegada";
+    .modo = "smartcar/accion/modo",
+    .claxon = "smartcar/accion/claxon",
+    .luces = "smartcar/accion/luces",
+
+    .ubicacion = "smartcar/estado/ubicacion"
+};
 
 // Pines del driver DRV8833
 const int motorA1 = 18; // Motor izquierdo

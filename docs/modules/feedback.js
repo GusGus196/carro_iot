@@ -1,51 +1,46 @@
-/*
-Función para mostrar una alerta temporal en la parte superior central.
-Utilizado en el módulo GPS para envío de destino y notificación de llegada
-*/
-let alertTimeout;
+let notificationTimeout;
 
-export function mostrarAlerta(title, message) {
-    const alert = document.getElementById("custom-alert"); // Contenedor
-    const alertTitle = document.getElementById("alert-title"); // Título
-    const alertBody = document.getElementById("alert-body"); // Cuerpo
+// Muestra una notificación flotante de 3 segundos (usada principalmente en navegación)
+export function notificar(title, message) {
+    const notification = document.getElementById("custom-notification");
+    const notificationTitle = document.getElementById("notification-title");
+    const notificationBody = document.getElementById("notification-body");
 
-    // La visibilidad y animación de la alerta se controla con la clase CSS "alert-visible"
-    if (alert) {
-        // Cancela el temporizador anterior para reiniciar el tiempo de la alerta en caso de oprimir más de una vez
-        clearTimeout(alertTimeout);
+    if (notification && notificationTitle && notificationBody) {
+        clearTimeout(notificationTimeout); // Evita que el tiempo de la notificación anterior oculte a la nueva antes de tiempo
 
-        alertTitle.innerText = title;
-        alertBody.innerText = message;
-        alert.classList.add("alert-visible"); // Mostramos la alerta
+        notificationTitle.textContent = title;
+        notificationBody.textContent = message;
+        notification.classList.add("notification-visible");
 
-        alertTimeout = setTimeout(() => {
-            alert.classList.remove("alert-visible"); // Ocultamos la alerta a los 3 segundos
+        notificationTimeout = setTimeout(() => {
+            notification.classList.remove("notification-visible");
         }, 3000);
     }
 }
 
-/*
-Actualiza el indicador visual de conexión MQTT:
-    - Mensaje: texto a mostrar (ej. "CONECTADO")
-    - Clase: color del indicador (ej. status-online)
-*/
-export function actualizarStatusMQTT(mensaje, clase) {
+// Actualiza el indicador visual y el texto de estado de la conexión MQTT 
+export function actualizarEstado(message, status) {
     const dot = document.getElementById("status-dot");
     const text = document.getElementById("status-text");
+    
     const estados = [
-        "status-start",
+        "status-connecting",
         "status-online",
         "status-offline",
         "status-reconnecting",
         "status-error"
     ];
 
-    if (dot.classList.contains(clase)) return; // Si la clase nueva es igual a la actual, salir
+    if (dot && text) {
+        if (dot.classList.contains(status)) {
+            return;
+        } 
 
-    if(dot && text) {
-        text.innerText = mensaje;
-        // Solo cambia la clase dinámica, manteniendo la base 'status-dot'
+        text.textContent = message;
+
+        // Remover clases de estado previas antes de agregar la nueva
         dot.classList.remove(...estados);
-        dot.classList.add(clase);
+        dot.classList.add(status);
     }
 }

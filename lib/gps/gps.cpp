@@ -26,7 +26,7 @@ void enviarUbicacion() {
                 char posicion[40];
                 snprintf(posicion, sizeof(posicion), "%.6f,%.6f", gps.location.lat(), gps.location.lng());
 
-                client.publish(topic_ubicacion, posicion); // Publicar la posición en el TOPIC ubicación
+                client.publish(topics.ubicacion, posicion); // Publicar la posición en el TOPIC ubicación
                 ultimaPublicacion = millis();
                 
                 // Test: Serial.print("Ubicación enviada: "); Serial.println(posicion);
@@ -71,7 +71,7 @@ void procesarLlegada() {
     hayDestino = false; // Esperar por un nuevo destino
     driver(0, 0); // Parar el motor al estar en el radio de llegada
     if(client.connected()) {
-        client.publish(topic_llegada, "1"); // Publicar alerta de llegada al broker MQTT
+        client.publish(topics.ubicacion, "1"); // Publicar alerta de llegada al broker MQTT
     }
     claxon(); // Sonido de llegada 
 }
