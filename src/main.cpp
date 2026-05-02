@@ -5,9 +5,8 @@
 
 #include "buzzer.h" // Funciones para activar el buzzer pasivo
 #include "callback.h" // Función de callback para manejar mensajes MQTT entrantes
-#include "driver.h" // Función para configurar los valores PWM del driver ⁠DRV8833 a partir de la posición del joystick
+#include "driver.h" // Función para configurar los valores PWM del driver
 #include "gps.h" // Funciones para utilizar el módulo GPS y establecer la ruta a un destino dado, publicar en TOPICS ubicación y llegada
-#include "joystick.h" // Funciones para iniciar y procesar la posición del joystick (posición x,y utilizada por el driver)
 #include "reconnect.h" // Función para reconectar al broker MQTT y suscripciones a TOPICS
 #include "seguidor_linea.h" // Funciones para configurar los pines del array de sensores reflectivos TCRT5000 y ejecutar el seguidor de línea
 #include "setup_wifi.h" // Función para configurar la conexión WiFi
@@ -26,7 +25,7 @@ void setup() {
 
   iniciarBuzzer(); // Configuración del canal PWM del buzzer pasivo
   iniciarGPS(); // Iniciar la comunicación serial con el módulo GY-GPS6MV2
-  iniciarJoystick(); // Iniciar los canales PWM de los motores del driver
+  iniciarDriver(); // Iniciar los canales PWM de los motores del driver
   iniciarSeguidor(); // Configuración de los pines de los sensores reflectivos como input
   iniciarUltrasonico(); // Configuración de los pines del sensor ultrasónico como input (echo) y output (trig)
   iniciarSensoresVelocidad(); // Configuración de los pines de los sensores de velocidad.
