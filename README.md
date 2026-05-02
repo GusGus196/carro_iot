@@ -1,36 +1,15 @@
 # Smart Car
 
-
-![License](https://img.shields.io/badge/License-GPL_3.0-blue.svg)
-![MQTT](https://img.shields.io/badge/-MQTT-660066?style=flat&logo=mqtt&logoColor=white)
-![Espressif](https://img.shields.io/badge/-Espressif-E7352C?style=flat&logo=espressif&logoColor=white)
-![PlatformIO](https://img.shields.io/badge/-PlatformIO-F5822A?style=flat&logo=platformio&logoColor=white)
-![WebSockets](https://img.shields.io/badge/Real--Time-WebSockets-010101?style=flat&logo=socketdotio&logoColor=white)
-
-## Descripción
+(Descripción)
 
 ## Contenido
 
 ## Instalación
 
-### Clonar el repositorio
-
-```bash
-git clone https://github.com/gusgus196/carro_iot.git
-cd carro_iot
-```
-
-### Configurar el broker local Eclipse Mosquitto (opcional, solo si no uas público)
-
-Sigue la guía en [`./mosquitto/README.md`](./mosquitto/README.md)
-
-### Control web
-
-Sigue la guía en [`./docs/README.md`](./docs/README.md)
-
-### Firmware
-
-Descargar la extensión PlatformIO y cargar el proyecto al ESP32.
+1. Clonar el repositorio.
+2. Configurar el bróker local Eclipse Mosquitto (opcional), sigue la guía en [`./mosquitto/README.md`](./mosquitto/README.md).
+3. Control Web, sigue la guía en [`./docs/README.md`](./docs/README.md).
+4. Descargar la extensión ![PlatformIO](https://img.shields.io/badge/-PlatformIO-F5822A?style=flat&logo=platformio&logoColor=white) y cargar el proyecto al ESP32.
 
 ## Instrucciones de uso
 
@@ -78,7 +57,9 @@ Descargar la extensión PlatformIO y cargar el proyecto al ESP32.
 ### Indicadores
 
 * 4 LEDs (rojo y ámbar)
-* Resistencias (220–330 Ω)
+* Resistencias (100 Ω)
 
->[!CAUTION]
+> [!CAUTION]
 > Verificar que la suma de los amperajes de todos los componentes no supere el amperaje que proporciona la fuente de energía.
+
+## Licencia

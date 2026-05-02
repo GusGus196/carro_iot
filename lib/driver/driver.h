@@ -23,6 +23,7 @@ extern const float Kp;
 extern const float biasForward;
 extern const float biasReverse;
 
+void iniciarDriver();
 void driver(float valorX, float valorY);
 int calibrarMotor(float motor);
 float compensarMotor(float compensacion, float motor);

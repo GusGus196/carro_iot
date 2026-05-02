@@ -8,14 +8,20 @@ extern const char* password;
 extern const char* mqtt_server;
 extern const int port;
 
-extern const char* topic_modo;
-extern const char* topic_joystick;
-extern const char* topic_claxon;
-extern const char* topic_seguidor;
-extern const char* topic_destino;
+struct Topics {
+    const char* manual;
+    const char* seguidor;
+    const char* obstaculos;
+    const char* navegacion;
 
-extern const char* topic_ubicacion;
-extern const char* topic_llegada;
+    const char* modo;
+    const char* claxon;
+    const char* luces;
+    
+    const char* ubicacion;
+};
+
+extern const Topics topics;
 
 extern const int motorA1;
 extern const int motorA2;

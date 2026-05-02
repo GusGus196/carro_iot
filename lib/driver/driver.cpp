@@ -34,6 +34,18 @@ static unsigned long ultimaCorreccion = 0;
 
 // ----------------------------------------
 
+void iniciarDriver() {
+  ledcSetup(canalA1, freq, resolucion);
+  ledcSetup(canalA2, freq, resolucion);
+  ledcSetup(canalB1, freq, resolucion);
+  ledcSetup(canalB2, freq, resolucion);
+
+  ledcAttachPin(motorA1, canalA1);
+  ledcAttachPin(motorA2, canalA2);
+  ledcAttachPin(motorB1, canalB1);
+  ledcAttachPin(motorB2, canalB2);
+}
+
 int calcularPWM(float motor) {
   float valor = abs(motor);
   if (valor > zonaMuerta) {

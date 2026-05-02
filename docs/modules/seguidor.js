@@ -1,26 +1,47 @@
-import { TOPICS } from "./topics.js";
-import { enviar } from "./mqtt.js";
+import mqttService from "./mqttService.js";
+import {topics} from "./topics.js";
 
-export function iniciarSeguidor() {
-    const btnSensor = document.getElementById("btnSensor");
-    if (!btnSensor) return;
+const seguidor = {
+    btnSeguidor: null, // Elemento HTML del botón
+    activo: false, // Estado lógico del modo
 
-    let activo = false;
-
-    btnSensor.addEventListener("click", () => {
-        activo = !activo;
-
-        // Polarizar la clase, texto y mensaje al hacer click
-        if (activo) {
-            btnSensor.classList.remove("btn-state-off");
-            btnSensor.classList.add("btn-state-on");
-            btnSensor.textContent = "Desactivar";
-            enviar(TOPICS.seguidor, "1");
+    iniciar() {
+        this.btnSeguidor = document.getElementById("btnSeguidor");
+        
+        if(!this.btnSeguidor) {
+            return;
         } else {
-            btnSensor.classList.remove("btn-state-on");
-            btnSensor.classList.add("btn-state-off");
-            btnSensor.textContent = "Activar";
-            enviar(TOPICS.seguidor, "0");
+            this.btnSeguidor.onclick = () => {
+                this.controlar();
+            }
         }
-    });
+    },
+
+    controlar() {
+        // Alternar estado, estilo visual del botón y payload del mensaje
+        this.activo = !this.activo;
+
+        this.btnSeguidor.classList.toggle("btn-state-on", this.activo);
+        this.btnSeguidor.classList.toggle("btn-state-off", !this.activo);
+        this.btnSeguidor.textContent = this.activo ? "Desactivar" : "Activar";
+        
+        const msg = {accion: this.activo ? "activar" : "desactivar"};
+        mqttService.publicar(topics.modo.seguidor, msg);
+    },
+
+    eliminar() {
+        if (this.btnSeguidor) {
+            this.btnSeguidor.onclick = null;
+        }
+        
+        // Medida de seguridad: apagar el modo si se cambia de menú mientras estaba activo
+        if(this.activo) {
+            mqttService.publicar(topics.modo.seguidor, {accion: "desactivar"});
+        }
+
+        this.btnSeguidor = null;
+        this.activo = false;
+    }
 }
+
+export default seguidor;
