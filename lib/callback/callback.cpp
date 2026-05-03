@@ -38,11 +38,11 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
     bool activo = (doc["accion"] == "activar");
     
     if (strcmp(topic, topics.seguidor) == 0) {
-        velocidadConstante = activo ? 0.45 : 0.0;
+        velocidadConstante = activo ? 0.42 : 0.0;
         momentum = 0;
 
     } else {
-        // Lógica para modo obstáculos
+      obstaculos();
     }
   } else if (strcmp(topic, topics.navegacion) == 0) {
     
