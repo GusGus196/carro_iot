@@ -54,9 +54,12 @@
       </div>
     </header>
 
-    <div id="mode-interface" class="flex-1 relative overflow-hidden bg-base-300/10 flex flex-col items-center justify-center">
-      <p class="placeholder-text opacity-40 font-bold uppercase text-xs tracking-widest">Selecciona un modo para comenzar</p>
-    </div>
+    <main id="mode-interface" class="flex-1 relative overflow-hidden bg-base-300/5 flex flex-col items-center justify-center transition-all duration-500">
+      <div id="interface-placeholder" class="flex flex-col items-center gap-4">
+        <span class="loading loading-ring loading-lg opacity-10"></span>
+        <p class="opacity-40 font-bold uppercase text-[10px] tracking-[0.2em]">Selecciona un modo para comenzar</p>
+      </div>
+    </main>
 
     <div id="custom-notification" class="toast toast-top toast-center z-100 pointer-events-none">
       <div id="notification-content" class="hidden alert shadow-lg transition-all duration-300">

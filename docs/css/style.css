@@ -21,10 +21,18 @@
     @apply opacity-40;
 }
 
-/* ------------------------- Interface wrapper (IMPORTANTE) ------------------------- */
+/* ------------------------- Interface wrapper ------------------------- */
 .mode-wrapper {
-  @apply w-full max-w-md mx-auto flex flex-col items-center justify-center h-full gap-6 px-4;
+  
+  @apply w-full max-w-4xl mx-auto h-full 
+         flex flex-col items-center justify-between
+         p-6 md:p-10 transition-all duration-300;
 }
+
+/* ------------------------- Secciones del wrapper ------------------------- */
+.module-header { @apply w-full text-center mb-4; }
+.module-content { @apply flex-1 flex items-center justify-center w-full; }
+.module-footer { @apply w-full mt-auto grid grid-cols-1 gap-4; }
 
 /* ------------------------- Joystick ------------------------- */
 #joystick-container {
