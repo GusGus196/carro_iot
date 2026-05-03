@@ -38,7 +38,7 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
         momentum = 0;
 
     } else {
-        // Lógica para modo obstáculos
+      obstaculos();
     }
   } else if (strcmp(topic, topics.navegacion) == 0) {
 

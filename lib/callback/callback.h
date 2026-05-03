@@ -7,6 +7,7 @@
 #include "config.h"
 #include "buzzer.h"
 #include "driver.h"
+#include "obstaculos.h"
 
 void callback(char* topic, uint8_t* payload, unsigned int length);
 
