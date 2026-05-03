@@ -1,14 +1,11 @@
 @import "tailwindcss";
-@plugin "../node_modules/daisyui";
+@plugin "../node_modules/daisyui" {
+  themes: light --default, dark --prefersdark;
+};
 
-/* ------------------------- Base ------------------------- */
-body {
-  @apply flex flex-col h-screen bg-base-100 text-base-content overflow-hidden;
-}
-
-/* ------------------------- Navbar ------------------------- */
-.header-nav {
-  @apply navbar bg-base-200 shadow-md sticky top-0 z-50 px-4;
+/* ------------------------- Interfaz ------------------------- */
+#interface-space {
+  @apply flex flex-col flex-1 relative overflow-hidden bg-base-300/10;
 }
 
 /* ------------------------- MQTT status ------------------------- */

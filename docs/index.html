@@ -1,37 +1,55 @@
 <!DOCTYPE html>
-<html lang="es-MX">
+<html lang="es-MX" data-theme="light">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Control Web</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   </head>
-  <body class="flex flex-col h-screen bg-base-100 text-base-content overflow-hidden">
-    <!--Contenedor para la selección de modo y el indicador de estado del broker MQTT-->
-    <div class="header-nav">
-      <select id="mode-select" class="select select-bordered">
-        <option value="0" disabled selected>Selecciona un modo</option>
-        <option value="1">Manual</option>
-        <option value="2">Seguidor</option>
-        <option value="3">Obstáculos</option>
-        <option value="4">Navegación</option>
-      </select>
+  <body class="flex flex-col h-screen bg-base-100 text-base-content overflow-hidden font-sans transition-colors duration-500 ease-in-out">
+    <header id="header-nav" class="navbar bg-base-200 shadow-md px-4 z-50 shrink-0 border-b border-base-300 gap-2">
+      <div class="flex-1 gap-2">
+        <select id="mode-select" class="select select-bordered select-sm md:select-md font-bold max-w-37.5 md:max-w-xs">
+          <option value="0" disabled selected>Selecciona un modo</option>
+          <option value="1">Manual</option>
+          <option value="2">Seguidor</option>
+          <option value="3">Obstáculos</option>
+          <option value="4">Navegación</option>
+        </select>
 
-      <div id="mqtt-status" class="ml-auto">
-        <span id="status-dot" class="status-dot status-connecting"></span>
-        <span id="status-text">CONECTANDO</span>
+        <!-- Controlador del tema -->
+        <label class="swap swap-rotate btn btn-ghost btn-circle btn-md">
+          <input type="checkbox" class="theme-controller" value="dark"/>
+
+          <!-- Luna -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="swap-off h-5 w-5 fill-current" viewBox="0 0 16 16">
+            <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278M4.858 1.311A7.27 7.27 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.32 7.32 0 0 0 5.205-2.162q-.506.063-1.029.063c-4.61 0-8.343-3.714-8.343-8.29 0-1.167.242-2.278.681-3.286"/>
+          </svg>
+          
+          <!-- Sol -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="swap-on h-5 w-5 fill-current" viewBox="0 0 16 16">
+            <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708"/>
+          </svg>
+        </label>
       </div>
+
+      <div id="mqtt-status" class="flex items-center gap-2 px-2 py-1.5 bg-base-100 rounded-lg border border-base-300 min-w-8.75 justify-center ml-auto">
+        <span id="status-dot" class="badge badge-xs badge-info animate-pulse"></span>
+        <span id="status-text" class="hidden md:inline text-[10px] font-black uppercase tracking-widest opacity-70">CONECTANDO</span>
+      </div>
+    </header>
+
+    <div id="interface-space" class="flex-1 relative overflow-hidden bg-base-300/10 flex flex-col items-center justify-center">
+      <p class="placeholder-text opacity-40 font-bold uppercase text-xs tracking-widest">Selecciona un modo para comenzar</p>
     </div>
 
-    <!--Contenedor donde se inyectará la interfaz de cada modo dinámicamente-->
-    <div id="interface-space" class="flex-1 relative overflow-hidden">
-      <p class="placeholder-text">Selecciona un modo para comenzar</p>
-    </div>
-
-    <!--Contenedor para mostrar notificaciones-->
-    <div id="custom-notification">
-      <span id="notification-title"></span>
-      <div id="notification-body"></div>
+    <div id="custom-notification" class="toast toast-top toast-center z-100 pointer-events-none">
+      <div id="notification-content" class="hidden alert shadow-lg transition-all duration-300">
+        <div>
+          <h3 id="notification-title" class="font-bold text-xs uppercase"></h3>
+          <div id="notification-body" class="text-sm"></div>
+        </div>
+      </div>
     </div>
 
     <script type="module" src="main.js"></script>
