@@ -22,6 +22,7 @@ void setup() {
 
   client.setServer(mqtt_server, port);
   client.setCallback(callback);
+  Wire.begin(21, 22);
 
   iniciarBuzzer(); // Configuración del canal PWM del buzzer pasivo
   iniciarGPS(); // Iniciar la comunicación serial con el módulo GY-GPS6MV2

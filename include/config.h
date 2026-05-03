@@ -69,7 +69,7 @@ extern float velocidadConstante;
 
 extern float momentum;
 
-const char* tipo;
+extern const char* tipo;
 
 struct ConfigLuces { 
     int pinR;
