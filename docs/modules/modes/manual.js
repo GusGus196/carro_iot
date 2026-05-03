@@ -52,7 +52,8 @@ const manual = {
         this.puck.addEventListener("mousedown", () => this.iniciarJoystick(), {signal});
         window.addEventListener("mousemove", (event) => this.moverJoystick(event), {signal});
         window.addEventListener("mouseup", () => this.detenerJoystick(), {signal});
-
+        window.addEventListener("blur", () => this.detenerJoystick(), {signal});
+        
         // Touch: preventDefault evita el scroll de la pantalla
         this.puck.addEventListener("touchstart", (event) => {
             event.preventDefault();

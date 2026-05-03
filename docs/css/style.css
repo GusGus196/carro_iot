@@ -8,6 +8,15 @@
   @apply flex flex-col flex-1 relative overflow-hidden bg-base-300/10;
 }
 
+/* ------------------------- Wrapper de la interfaz del modo ------------------------- */
+.mode-wrapper {
+  @apply w-full max-w-4xl mx-auto h-full flex flex-col items-center justify-between p-6 md:p-10 transition-all duration-300;
+}
+
+.mode-wrapper-full {
+  @apply w-full h-full relative overflow-hidden;
+}
+
 /* ------------------------- MQTT status ------------------------- */
 #mqtt-status {
     @apply flex items-center justify-center transition-all duration-300;
@@ -21,38 +30,38 @@
     @apply opacity-40;
 }
 
-/* ------------------------- Interface wrapper ------------------------- */
-.mode-wrapper {
-  
-  @apply w-full max-w-4xl mx-auto h-full 
-         flex flex-col items-center justify-between
-         p-6 md:p-10 transition-all duration-300;
-}
-
-/* ------------------------- Secciones del wrapper ------------------------- */
-.module-header { @apply w-full text-center mb-4; }
-.module-content { @apply flex-1 flex items-center justify-center w-full; }
-.module-footer { @apply w-full mt-auto grid grid-cols-1 gap-4; }
-
 /* ------------------------- Joystick ------------------------- */
 #joystick-container {
-  @apply relative w-56 h-56 rounded-full border-4 border-base-300;
-  background: radial-gradient(circle, #2a2f36 0%, #1b1f26 100%);
+  @apply relative w-56 h-56 rounded-full border-4 border-base-300 shadow-inner;
+  background: radial-gradient(circle at center, #2a2f36 0%, #111418 100%);
+}
+
+#joystick-container::before {
+  content: '';
+  @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
+         w-2 h-2 bg-base-content/10 rounded-full;
 }
 
 #joystick-puck {
-  @apply absolute w-16 h-16 bg-primary rounded-full;
+  @apply absolute w-16 h-16 bg-primary rounded-full shadow-2xl;
+  /* El efecto de brillo en el puck lo hace ver 3D */
+  background: radial-gradient(circle at 30% 30%, var(--color-primary) 0%, #000 150%);
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   touch-action: none;
+  cursor: grab;
 }
-
 /* ------------------------- Stats ------------------------- */
 .stats {
-  @apply text-sm font-mono text-primary bg-primary/10 p-3 rounded-lg text-center border border-primary/20 w-full;
+  @apply flex justify-around items-center text-xs font-mono 
+         bg-base-200/50 backdrop-blur-md p-2 rounded-xl
+         border border-base-300 w-full max-w-70 shadow-sm;
 }
 
+.stats span {
+  @apply text-primary font-black text-sm;
+}
 /* ------------------------- Botones ------------------------- */
 .btn-action {
   @apply btn btn-primary w-full;
