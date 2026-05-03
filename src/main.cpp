@@ -47,9 +47,7 @@ void loop() {
       driver(0, 0); // Detener el smart car si el último mensaje fue recibido hace más de 500ms por seguridad
     }
 
-    if(direccionalesFlag){
-      direccionales(tipo);
-    }
+    direccionales(tipo);
 
   } else if (modo == "seguidor") {
     if (velocidadConstante > 0.0) {

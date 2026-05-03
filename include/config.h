@@ -69,7 +69,6 @@ extern float velocidadConstante;
 
 extern float momentum;
 
-extern bool direccionalesFlag;
 const char* tipo;
 
 struct ConfigLuces { 

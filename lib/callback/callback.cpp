@@ -47,7 +47,6 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
     
   } else if (strcmp(topic, topics.luces) == 0) {
     tipo = doc["luces"];
-    direccionalesFlag != direccionalesFlag;
   } else if (strcmp(topic, topics.claxon) == 0) {
     claxon();
   
