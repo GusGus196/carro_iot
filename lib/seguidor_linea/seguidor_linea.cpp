@@ -1,21 +1,34 @@
 #include "seguidor_linea.h"
-const float kP = 0.8;  // más alto = más agresivo
-const float kD = 0.5;  // más alto = más suavizado
 
-const float kMomentum   = 0.4;   // Qué tanto se hereda el giro anterior (0.0 - 1.0)
-const float kDecaimiento = 0.7;  // Qué tan rápido se "olvida" el giro (0.0 = olvido inmediato, 1.0 = nunca olvida)
+const float kP = 0.9f;
+const float kD = 0.55f;
 
-float errorAnterior = 0;
+const float kTiempoDecay_ms   = 120.0f;
+
+const float kResetCentrado    = 0.2f;
+
+const float kMomentum         = 0.4f;
+const float kUmbralRecto      = 0.15f;
+
+float errorAnterior  = 0.0f;
+unsigned long tAnterior = 0;
 
 void iniciarSeguidor() {
-    pinMode(pinS1, INPUT); // Extremo Izquierdo (-1.0) 33
-    pinMode(pinS2, INPUT); // Medio Izquierdo (-0.5)
-    pinMode(pinS3, INPUT); // Centro (0.0)
-    pinMode(pinS4, INPUT); // Medio Derecho (0.5)
-    pinMode(pinS5, INPUT); // Extremo Derecho (1.0)
+    pinMode(pinS1, INPUT); // Extremo Izquierdo
+    pinMode(pinS2, INPUT); // Medio Izquierdo
+    pinMode(pinS3, INPUT); // Centro
+    pinMode(pinS4, INPUT); // Medio Derecho
+    pinMode(pinS5, INPUT); // Extremo Derecho
+    tAnterior = millis();
 }
 
 void ejecutarSeguidorLinea() {
+    unsigned long tAhora = millis();
+    float dt = (float)(tAhora - tAnterior); 
+    tAnterior = tAhora;
+
+    if (dt < 0.1f || dt > 500.0f) return;
+
     int s1 = !digitalRead(pinS1);
     int s2 = !digitalRead(pinS2);
     int s3 = !digitalRead(pinS3);
@@ -25,33 +38,39 @@ void ejecutarSeguidorLinea() {
     float sumaLecturas = s1 + s2 + s3 + s4 + s5;
 
     if (sumaLecturas > 0) {
-        float error = (s1 * -0.65 + s2 * -0.375 + s4 * 0.375 + s5 * 0.65) / sumaLecturas;
+        float error = (s1 * -1.0f + s2 * -0.45f + s4 * 0.45f + s5 * 1.0f) / sumaLecturas;
 
-        float derivada = error - errorAnterior;
-        errorAnterior = error;
-
-        float correccion;
-
-        if (s3 && !s2 && !s4) {
-            // Solo el sensor del medio detecta: aplicar corrección inversa proporcional al momentum
-            correccion = -(momentum * kMomentum);
-        } else {
-            // Sensores laterales activos: calcular corrección normal
-            correccion = (kP * error) + (kD * derivada);
-            // Acumular momentum con la corrección actual
-            momentum = (momentum * kDecaimiento) + (correccion * (1.0 - kDecaimiento));
+        float derivada = (error - errorAnterior) / dt;
+        
+        float kD_dinamico = kD;
+        
+        if (fabsf(error) < fabsf(errorAnterior)) {
+            kD_dinamico = kD * 1.5f; // "freno" al volver al centro
         }
 
-        correccion = constrain(correccion, -1.0, 1.0);
-        driver(correccion, velocidadConstante);
+        float p = kP * error;
+        float d = kD_dinamico * derivada * 10.0f; // multiplicador
+        
+        float correccion = p + d;
+
+        float factorDecay = expf(-dt / kTiempoDecay_ms);
+        momentum = momentum * factorDecay + correccion * (1.0f - factorDecay);
+
+        // Velocidad variable: Reducir velocidad si el giro es brusco
+        float reduccionVelocidad = 1.0f - (fabsf(error) * 0.43f); // Reduce hasta un 40%
+        float velActual = velocidadConstante * reduccionVelocidad;
+
+        errorAnterior = error;
+        
+        correccion = constrain(correccion, -1.0f, 1.0f);
+        driver(correccion, velActual);
+
     } else {
-        // Sin línea detectada: mantener momentum para intentar recuperarla
-        driver(momentum * 0.5, velocidadConstante * 0.5);
+        driver(momentum * 0.5f, velocidadConstante * 0.5f);
     }
 }
 
 /*
-Momenum es el que guarda cuánto y en qué dirección giró el carrito recientemente. Es un número entre -1 a 1.
-kMomentum controla qué tan fuerte es la corrección inversa cuando el sensor del medio detecta la línea.
-KDecaimiento controla qué tan rápido se olvida el momentum entre ciclo y ciclo. Un valor cercano a 1 significa memoria larga y un valor cercano a 0.0 significa que casi no recuerda nada del ciclo anteriro.
+  * Si el carro se sale en las curvas: Sube kP o baja la velocidad en curvas.
+  * Si el carro zigzaguea en las rectas tras una curva: Sube kD o aumenta el multiplicador de la derivada cuando el error disminuye.
 */
