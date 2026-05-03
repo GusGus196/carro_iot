@@ -8,14 +8,16 @@
   </head>
   <body class="flex flex-col h-screen bg-base-100 text-base-content overflow-hidden font-sans transition-colors duration-500 ease-in-out">
     <header id="header-nav" class="navbar bg-base-200 shadow-md px-4 z-50 shrink-0 border-b border-base-300 gap-2">
-      <div class="flex-1 gap-2">
-        <select id="mode-select" class="select select-bordered select-sm md:select-md font-bold max-w-37.5 md:max-w-xs">
-          <option value="0" disabled selected>Selecciona un modo</option>
-          <option value="1">Manual</option>
-          <option value="2">Seguidor</option>
-          <option value="3">Obstáculos</option>
-          <option value="4">Navegación</option>
-        </select>
+      <div class="flex-1 flex items-center gap-2">
+        <div class="flex items-center">
+          <select id="mode-select" class="select select-ghost font-bold uppercase tracking-tighter select-sm md:select-md text-center pl-8 pr-10 w-35 md:w-45 focus:outline-none">
+            <option value="0" disabled selected>Modo</option>
+            <option value="1">Manual</option>
+            <option value="2">Seguidor</option>
+            <option value="3">Obstáculos</option>
+            <option value="4">Navegación</option>
+          </select>
+        </div>
 
         <!-- Controlador del tema -->
         <label class="swap swap-rotate btn btn-ghost btn-circle btn-md">
