@@ -45,7 +45,7 @@ void ledRGB(int color[3])
 }
 
 //si solo tenemos un par de leds usar este 
-void controlLucesTraseras(int velocidadY, String instruccion, int zonaMuerta)
+void controlLucesTraseras(int velocidadY, char* instruccion, int zonaMuerta)
 {   
     bool freno = ledFreno(velocidadY, zonaMuerta);
     
@@ -55,25 +55,25 @@ void controlLucesTraseras(int velocidadY, String instruccion, int zonaMuerta)
     }
 }
 
-void direccionales(String instruccion)
+void direccionales(const char* instruccion)
 {
 
-    if(instruccion == "" || instruccion == "off") 
+    if(instruccion == nullptr || strcmp(instruccion, "") == 0 || strcmp(instruccion, "off") == 0)
     { 
         digitalWrite(pinLedDer, LOW);
         digitalWrite(pinLedIzq, LOW);
     } 
-    else if (instruccion == "der")
+    else if (strcmp(instruccion, "der") == 0)
     {
         pcf.write(pinLedIzq, LOW);
         parpadeoDirec(pinLedDer);
     }
-    else if (instruccion == "izq")
+    else if (strcmp(instruccion, "izq") == 0)
     {
         pcf.write(pinLedDer, LOW); 
         parpadeoDirec(pinLedIzq);
     }
-    else if (instruccion == "prev")
+    else if (strcmp(instruccion, "prev") == 0)
     {
         parpadeoInter(pinLedDer, pinLedIzq);
     }
@@ -101,10 +101,11 @@ bool ledFreno(float velocidadY, int zonaMuerta) {
 void parpadeoDirec(int pinLed)
 {
     static unsigned long tiempoAnterior = 0; 
+    static bool estadoActual = false;
     if(millis() - tiempoAnterior >= intervalo) 
     {
         tiempoAnterior = millis();   
-        bool estadoActual = digitalRead(pinLed);
+        estadoActual = digitalRead(pinLed);
         pcf.write(pinLed, !estadoActual); 
     }
 }

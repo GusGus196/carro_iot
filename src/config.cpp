@@ -82,3 +82,4 @@ const int pinG = 1;
 const int pinB = 2;
 const int pinLedIzq = 3;
 const int pinLedDer = 4;
+
