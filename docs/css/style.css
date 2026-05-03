@@ -3,8 +3,8 @@
   themes: light --default, dark --prefersdark;
 };
 
-/* ------------------------- Interfaz ------------------------- */
-#interface-space {
+/* ------------------------- Interfaz del modo ------------------------- */
+#mode-interface {
   @apply flex flex-col flex-1 relative overflow-hidden bg-base-300/10;
 }
 

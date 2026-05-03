@@ -25,7 +25,7 @@ mqttService.recibir((topic, payload) => {
 });
 
 const modeSelect = document.getElementById("mode-select");
-const interfaceSpace = document.getElementById("interface-space");
+const modeInterface = document.getElementById("mode-interface");
 
 modeSelect.addEventListener("change", () => {
     const value = modeSelect.value;
@@ -38,7 +38,7 @@ modeSelect.addEventListener("change", () => {
 
     switch (value) {
         case "1": // Control manual
-            interfaceSpace.innerHTML = `
+            modeInterface.innerHTML = `
                 <div class="mode-wrapper">
                     <div id="joystick-container">
                         <div id="joystick-puck"></div>
@@ -70,7 +70,7 @@ modeSelect.addEventListener("change", () => {
             break;
 
         case "2": // Seguidor de línea
-            interfaceSpace.innerHTML = `
+            modeInterface.innerHTML = `
                 <div class="mode-wrapper">
                     <button id="btnSeguidor" class="btn-action btn-state-off">
                         Activar
@@ -83,7 +83,7 @@ modeSelect.addEventListener("change", () => {
             break;
             
         case "3": // Evitar obstáculos
-            interfaceSpace.innerHTML = `
+            modeInterface.innerHTML = `
                 <div class="mode-wrapper">
                     <button id="btnObstaculos" class="btn-action btn-state-off">
                         Activar
@@ -96,7 +96,7 @@ modeSelect.addEventListener("change", () => {
             break;
 
         case "4": // Navegación GPS
-            interfaceSpace.innerHTML = `
+            modeInterface.innerHTML = `
                 <div class="absolute inset-0">
                     <div id="mapa" class="w-full h-full"></div>
                     <div class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-base-200 p-4 rounded-lg shadow-lg space-y-2">
@@ -122,7 +122,7 @@ modeSelect.addEventListener("change", () => {
 
         default:
             // Por si acaso (valor inválido o vacío)
-            interfaceSpace.innerHTML = `
+            modeInterface.innerHTML = `
                 <p class="text-base-content/60">
                 Selecciona un modo de operación válido
                 </p>
