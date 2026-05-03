@@ -31,6 +31,7 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
       hayDestino = false;
       sonarConfirmacion();
       ledModo(nuevoModo);
+      tipo = "off";
     }
 }
    else if (strcmp(topic, topics.seguidor) == 0 || strcmp(topic, topics.obstaculos) == 0) {
