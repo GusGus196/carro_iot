@@ -77,9 +77,15 @@ float velocidadConstante = 0.00; // Velocidad constante para modo 'seguidor de l
 
 
 //pines LEDS
-const int pinR = 0;
-const int pinG = 1;
-const int pinB = 2;
-const int pinLedIzq = 3;
-const int pinLedDer = 4;
-
+const ConfigLuces lucesConf { 
+    .pinR = 0,
+    .pinG = 1,
+    .pinB = 2,
+    .pinLedDer = 3,
+    .pinLedIzq = 4,
+   
+    .colorManual = {0, 1, 1},
+    .colorSeguidor = {1, 0, 1},
+    .colorObstaculos = {1, 1, 0},
+    .colorNavegacion = {0, 0, 0},
+};

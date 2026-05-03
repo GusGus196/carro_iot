@@ -39,9 +39,9 @@ void sonarError() {
 //funcion que da color al led
 void ledRGB(int color[3])
 {
-    pcf.write(pinR, color[0]);
-    pcf.write(pinG, color[1]);
-    pcf.write(pinB, color[2]);    
+    pcf.write(lucesConf.pinR, color[0]);
+    pcf.write(lucesConf.pinG, color[1]);
+    pcf.write(lucesConf.pinB, color[2]);    
 }
 
 //si solo tenemos un par de leds usar este 
@@ -60,22 +60,22 @@ void direccionales(const char* instruccion)
 
     if(instruccion == nullptr || strcmp(instruccion, "") == 0 || strcmp(instruccion, "off") == 0)
     { 
-        digitalWrite(pinLedDer, LOW);
-        digitalWrite(pinLedIzq, LOW);
+        digitalWrite(lucesConf.pinLedDer, LOW);
+        digitalWrite(lucesConf.pinLedIzq, LOW);
     } 
     else if (strcmp(instruccion, "der") == 0)
     {
-        pcf.write(pinLedIzq, LOW);
-        parpadeoDirec(pinLedDer);
+        pcf.write(lucesConf.pinLedIzq, LOW);
+        parpadeoDirec(lucesConf.pinLedDer);
     }
     else if (strcmp(instruccion, "izq") == 0)
     {
-        pcf.write(pinLedDer, LOW); 
-        parpadeoDirec(pinLedIzq);
+        pcf.write(lucesConf.pinLedDer, LOW); 
+        parpadeoDirec(lucesConf.pinLedIzq);
     }
     else if (strcmp(instruccion, "prev") == 0)
     {
-        parpadeoInter(pinLedDer, pinLedIzq);
+        parpadeoInter(lucesConf.pinLedDer, lucesConf.pinLedIzq);
     }
 }
 
@@ -89,8 +89,8 @@ bool ledFreno(float velocidadY, int zonaMuerta) {
 
     static bool ultimoEstado = false;
     if (estadoFreno != ultimoEstado) {
-        pcf.write(pinLedDer, estadoFreno ? HIGH : LOW);
-        pcf.write(pinLedIzq, estadoFreno ? HIGH : LOW);
+        pcf.write(lucesConf.pinLedDer, estadoFreno ? HIGH : LOW);
+        pcf.write(lucesConf.pinLedIzq, estadoFreno ? HIGH : LOW);
         ultimoEstado = estadoFreno;
     }
 

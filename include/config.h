@@ -69,9 +69,19 @@ extern float velocidadConstante;
 
 extern float momentum;
 
-extern const int pinR;
-extern const int pinG;
-extern const int pinB;
-extern const int pinLedIzq;
-extern const int pinLedDer;
+
+struct ConfigLuces { 
+    int pinR;
+    int pinG;
+    int pinB;
+    int pinLedDer;
+    int pinLedIzq;
+   
+    int colorManual[3];
+    int colorSeguidor[3];
+    int colorObstaculos[3];
+    int colorNavegacion[3];
+};
+
+extern const ConfigLuces lucesConf;
 #endif
