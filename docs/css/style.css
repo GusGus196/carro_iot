@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @plugin "../node_modules/daisyui";
 
-/* ------------------------- Layout base ------------------------- */
+/* ------------------------- Base ------------------------- */
 body {
   @apply flex flex-col h-screen bg-base-100 text-base-content overflow-hidden;
 }
@@ -11,12 +11,7 @@ body {
   @apply navbar bg-base-200 shadow-md sticky top-0 z-50 px-4;
 }
 
-/* ------------------------- Select ------------------------- */
-#mode-select {
-  @apply select select-bordered;
-}
-
-/* ------------------------- Estado MQTT ------------------------- */
+/* ------------------------- MQTT status ------------------------- */
 #mqtt-status {
   @apply flex items-center gap-2;
 }
@@ -30,29 +25,15 @@ body {
 }
 
 /* Estados */
-.status-connecting {
-  @apply bg-info animate-pulse;
-}
+.status-connecting { @apply bg-info animate-pulse; }
+.status-online { @apply bg-success; }
+.status-offline { @apply bg-neutral; }
+.status-reconnecting { @apply bg-warning animate-pulse; }
+.status-error { @apply bg-error; }
 
-.status-online {
-  @apply bg-success;
-}
-
-.status-offline {
-  @apply bg-neutral;
-}
-
-.status-reconnecting {
-  @apply bg-warning animate-pulse;
-}
-
-.status-error {
-  @apply bg-error;
-}
-
-/* ------------------------- Interface ------------------------- */
-#interface-space {
-  @apply flex-1 relative overflow-hidden flex flex-col items-center justify-center;
+/* ------------------------- Interface wrapper (IMPORTANTE) ------------------------- */
+.mode-wrapper {
+  @apply w-full max-w-md mx-auto flex flex-col items-center justify-center h-full gap-6 px-4;
 }
 
 /* ------------------------- Joystick ------------------------- */
@@ -71,12 +52,12 @@ body {
 
 /* ------------------------- Stats ------------------------- */
 .stats {
-  @apply text-sm font-mono text-primary bg-primary/10 p-3 rounded-lg text-center border border-primary/20;
+  @apply text-sm font-mono text-primary bg-primary/10 p-3 rounded-lg text-center border border-primary/20 w-full;
 }
 
 /* ------------------------- Botones ------------------------- */
 .btn-action {
-  @apply btn btn-primary;
+  @apply btn btn-primary w-full;
 }
 
 .btn-state-on {

@@ -39,7 +39,7 @@ modeSelect.addEventListener("change", () => {
     switch (value) {
         case "1": // Control manual
             interfaceSpace.innerHTML = `
-                <div class="flex flex-col items-center justify-center h-full gap-6">
+                <div class="mode-wrapper">
                     <div id="joystick-container">
                         <div id="joystick-puck"></div>
                     </div>
@@ -71,7 +71,7 @@ modeSelect.addEventListener("change", () => {
 
         case "2": // Seguidor de línea
             interfaceSpace.innerHTML = `
-                <div class="flex items-center justify-center h-full">
+                <div class="mode-wrapper">
                     <button id="btnSeguidor" class="btn-action btn-state-off">
                         Activar
                     </button>
@@ -84,7 +84,7 @@ modeSelect.addEventListener("change", () => {
             
         case "3": // Evitar obstáculos
             interfaceSpace.innerHTML = `
-                <div class="flex items-center justify-center h-full">
+                <div class="mode-wrapper">
                     <button id="btnObstaculos" class="btn-action btn-state-off">
                         Activar
                     </button>
