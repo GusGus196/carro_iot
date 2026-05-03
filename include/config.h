@@ -76,6 +76,8 @@ struct ConfigLuces {
     int pinB;
     int pinLedDer;
     int pinLedIzq;
+    int pinFrenoDer;
+    int pinFrenoIzq;
    
     int colorManual[3];
     int colorSeguidor[3];

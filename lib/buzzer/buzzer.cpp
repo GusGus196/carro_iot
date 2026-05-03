@@ -90,8 +90,8 @@ bool ledFreno(float velocidadY, int zonaMuerta) {
 
     static bool ultimoEstado = false;
     if (estadoFreno != ultimoEstado) {
-        pcf.write(lucesConf.pinLedDer, estadoFreno ? HIGH : LOW);
-        pcf.write(lucesConf.pinLedIzq, estadoFreno ? HIGH : LOW);
+        pcf.write(lucesConf.pinFrenoDer, estadoFreno ? HIGH : LOW);
+        pcf.write(lucesConf.pinFrenoIzq, estadoFreno ? HIGH : LOW);
         ultimoEstado = estadoFreno;
     }
 
