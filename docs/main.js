@@ -1,3 +1,4 @@
+import './css/style.css';
 import mqttService from "./modules/mqtt/mqttService.js"; // Objeto para el Servicio MQTT
 import {topics} from "./modules/mqtt/topics.js"; // Diccionario de los tópicos MQTT
 

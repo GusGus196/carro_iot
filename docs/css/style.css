@@ -1,3 +1,6 @@
+@import "tailwindcss";
+@plugin "../node_modules/daisyui";
+
 /* ------------------------- Configuración global y body ------------------------- */
 :root {
     --bg-body: #0f1115;

@@ -1,6 +1,11 @@
-import {defineConfig} from "vite";
+import {defineConfig} from 'vite';
+import tailwindcss from '@tailwindcss/vite';
 
-export default defineConfig ({
+export default defineConfig({
+  plugins: [
+    tailwindcss()
+  ],
+
   server: {
     port: 3000,
     host: true, // Acceso desde cualquier dispositivo en la red LAN
