@@ -10,23 +10,16 @@
 
 /* ------------------------- MQTT status ------------------------- */
 #mqtt-status {
-  @apply flex items-center gap-2;
-}
-
-.status-dot {
-  @apply w-3 h-3 rounded-full transition-all;
+    @apply flex items-center justify-center transition-all duration-300;
 }
 
 #status-text {
-  @apply text-xs font-semibold;
+    @apply text-[10px] font-black uppercase tracking-[0.15em] opacity-50;
 }
 
-/* Estados */
-.status-connecting { @apply bg-info animate-pulse; }
-.status-online { @apply bg-success; }
-.status-offline { @apply bg-neutral; }
-.status-reconnecting { @apply bg-warning animate-pulse; }
-.status-error { @apply bg-error; }
+.badge-neutral {
+    @apply opacity-40;
+}
 
 /* ------------------------- Interface wrapper (IMPORTANTE) ------------------------- */
 .mode-wrapper {

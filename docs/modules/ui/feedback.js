@@ -19,28 +19,30 @@ export function notificar(title, message) {
     }
 }
 
-// Actualiza el indicador visual y el texto de estado de la conexión MQTT 
+// Actualiza el indicador visual y el texto de estado de la conexión MQTT
 export function actualizarEstado(message, status) {
     const dot = document.getElementById("status-dot");
     const text = document.getElementById("status-text");
     
-    const estados = [
-        "status-connecting",
-        "status-online",
-        "status-offline",
-        "status-reconnecting",
-        "status-error"
-    ];
+    // Mapeamos tus estados internos a clases de daisyUI
+    const daisyClasses = {
+        "status-connecting": "badge-info",
+        "status-online": "badge-success",
+        "status-offline": "badge-neutral",
+        "status-reconnecting": "badge-warning",
+        "status-error": "badge-error"
+    };
 
     if (dot && text) {
-        if (dot.classList.contains(status)) {
-            return;
-        } 
-
         text.textContent = message;
 
-        // Remover clases de estado previas antes de agregar la nueva
-        dot.classList.remove(...estados);
-        dot.classList.add(status);
+        dot.classList.remove("badge-info", "badge-success", "badge-neutral", "badge-warning", "badge-error", "animate-pulse");
+
+        const nuevaClase = daisyClasses[status] || "badge-neutral";
+        dot.classList.add(nuevaClase);
+
+        if (status === "status-connecting" || status === "status-reconnecting") {
+            dot.classList.add("animate-pulse");
+        }
     }
 }
