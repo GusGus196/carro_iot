@@ -1,5 +1,5 @@
-import mqttService from "./mqttService.js";
-import {topics} from "./topics.js";
+import mqttService from "../mqtt/mqttService.js";
+import {topics} from "../mqtt/topics.js";
 
 const seguidor = {
     btnSeguidor: null, // Elemento HTML del botón

@@ -1,8 +1,8 @@
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import mqttService from "./mqttService.js";
-import {topics} from "./topics.js";
-import {notificar} from "./feedback.js";
+import mqttService from "../mqtt/mqttService.js";
+import {topics} from "../mqtt/topics.js";
+import {notificar} from "../ui/feedback.js";
 
 const navegacion = {
     mapa: null,

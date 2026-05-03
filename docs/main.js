@@ -1,11 +1,11 @@
-import mqttService from "./modules/mqttService.js"; // Objeto para el Servicio MQTT
-import {topics} from "./modules/topics.js"; // Diccionario de los tópicos MQTT
+import mqttService from "./modules/mqtt/mqttService.js"; // Objeto para el Servicio MQTT
+import {topics} from "./modules/mqtt/topics.js"; // Diccionario de los tópicos MQTT
 
 // Objeto para cada modo
-import manual from "./modules/manual.js";
-import seguidor from "./modules/seguidor.js";
-import obstaculos from "./modules/obstaculos.js";
-import navegacion from "./modules/navegacion.js";
+import manual from "./modules/modes/manual.js";
+import seguidor from "./modules/modes/seguidor.js";
+import obstaculos from "./modules/modes/obstaculos.js";
+import navegacion from "./modules/modes/navegacion.js";
 
 mqttService.conectar();
 

@@ -1,6 +1,6 @@
 import mqtt from "mqtt";
 import {topics} from "./topics.js";
-import {actualizarEstado} from "./feedback.js";
+import {actualizarEstado} from "../ui/feedback.js";
 
 // Variables de entorno
 const MQTT_PROTOCOL = import.meta.env.VITE_MQTT_PROTOCOL;
