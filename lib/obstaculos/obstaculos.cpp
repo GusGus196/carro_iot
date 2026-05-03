@@ -20,5 +20,5 @@ void obstaculos(){
 
 void esquivarObstaculo(){
     driver(0,0); //! Aqui se detiene
-    // El carro deberá de retroceder por lo menos hasta que la variable obstaculo tenga mas de 7cm para poder hacer el giro. También si es que ya está, se podria mandar a llamar los leds de precausión.
+    // El carro deberá de retroceder por lo menos hasta que la variable obstaculo tenga mas de 7cm para poder hacer el giro. También, si es que ya está, se podria mandar a llamar los leds de precausión.
 }
