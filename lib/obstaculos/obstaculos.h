@@ -6,5 +6,6 @@
 #include "driver.h"
 
 extern void obstaculos();
+extern void esquivarObstaculo();
 
 #endif
