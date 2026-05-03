@@ -22,6 +22,7 @@ void parpadeoDirec(int pinLed);
 void parpadeoInter(int pinLed1, int pinLed2);
 void ledModo(const String &modo);
 
+void actualizarCicloParpadeo();
 
 extern const int intervalo;
 extern bool preventivasActivas;  

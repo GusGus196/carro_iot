@@ -5,6 +5,17 @@ bool direccionalIzqActiva = false;
 const int intervalo = 500;
 PCF8574 pcf(0x20);
 
+
+unsigned long lastMillisBlink = 0;
+bool toggleEstado = false;
+
+void actualizarCicloParpadeo() {
+    if (millis() - lastMillisBlink >= intervalo) {
+        lastMillisBlink = millis();
+        toggleEstado = !toggleEstado;
+    }
+}
+
 void iniciarBuzzer() {
     ledcSetup(canalBuzzer, freqBuzzer, resolucion);
     ledcAttachPin(pinBuzzer, canalBuzzer);
@@ -56,27 +67,24 @@ void controlLucesTraseras(int velocidadY, char* instruccion, int zonaMuerta)
     }
 }
 
-void direccionales(const char* instruccion)
-{
+void direccionales(const char* instruccion) {
+    actualizarCicloParpadeo(); // Actualizamos el pulso de tiempo
 
-    if(instruccion == nullptr || strcmp(instruccion, "") == 0 || strcmp(instruccion, "off") == 0)
-    { 
-        digitalWrite(lucesConf.pinLedDer, LOW);
-        digitalWrite(lucesConf.pinLedIzq, LOW);
+    if (instruccion == nullptr || strcmp(instruccion, "off") == 0) { 
+        pcf.write(lucesConf.pinLedDer, HIGH);
+        pcf.write(lucesConf.pinLedIzq, HIGH);
     } 
-    else if (strcmp(instruccion, "der") == 0)
-    {
-        pcf.write(lucesConf.pinLedIzq, LOW);
-        parpadeoDirec(lucesConf.pinLedDer);
+    else if (strcmp(instruccion, "der") == 0) {
+        pcf.write(lucesConf.pinLedIzq, HIGH);      // Izquierda apagada
+        pcf.write(lucesConf.pinLedDer, toggleEstado ? LOW : HIGH); // Derecha parpadea
     }
-    else if (strcmp(instruccion, "izq") == 0)
-    {
-        pcf.write(lucesConf.pinLedDer, LOW); 
-        parpadeoDirec(lucesConf.pinLedIzq);
+    else if (strcmp(instruccion, "izq") == 0) {
+        pcf.write(lucesConf.pinLedDer, HIGH);      // Derecha apagada
+        pcf.write(lucesConf.pinLedIzq, toggleEstado ? LOW : HIGH); // Izquierda parpadea
     }
-    else if (strcmp(instruccion, "prev") == 0)
-    {
-        parpadeoInter(lucesConf.pinLedDer, lucesConf.pinLedIzq);
+    else if (strcmp(instruccion, "prev") == 0) {
+        pcf.write(lucesConf.pinLedDer, toggleEstado ? LOW : HIGH);
+        pcf.write(lucesConf.pinLedIzq, toggleEstado ? LOW : HIGH);
     }
 }
 
@@ -90,8 +98,8 @@ bool ledFreno(float velocidadY, int zonaMuerta) {
 
     static bool ultimoEstado = false;
     if (estadoFreno != ultimoEstado) {
-        pcf.write(lucesConf.pinFrenoDer, estadoFreno ? HIGH : LOW);
-        pcf.write(lucesConf.pinFrenoIzq, estadoFreno ? HIGH : LOW);
+        pcf.write(lucesConf.pinFrenoDer, estadoFreno ? LOW : HIGH);
+        pcf.write(lucesConf.pinFrenoIzq, estadoFreno ? LOW : HIGH);
         ultimoEstado = estadoFreno;
     }
 
