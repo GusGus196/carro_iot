@@ -40,7 +40,6 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
     if (strcmp(topic, topics.seguidor) == 0) {
         velocidadConstante = activo ? 0.42 : 0.0;
         momentum = 0;
-
     } else {
       obstaculos();
     }
