@@ -1,9 +1,9 @@
 #include "config.h"
 
 // Variables de configuración WIFI y MQTT
-const char* ssid = "iPhone 13";
-const char* password = "testing-hotspot";
-const char* mqtt_server = "172.20.10.2";
+const char* ssid = "ssid";
+const char* password = "password";
+const char* mqtt_server = "";
 const int port = 1883;
 
 const Topics topics = {
@@ -81,8 +81,8 @@ const ConfigLuces lucesConf {
     .pinR = 0,
     .pinG = 1,
     .pinB = 2,
-    .pinLedDer = 3,
-    .pinLedIzq = 4,
+    .pinLedDer = 4,
+    .pinLedIzq = 3,
     
     .colorManual = {0, 1, 0},
     .colorSeguidor = {0, 1, 0},
