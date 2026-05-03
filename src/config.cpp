@@ -75,6 +75,9 @@ String modo = "indefinido"; // Modo seleccionado (control, linea o gps)
 unsigned long ultimaVezRecibido = 0; // Última vez recibido un mensaje MQTT para joystick
 float velocidadConstante = 0.00; // Velocidad constante para modo 'seguidor de línea'
 
+
+bool direccionalesFlag = false;
+const char* tipo = "";
 //pines LEDS
 const ConfigLuces lucesConf { 
     .pinR = 0,

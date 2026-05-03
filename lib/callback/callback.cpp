@@ -46,8 +46,8 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
   } else if (strcmp(topic, topics.navegacion) == 0) {
     
   } else if (strcmp(topic, topics.luces) == 0) {
-    const char* tipo = doc["luces"];
-    direccionales(tipo);
+    tipo = doc["luces"];
+    direccionalesFlag != direccionalesFlag;
   } else if (strcmp(topic, topics.claxon) == 0) {
     claxon();
   
