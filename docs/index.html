@@ -6,10 +6,10 @@
     <title>Control Web</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   </head>
-  <body>
+  <body class="flex flex-col h-screen bg-base-100 text-base-content overflow-hidden">
     <!--Contenedor para la selección de modo y el indicador de estado del broker MQTT-->
     <div class="header-nav">
-      <select id="mode-select">
+      <select id="mode-select" class="select select-bordered">
         <option value="0" disabled selected>Selecciona un modo</option>
         <option value="1">Manual</option>
         <option value="2">Seguidor</option>
@@ -17,14 +17,14 @@
         <option value="4">Navegación</option>
       </select>
 
-      <div id="mqtt-status">
+      <div id="mqtt-status" class="ml-auto">
         <span id="status-dot" class="status-dot status-connecting"></span>
         <span id="status-text">CONECTANDO</span>
       </div>
     </div>
 
     <!--Contenedor donde se inyectará la interfaz de cada modo dinámicamente-->
-    <div id="interface-space">
+    <div id="interface-space" class="flex-1 relative overflow-hidden">
       <p class="placeholder-text">Selecciona un modo para comenzar</p>
     </div>
 

@@ -39,25 +39,29 @@ modeSelect.addEventListener("change", () => {
     switch (value) {
         case "1": // Control manual
             interfaceSpace.innerHTML = `
-                <div id="joystick-container">
-                    <div id="joystick-puck"></div>
-                </div>
-                <div class="stats">
-                    X: <span id="valX">0.00</span> | Y: <span id="valY">0.00</span>
-                </div>
-                <div class="controls-grid">
-                    <div class="light-group">
-                        <button id="btnDirIzq" class="btn-light btn-state-off">
-                            <img src="assets/arrow-left.svg" alt="L">
-                        </button>
-                        <button id="btnPrev" class="btn-light btn-state-off">
-                            <img src="assets/warning.svg" alt="P">
-                        </button>
-                        <button id="btnDirDer" class="btn-light btn-state-off">
-                            <img src="assets/arrow-right.svg" alt="R">
+                <div class="flex flex-col items-center justify-center h-full gap-6">
+                    <div id="joystick-container">
+                        <div id="joystick-puck"></div>
+                    </div>
+                    <div class="stats">
+                        X: <span id="valX">0.00</span> | Y: <span id="valY">0.00</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-4">
+                        <div class="flex gap-3">
+                            <button id="btnDirIzq" class="btn-light btn-state-off">
+                                <img src="assets/arrow-left.svg" alt="L">
+                            </button>
+                            <button id="btnPrev" class="btn-light btn-state-off">
+                                <img src="assets/warning.svg" alt="P">
+                            </button>
+                            <button id="btnDirDer" class="btn-light btn-state-off">
+                                <img src="assets/arrow-right.svg" alt="R">
+                            </button>
+                        </div>
+                        <button id="btnClaxon" class="btn-action">
+                            Claxon
                         </button>
                     </div>
-                    <button id="btnClaxon" class="btn-action">Claxon</button>
                 </div>
             `;
 
@@ -67,8 +71,10 @@ modeSelect.addEventListener("change", () => {
 
         case "2": // Seguidor de línea
             interfaceSpace.innerHTML = `
-                <div class="mode-card">
-                    <button id="btnSeguidor" type="button" class="btn-action btn-state-off">Activar</button>
+                <div class="flex items-center justify-center h-full">
+                    <button id="btnSeguidor" class="btn-action btn-state-off">
+                        Activar
+                    </button>
                 </div>
             `;
             
@@ -78,8 +84,10 @@ modeSelect.addEventListener("change", () => {
             
         case "3": // Evitar obstáculos
             interfaceSpace.innerHTML = `
-                <div class="mode-card">
-                    <button id="btnObstaculos" type="button" class="btn-action btn-state-off">Activar</button>
+                <div class="flex items-center justify-center h-full">
+                    <button id="btnObstaculos" class="btn-action btn-state-off">
+                        Activar
+                    </button>
                 </div>
             `;
             
@@ -89,18 +97,20 @@ modeSelect.addEventListener("change", () => {
 
         case "4": // Navegación GPS
             interfaceSpace.innerHTML = `
-                <div class="mode-card">
-                    <div id="mapa"></div>
-                    <div class="stats">
-                        <b>Destino</b><br>
-                        Lat: <span id="latD">0.00</span> | Lon: <span id="lonD">0.00</span>
-                    </div>
-                    <div class="stats">
-                        <b>Smart Car</b><br>
-                        Lat: <span id="latSC">0.00</span> | Lon: <span id="lonSC">0.00</span>
-                    </div>
-                    <div class="controls">
-                        <button id="btnGPS" class="btn-action btn-state-off">Enviar destino</button>
+                <div class="absolute inset-0">
+                    <div id="mapa" class="w-full h-full"></div>
+                    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-base-200 p-4 rounded-lg shadow-lg space-y-2">
+                        <div class="stats">
+                            <b>Destino</b><br>
+                            Lat: <span id="latD">0.00</span> | Lon: <span id="lonD">0.00</span>
+                        </div>
+                        <div class="stats">
+                            <b>Smart Car</b><br>
+                            Lat: <span id="latSC">0.00</span> | Lon: <span id="lonSC">0.00</span>
+                        </div>
+                        <button id="btnGPS" class="btn-action btn-state-off w-full">
+                            Enviar destino
+                        </button>
                     </div>
                 </div>
             `;
@@ -113,8 +123,9 @@ modeSelect.addEventListener("change", () => {
         default:
             // Por si acaso (valor inválido o vacío)
             interfaceSpace.innerHTML = `
-                <p class="placeholder-text">Selecciona un modo de operación válido</p>
-            `;
-            break;
+                <p class="text-base-content/60">
+                Selecciona un modo de operación válido
+                </p>
+        `;
     }
 });
