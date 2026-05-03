@@ -181,6 +181,8 @@ const manual = {
 
     // Limpieza total de recursos y listeners para evitar listeners duplicados al cambiar de modo
     eliminar() {
+        this.estadoLuces = {izq: false, prev: false, der: false};
+        
         if (this.abortController) {
             this.abortController.abort();
             this.abortController = null;
