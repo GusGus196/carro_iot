@@ -22,6 +22,7 @@ void setup() {
 
   client.setServer(mqtt_server, port);
   client.setCallback(callback);
+  Wire.begin(21, 22);
 
   iniciarBuzzer(); // Configuración del canal PWM del buzzer pasivo
   iniciarGPS(); // Iniciar la comunicación serial con el módulo GY-GPS6MV2
@@ -46,6 +47,8 @@ void loop() {
     if (millis() - ultimaVezRecibido > 500) {
       driver(0, 0); // Detener el smart car si el último mensaje fue recibido hace más de 500ms por seguridad
     }
+
+    direccionales(tipo);
 
   } else if (modo == "seguidor") {
     if (velocidadConstante > 0.0) {
