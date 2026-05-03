@@ -24,11 +24,13 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
 
   } else if (strcmp(topic, topics.modo) == 0) {
     const char* nuevoModo = doc["modo"];
+    
     if (nuevoModo) {
       modo = String(nuevoModo);
       velocidadConstante = 0.0;
       hayDestino = false;
       sonarConfirmacion();
+      ledModo(nuevoModo);
     }
 }
    else if (strcmp(topic, topics.seguidor) == 0 || strcmp(topic, topics.obstaculos) == 0) {
@@ -42,7 +44,7 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
         // Lógica para modo obstáculos
     }
   } else if (strcmp(topic, topics.navegacion) == 0) {
-
+    
   } else if (strcmp(topic, topics.luces) == 0) {
     const char* tipo = doc["luces"];
     direccionales(tipo);

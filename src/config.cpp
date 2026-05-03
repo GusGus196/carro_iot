@@ -83,9 +83,10 @@ const ConfigLuces lucesConf {
     .pinB = 2,
     .pinLedDer = 3,
     .pinLedIzq = 4,
-   
-    .colorManual = {0, 1, 1},
-    .colorSeguidor = {1, 0, 1},
-    .colorObstaculos = {1, 1, 0},
-    .colorNavegacion = {0, 0, 0},
+    
+    .colorManual = {0, 1, 0},
+    .colorSeguidor = {0, 1, 0},
+    .colorObstaculos = {1, 0, 1},
+    .colorNavegacion = {1, 1, 1},
+    .colorNull = {1,0,0}
 };

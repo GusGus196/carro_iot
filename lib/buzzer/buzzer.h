@@ -20,9 +20,11 @@ void direccionales(const char* instruccion);
 //Funciones auxiliares leds
 void parpadeoDirec(int pinLed);
 void parpadeoInter(int pinLed1, int pinLed2);
+void ledModo(const String &modo);
+
 
 extern const int intervalo;
-extern bool preventivasActivas;
+extern bool preventivasActivas;  
 extern bool direccionalDerActiva;
 extern bool direccionalIzqActiva;
 #endif

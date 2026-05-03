@@ -81,6 +81,7 @@ struct ConfigLuces {
     int colorSeguidor[3];
     int colorObstaculos[3];
     int colorNavegacion[3];
+    int colorNull[3];
 };
 
 extern const ConfigLuces lucesConf;

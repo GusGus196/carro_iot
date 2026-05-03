@@ -36,8 +36,9 @@ void sonarError() {
     delay(180);
     ledcWriteTone(canalBuzzer, 0);
 }
-//funcion que da color al led
-void ledRGB(int color[3])
+
+//Funcion que da color al led
+void ledRGB(const int color[3])
 {
     pcf.write(lucesConf.pinR, color[0]);
     pcf.write(lucesConf.pinG, color[1]);
@@ -119,5 +120,24 @@ void parpadeoInter(int pin1, int pin2)
         bool estadoActual = digitalRead(pin1);
         pcf.write(pin1, !estadoActual); 
         pcf.write(pin2, !estadoActual); 
+    }
+}
+
+void ledModo(const String &modo)
+{
+    if(modo == "manual")
+    {
+        ledRGB(lucesConf.colorManual);
+    } else if(modo == "seguidor")
+    {
+        ledRGB(lucesConf.colorSeguidor);
+    } else if(modo == "obstaculos")
+    {
+        ledRGB(lucesConf.colorObstaculos);
+    } else if (modo == "navegacion")
+    {
+        ledRGB(lucesConf.colorNavegacion);
+    } else {
+        ledRGB(lucesConf.colorNull);
     }
 }
