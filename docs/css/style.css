@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @plugin "../node_modules/daisyui" {
-  themes: sunset --default, nord;
+  themes: dark --default, light;
 };
 
 /* ------------------------- Interfaz del modo ------------------------- */
@@ -24,10 +24,6 @@
 
 #status-text {
     @apply text-[10px] font-black uppercase tracking-[0.15em] opacity-50;
-}
-
-.badge-neutral {
-    @apply opacity-40;
 }
 
 /* ------------------------- Joystick ------------------------- */
