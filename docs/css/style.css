@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @plugin "../node_modules/daisyui" {
-  themes: light --default, dark --prefersdark;
+  themes: sunset --default, nord;
 };
 
 /* ------------------------- Interfaz del modo ------------------------- */
