@@ -3,7 +3,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   plugins: [
-    tailwindcss()
+    tailwindcss() // Activa Tailwind CSS en Vite (compilación y optimización de estilos)
   ],
 
   server: {
