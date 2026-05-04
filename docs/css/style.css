@@ -6,6 +6,8 @@
 /* ------------------------- Interfaz del modo ------------------------- */
 #mode-interface {
   @apply flex flex-col flex-1 relative overflow-hidden bg-base-300/10;
+  position: relative;
+  z-index: 1;
 }
 
 /* ------------------------- Wrapper de la interfaz del modo ------------------------- */
@@ -14,16 +16,8 @@
 }
 
 .mode-wrapper-full {
-  @apply w-full h-full relative overflow-hidden;
-}
-
-/* ------------------------- MQTT status ------------------------- */
-#mqtt-status {
-    @apply flex items-center justify-center transition-all duration-300;
-}
-
-#status-text {
-    @apply text-[10px] font-black uppercase tracking-[0.15em] opacity-50;
+  @apply w-full h-full relative;
+  z-index: 10;
 }
 
 /* ------------------------- Joystick ------------------------- */
@@ -48,6 +42,7 @@
   touch-action: none;
   cursor: grab;
 }
+
 /* ------------------------- Stats ------------------------- */
 .stats {
   @apply flex justify-around items-center text-xs font-mono 
@@ -63,14 +58,6 @@
   @apply btn btn-primary w-full;
 }
 
-.btn-state-on {
-  @apply btn-primary;
-}
-
-.btn-state-off {
-  @apply btn-outline;
-}
-
 /* ------------------------- Luces ------------------------- */
 .btn-light {
   @apply btn btn-circle;
@@ -82,7 +69,19 @@
 
 /* ------------------------- Mapa ------------------------- */
 #mapa {
-  @apply w-full h-full;
+  @apply absolute inset-0;
+  z-index: 0;
+}
+.leaflet-container {
+  z-index: 0 !important;
+}
+
+.leaflet-pane {
+  z-index: 0 !important;
+}
+
+.leaflet-control-container {
+  z-index: 10 !important;
 }
 
 /* ------------------------- Notificación ------------------------- */
