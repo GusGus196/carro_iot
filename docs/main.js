@@ -49,13 +49,13 @@ modeSelect.addEventListener("change", () => {
                     <div class="flex flex-col items-center gap-4">
                         <div class="flex gap-3">
                             <button id="btnDirIzq" class="btn-light btn-state-off">
-                                <img src="assets/arrow-left.svg" alt="L">
+                                <img src="assets/manual/arrow-left.svg" alt="L">
                             </button>
                             <button id="btnPrev" class="btn-light btn-state-off">
-                                <img src="assets/warning.svg" alt="P">
+                                <img src="assets/manual/warning.svg" alt="P">
                             </button>
                             <button id="btnDirDer" class="btn-light btn-state-off">
-                                <img src="assets/arrow-right.svg" alt="R">
+                                <img src="assets/manual/arrow-right.svg" alt="R">
                             </button>
                         </div>
                         <button id="btnClaxon" class="btn-action">
