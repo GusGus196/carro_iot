@@ -99,22 +99,22 @@
                 modeInterface.innerHTML = `
                     <div class="mode-wrapper-full animate-fade-in">
                         <div id="mapa" class="w-full h-full bg-base-300"></div>
-                        <div class="absolute top-4 left-1/2 -translate-x-1/2 flex gap-3 z-1000 w-full px-4 justify-center">
-                            <div class="bg-base-200/90 backdrop-blur-md px-4 py-2 rounded-full border border-base-content/10 shadow-lg flex items-center gap-2">
-                                <span class="text-[10px] opacity-50 uppercase tracking-tighter">Distancia</span>
-                                <span id="spanDistancia" text-sm font-bold text-primary">0.0m</span>
+                        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-1000 w-full max-w-90 px-4 flex flex-col gap-3 pointer-events-none">
+                            <div class="grid grid-cols-3 shadow-2xl bg-base-200/95 backdrop-blur-md border border-base-content/10 rounded-2xl pointer-events-auto overflow-hidden">
+                                <div class="flex flex-col items-center justify-center py-3 px-1 border-r border-base-content/5">
+                                    <span class="text-[9px] font-black uppercase opacity-50 tracking-widest mb-1">Distancia</span>
+                                    <span id="spanDistancia" class="font-mono text-sm font-bold text-primary truncate">0.0m</span>
+                                </div>
+                                <div class="flex flex-col items-center justify-center py-3 px-1 border-r border-base-content/5">
+                                    <span class="text-[9px] font-black uppercase opacity-50 tracking-widest mb-1">Rumbo</span>
+                                    <span id="spanRumbo" class="font-mono text-sm font-bold text-secondary">0°</span>
+                                </div>
+                                <div class="flex flex-col items-center justify-center py-3 px-1">
+                                    <span class="text-[9px] font-black uppercase opacity-50 tracking-widest mb-1">Satelites</span>
+                                    <span id="spanSatelites" class="font-mono text-sm font-bold text-accent">0</span>
+                                </div>
                             </div>
-                            <div class="bg-base-200/90 backdrop-blur-md px-4 py-2 rounded-full border border-base-content/10 shadow-lg flex items-center gap-2">
-                                <span class="text-[10px] opacity-50 uppercase tracking-tighter">Error Rumbo</span>
-                                <span id="spanRumbo" text-sm font-bold text-secondary">0°</span>
-                            </div>
-                            <div class="bg-base-200/90 backdrop-blur-md px-4 py-2 rounded-full border border-base-content/10 shadow-lg flex items-center gap-2">
-                                <span class="text-[10px] opacity-50 uppercase tracking-tighter">Satelites</span>
-                                <span id="spanSatelites" text-sm font-bold text-secondary">0</span>
-                            </div>
-                        </div>
-                        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-1000 w-full max-w-[320px] px-4">
-                            <button id="btnNavegacion" class="btn btn-neutral w-full shadow-2xl uppercase tracking-widest transition-all active:scale-95 border-none">
+                            <button id="btnNavegacion" class="btn btn-neutral w-full shadow-xl font-black uppercase tracking-widest transition-all active:scale-95 border-none rounded-2xl pointer-events-auto h-14">
                                 Enviar destino
                             </button>
                         </div>
