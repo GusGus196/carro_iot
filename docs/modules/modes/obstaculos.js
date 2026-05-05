@@ -3,7 +3,7 @@ import {topics} from "../mqtt/topics.js";
 
 const obstaculos = {
     contenedor: null,
-    toggleObstaculos: null,
+    toggle: null,
     activo: false,
 
     montar(contenedor) {
@@ -11,7 +11,7 @@ const obstaculos = {
 
         contenedor.innerHTML = `
             <div class="mode-wrapper mode-center">
-                <input type="checkbox" class="toggle toggle-success toggle-lg md:toggle-xl" />
+                <input type="checkbox" class="toggle toggle-success toggle-lg md:toggle-xl"/>
             </div>
         `;
 
@@ -19,28 +19,29 @@ const obstaculos = {
     },
 
     enlazar() {
-        this.toggleObstaculos = this.contenedor.querySelector(".toggle");
+        this.toggle = this.contenedor.querySelector(".toggle");
 
         this.toggleClick = () => this.controlar();
-        this.toggleObstaculos?.addEventListener("change", this.toggleClick);
+        this.toggle?.addEventListener("change", this.toggleClick);
     },
 
     controlar() {
-        this.activo = this.toggleObstaculos.checked;
+        this.activo = this.toggle.checked;
 
         const msg = {accion: this.activo ? "activar" : "desactivar"};
         mqttService.publicar(topics.modo.obstaculos, msg);
     },
 
     eliminar() {
-        this.toggleObstaculos?.removeEventListener("change", this.toggleClick);
+        this.toggle?.removeEventListener("change", this.toggleClick);
 
         if (this.activo) {
+            // Mensaje de seguridad
             mqttService.publicar(topics.modo.obstaculos, {accion: "desactivar"});
         }
 
         this.contenedor = null;
-        this.toggleObstaculos = null;
+        this.toggle = null;
         this.toggleClick = null;
         this.activo = false;
     }

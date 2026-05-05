@@ -3,7 +3,7 @@ import {topics} from "../mqtt/topics.js";
 
 const seguidor = {
     contenedor: null,
-    toggleSeguidor: null,
+    toggle: null,
     activo: false,
 
     montar(contenedor) {
@@ -11,7 +11,7 @@ const seguidor = {
 
         contenedor.innerHTML = `
             <div class="mode-wrapper mode-center">
-                <input type="checkbox" class="toggle toggle-success toggle-lg md:toggle-xl" />
+                <input type="checkbox" class="toggle toggle-success toggle-lg md:toggle-xl"/>
             </div>
         `;
 
@@ -19,28 +19,29 @@ const seguidor = {
     },
 
     enlazar() {
-        this.toggleSeguidor = this.contenedor.querySelector(".toggle");
+        this.toggle = this.contenedor.querySelector(".toggle");
 
         this.toggleClick = () => this.controlar();
-        this.toggleSeguidor?.addEventListener("change", this.toggleClick);
+        this.toggle?.addEventListener("change", this.toggleClick);
     },
 
     controlar() {
-        this.activo = this.toggleSeguidor.checked;
+        this.activo = this.toggle.checked;
 
         const msg = {accion: this.activo ? "activar" : "desactivar"};
         mqttService.publicar(topics.modo.seguidor, msg);
     },
 
     eliminar() {
-        this.toggleSeguidor?.removeEventListener("change", this.toggleClick);
+        this.toggle?.removeEventListener("change", this.toggleClick);
 
         if (this.activo) {
+            // Mensaje de seguridad
             mqttService.publicar(topics.modo.seguidor, {accion: "desactivar"});
         }
 
         this.contenedor = null;
-        this.toggleSeguidor = null;
+        this.toggle = null;
         this.toggleClick = null;
         this.activo = false;
     }
