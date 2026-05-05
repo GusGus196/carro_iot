@@ -1,4 +1,9 @@
 @import "tailwindcss";
+@plugin "daisyui/index.js";
+
+@theme {
+  --font-sans: Inter, system-ui, sans-serif;
+}
 
 /* ------------------------- Interfaz del modo ------------------------- */
 #mode-interface {
