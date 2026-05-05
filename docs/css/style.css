@@ -1,7 +1,4 @@
 @import "tailwindcss";
-@plugin "../node_modules/daisyui" {
-  themes: dark --default, light;
-};
 
 /* ------------------------- Interfaz del modo ------------------------- */
 #mode-interface {
@@ -15,6 +12,7 @@
   @apply w-full max-w-4xl mx-auto h-full flex flex-col items-center justify-between p-6 md:p-10 transition-all duration-300;
 }
 
+/* Usado en navegación */
 .mode-wrapper-full {
   @apply w-full h-full relative;
   z-index: 10;
@@ -28,13 +26,11 @@
 
 #joystick-container::before {
   content: '';
-  @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
-         w-2 h-2 bg-base-content/10 rounded-full;
+  @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-base-content/10 rounded-full;
 }
 
 #joystick-puck {
   @apply absolute w-16 h-16 bg-primary rounded-full shadow-2xl;
-  /* El efecto de brillo en el puck lo hace ver 3D */
   background: radial-gradient(circle at 30% 30%, var(--color-primary) 0%, #000 150%);
   top: 50%;
   left: 50%;
@@ -45,14 +41,13 @@
 
 /* ------------------------- Stats ------------------------- */
 .stats {
-  @apply flex justify-around items-center text-xs font-mono 
-         bg-base-200/50 backdrop-blur-md p-2 rounded-xl
-         border border-base-300 w-full max-w-70 shadow-sm;
+  @apply flex justify-around items-center text-xs font-mono bg-base-200/50 backdrop-blur-md p-2 rounded-xl border border-base-300 w-full max-w-70 shadow-sm;
 }
 
 .stats span {
   @apply text-primary font-black text-sm;
 }
+
 /* ------------------------- Botones ------------------------- */
 .btn-action {
   @apply btn btn-primary w-full;
@@ -67,11 +62,12 @@
   @apply animate-pulse;
 }
 
-/* ------------------------- Mapa ------------------------- */
+/* ------------------------- Mapa de Leaflet ------------------------- */
 #mapa {
   @apply absolute inset-0;
   z-index: 0;
 }
+
 .leaflet-container {
   z-index: 0 !important;
 }
