@@ -2,44 +2,46 @@ import mqttService from "../mqtt/mqttService.js";
 import {topics} from "../mqtt/topics.js";
 
 const seguidor = {
-    btnSeguidor: null, // Elemento HTML del botón
-    activo: false, // Estado lógico del modo
+    contenedor: null,
+    toggleSeguidor: null,
+    activo: false,
 
-    iniciar() {
-        this.btnSeguidor = document.getElementById("btnSeguidor");
-        
-        if(!this.btnSeguidor) {
-            return;
-        } else {
-            this.btnSeguidor.onclick = () => {
-                this.controlar();
-            }
-        }
+    montar(contenedor) {
+        this.contenedor = contenedor;
+
+        contenedor.innerHTML = `
+            <div class="mode-wrapper mode-center">
+                <input type="checkbox" class="toggle toggle-success toggle-lg md:toggle-xl" />
+            </div>
+        `;
+
+        this.enlazar();
+    },
+
+    enlazar() {
+        this.toggleSeguidor = this.contenedor.querySelector(".toggle");
+
+        this.toggleClick = () => this.controlar();
+        this.toggleSeguidor?.addEventListener("change", this.toggleClick);
     },
 
     controlar() {
-        // Alternar estado, estilo visual del botón y payload del mensaje
-        this.activo = !this.activo;
+        this.activo = this.toggleSeguidor.checked;
 
-        this.btnSeguidor.classList.toggle("btn-state-on", this.activo);
-        this.btnSeguidor.classList.toggle("btn-state-off", !this.activo);
-        this.btnSeguidor.textContent = this.activo ? "Desactivar" : "Activar";
-        
         const msg = {accion: this.activo ? "activar" : "desactivar"};
         mqttService.publicar(topics.modo.seguidor, msg);
     },
 
     eliminar() {
-        if (this.btnSeguidor) {
-            this.btnSeguidor.onclick = null;
-        }
-        
-        // Medida de seguridad: apagar el modo si se cambia de menú mientras estaba activo
-        if(this.activo) {
+        this.toggleSeguidor?.removeEventListener("change", this.toggleClick);
+
+        if (this.activo) {
             mqttService.publicar(topics.modo.seguidor, {accion: "desactivar"});
         }
 
-        this.btnSeguidor = null;
+        this.contenedor = null;
+        this.toggleSeguidor = null;
+        this.toggleClick = null;
         this.activo = false;
     }
 }

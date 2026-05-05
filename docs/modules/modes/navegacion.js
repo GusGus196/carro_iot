@@ -48,27 +48,25 @@ const navegacion = {
         this.contenedor = contenedor;
 
         contenedor.innerHTML = `
-            <div class="mode-wrapper-full relative">
-                <div id="mapa" class="absolute inset-0 z-0"></div>
-                <div class="absolute bottom-6 left-1/2 -translate-x-1/2 w-full max-w-md px-4 flex flex-col gap-3 z-20">
-                    <div class="grid grid-cols-3 bg-base-200/95 backdrop-blur-md rounded-2xl shadow-xl border border-base-300 overflow-hidden">
-                        <div class="flex flex-col items-center py-3">
-                            <span class="text-xs font-medium opacity-60">Distancia</span>
-                            <span id="divDistancia" class="font-sans text-base font-semibold text-primary">0.0m</span>
-                        </div>
-                        <div class="flex flex-col items-center py-3 border-x border-base-300">
-                            <span class="text-xs font-medium opacity-60">Rumbo</span>
-                            <span id="divRumbo" class="font-sans text-base font-semibold text-primary">0°</span>
-                        </div>
-                        <div class="flex flex-col items-center py-3">
-                            <span class="text-xs font-medium opacity-60">Satélites</span>
-                            <span id="divSatelites" class="font-sans text-base font-semibold text-primary">0</span>
-                        </div>
+            <div id="mapa" class="absolute inset-0 z-0"></div>
+            <div class="absolute bottom-12 md:bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] max-w-md px-2 flex flex-col gap-3 z-20">
+                <div class="grid grid-cols-3 bg-base-200/95 backdrop-blur-md rounded-2xl shadow-xl border border-base-300 overflow-hidden">
+                    <div class="flex flex-col items-center py-3">
+                        <span class="text-xs font-medium opacity-60">Distancia</span>
+                        <span id="divDistancia" class="font-sans text-base font-semibold text-primary">0.0m</span>
                     </div>
-                    <button id="btnNavegacion" class="btn btn-success w-full shadow-xl font-semibold normal-case tracking-wide">
-                        Selecciona un destino
-                    </button>
+                    <div class="flex flex-col items-center py-3 border-x border-base-300">
+                        <span class="text-xs font-medium opacity-60">Rumbo</span>
+                        <span id="divRumbo" class="font-sans text-base font-semibold text-primary">0°</span>
+                    </div>
+                    <div class="flex flex-col items-center py-3">
+                        <span class="text-xs font-medium opacity-60">Satélites</span>
+                        <span id="divSatelites" class="font-sans text-base font-semibold text-primary">0</span>
+                    </div>
                 </div>
+                <button id="btnNavegacion" class="btn btn-success w-full shadow-xl font-semibold normal-case tracking-wide">
+                    Selecciona un destino
+                </button>
             </div>
         `;
 
