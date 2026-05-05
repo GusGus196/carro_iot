@@ -2,7 +2,6 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import mqttService from "../mqtt/mqttService.js";
 import {topics} from "../mqtt/topics.js";
-import {notificar} from "../ui/feedback.js"; // Notificación del estado de navegación
 
 const navegacion = {
     mapa: null,
@@ -163,15 +162,13 @@ const navegacion = {
         switch (this.estado) {
             case "SIN_DESTINO": // Fallback
             case "DESTINO_SELECCIONADO":
-                if (!this.destino) return notificar("NAVEGACIÓN GPS", "Selecciona un punto en el mapa.");
+                if (!this.destino) return;
 
                 this.enviarAccion("iniciar");
                 this.estado = "NAVEGANDO";
-                notificar("NAVEGACIÓN GPS", "¡Destino guardado! Iniciando navegación...");
                 break;
 
             case "NAVEGANDO":
-                notificar("NAVEGACIÓN GPS", "¡Navegación pausada! Esperando acción...")
                 this.enviarAccion("detener");
                 this.estado = "PAUSADO";
                 break;
@@ -179,10 +176,8 @@ const navegacion = {
             case "PAUSADO": {
                 if (!this.ultimoDestino || this.destino.distanceTo(this.ultimoDestino) > 1) {
                     this.enviarAccion("iniciar");
-                    notificar("NAVEGACIÓN GPS", "¡Destino actualizado! Calculando nueva ruta...");
                 } else {
                     this.enviarAccion("reanudar");
-                    notificar("NAVEGACIÓN GPS", "Reanudando navegación hacia el destino guardado.");
                 }
 
                 this.estado = "NAVEGANDO";
@@ -275,8 +270,6 @@ const navegacion = {
     },
 
     reiniciar() {
-        notificar("NAVEGACIÓN GPS", "¡Destino alcanzado!");
-
         this.mapa?.removeLayer(this.marcadorD);
         this.marcadorD = null;
 
