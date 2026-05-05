@@ -1,6 +1,6 @@
 import mqtt from "mqtt";
 import {topics} from "./topics.js";
-import {actualizarEstado} from "../ui/feedback.js";
+import {actualizar} from "./mqttStatus.js";
 
 // Variables de entorno
 const MQTT_PROTOCOL = import.meta.env.VITE_MQTT_PROTOCOL;
@@ -38,7 +38,7 @@ const mqttService = {
     // Eventos
     configurar() {
         this.cliente.on("connect", () => {
-            actualizarEstado("CONECTADO", "connected");
+            actualizar("CONECTADO", "connected");
             if (isDev) {
                 console.info(`[MQTT] conectado`, {
                     url: URL, 
@@ -52,17 +52,17 @@ const mqttService = {
         });
 
         this.cliente.on("reconnect", () => {
-            actualizarEstado("RECONECTANDO", "reconnecting");
+            actualizar("RECONECTANDO", "reconnecting");
             if (isDev) console.warn(`[MQTT] reconectando...`);
         });
 
         this.cliente.on("offline", () => {
-            actualizarEstado("DESCONECTADO", "disconnected");
+            actualizar("DESCONECTADO", "disconnected");
             if (isDev) console.warn(`[MQTT] desconectado`);
         });
 
         this.cliente.on("error", (err) => {
-            actualizarEstado("ERROR", "error");
+            actualizar("ERROR", "error");
             console.error(`[MQTT] error: ${err.message}`);
 
             if (isDev && err.stack) console.error(err.stack);

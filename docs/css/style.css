@@ -79,12 +79,3 @@
 .leaflet-control-container {
   z-index: 10 !important;
 }
-
-/* ------------------------- Notificación ------------------------- */
-#custom-notification {
-  @apply fixed top-6 left-1/2 -translate-x-1/2 bg-base-200 text-base-content p-4 rounded-lg shadow-xl opacity-0 transition-all;
-}
-
-#custom-notification.notification-visible {
-  @apply opacity-100 translate-y-0;
-}
