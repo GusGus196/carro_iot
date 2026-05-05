@@ -4,17 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Control Web</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   </head>
   <body class="flex flex-col h-screen bg-base-100 text-base-content overflow-hidden font-sans transition-colors duration-200 ease-in-out">
-    
+
     <!-- Barra de navegación -->
     <header id="header-nav" class="navbar bg-base-200 shadow-md px-4 z-50 shrink-0 border-b border-base-300">
       <div class="navbar-start flex-1">
         <div class="flex items-center">
      
           <!-- Selector de modo -->
-          <select id="mode-select" class="select select-ghost font-bold uppercase tracking-tighter select-sm md:select-md text-center pl-8 pr-10 w-36.25 md:w-46.25 focus:outline-none hover:bg-base-300/50 transition-colors">
+          <select id="mode-select" class="select select-ghost font-semibold text-sm normal-case tracking-normal select-sm md:select-md text-center pl-3 pr-3 w-36 md:w-44 focus:outline-none hover:bg-base-300/50 transition-colors">
             <option value="0" disabled selected>Modo</option>
             <option value="1">Manual</option>
             <option value="2">Seguidor</option>
@@ -24,13 +25,13 @@
         </div>
       </div>
       
-      <div class="navbar-end gap-2 md:gap-4">
-        
+      <div class="navbar-end flex items-center gap-3 md:gap-5">
+
         <!-- Estado MQTT -->
-        <div id="mqtt-status" class="badge gap-2 px-3 py-2 transition-all duration-300 bg-base-200">
-          <span id="status-dot" class="w-3.5 h-3.5 rounded-full bg-info shadow-sm animate-pulse"></span>
-          <span id="status-text" class="hidden sm:inline text-[10px] font-black uppercase tracking-[0.15em] opacity-50">
-            CONECTANDO
+        <div id="mqtt-status" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-base-100/60 backdrop-blur border border-base-300">
+          <span id="status-dot" class="w-2.5 h-2.5 rounded-full bg-info animate-pulse"></span>
+          <span id="status-text" class="hidden sm:inline text-xs font-medium opacity-70">
+            Conectando
           </span>
         </div>
         
@@ -54,13 +55,16 @@
       </div>
     </header>
 
-    <main id="mode-interface" class="flex-1 relative overflow-hidden bg-base-300/5 flex flex-col items-center justify-center transition-all duration-500">
-      <div id="interface-placeholder" class="flex flex-col items-center gap-4">
-        <span class="loading loading-ring loading-lg opacity-10"></span>
-        <p class="opacity-40 font-bold uppercase text-[10px] tracking-[0.2em]">Selecciona un modo para comenzar</p>
+    <!-- Interfaz del modo -->
+    <main id="mode-interface" class="flex-1 relative overflow-hidden bg-base-300/5 flex items-center justify-center transition-all duration-500">
+      <div id="interface-placeholder" class="flex flex-col items-center gap-3">    
+        <p class="text-lg md:text-xl font-medium tracking-wide opacity-60 text-center select-none">
+          Selecciona un modo para comenzar
+        </p>
       </div>
     </main>
 
+    <!-- Notificaciones -->
     <div id="custom-notification" class="toast toast-top toast-center z-100 pointer-events-none">
       <div id="notification-content" class="hidden alert shadow-lg transition-all duration-300">
         <div>
