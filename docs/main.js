@@ -42,10 +42,10 @@ mqttService.recibir((topic, payload) => {
     if (!payload) return;
 
     if (topic === topics.estado.ubicacion && currentMode === navegacion) {
-        const {lat, lon, sat, rumbo, destino} = payload;
+        const {lat, lon, rumbo, sat, destino} = payload;
         
         if (typeof lat === "number" && typeof lon === "number") {
-            navegacion.actualizarInterfaz(lat, lon, sat, rumbo);
+            navegacion.actualizarInterfaz(lat, lon, rumbo, sat);
         }
 
         if (destino === true) {

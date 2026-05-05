@@ -179,6 +179,6 @@ npm run preview
 | `smartcar/modo/navegacion` | `{"accion":"iniciar", "lat":19.249158, "lon":-103.697135}` | Inicia ruta hacia coordenadas específicas. |
 | `smartcar/modo/navegacion` | `{"accion":"detener", "lat":19.249158, "lon":-103.697135}` | Detiene la navegación en curso. |
 | `smartcar/modo/navegacion` | `{"accion":"reanudar", "lat":19.249158, "lon":-103.697135}` | Continúa la ruta hacia el destino. |
-| `smartcar/estado/ubicacion` | `{"lat":19.249158, "lon":-103.697135, "sat": 4, "rumbo": 40, "destino":true}` | Información de estado. |
+| `smartcar/estado/ubicacion` | `{"lat":19.249158, "lon":-103.697135, "rumbo":40, "sat":4, "destino":true}` | Información de estado. |
 
 [Stadia Maps Auth](https://docs.stadiamaps.com/authentication/)

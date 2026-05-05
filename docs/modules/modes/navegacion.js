@@ -66,7 +66,7 @@ const navegacion = {
                         </div>
                     </div>
                     <button id="btnNavegacion" class="btn btn-success w-full shadow-xl font-semibold normal-case tracking-wide">
-                        Enviar destino
+                        Selecciona un destino
                     </button>
                 </div>
             </div>
@@ -74,6 +74,7 @@ const navegacion = {
 
         this.enlazar(); // Obtener los elementos de la interfaz y asignar eventos
         this.iniciarMapa(); // Inicializar el mapa utilizando Leaflet
+        this.actualizarBoton(); // Sincronizar texto del botón con estado inicial
     },
 
     enlazar() {
@@ -198,7 +199,7 @@ const navegacion = {
         this.ultimoDestino = L.latLng(this.destino);
     },
 
-    actualizarInterfaz(lat, lon, sat, rumbo) {
+    actualizarInterfaz(lat, lon, rumbo, sat) {
         if (!this.mapa) return;
 
         if (this.divRumbo) this.divRumbo.textContent = `${Math.round(rumbo)}°`;
@@ -245,7 +246,11 @@ const navegacion = {
 
         let texto = "";
 
-        if (this.estado === "SIN_DESTINO" || this.estado === "DESTINO_SELECCIONADO") {
+        if (this.estado === "SIN_DESTINO") {
+            this.btnNavegacion.classList.add("btn-success");
+            texto = "Selecciona un destino";
+
+        } else if (this.estado === "DESTINO_SELECCIONADO") {
             this.btnNavegacion.classList.add("btn-success");
             texto = "Enviar destino";
 
@@ -270,35 +275,62 @@ const navegacion = {
     },
 
     reiniciar() {
-        this.mapa?.removeLayer(this.marcadorD);
-        this.marcadorD = null;
+        if (this.marcadorD && this.destino) {
+            this.marcadorD.setPopupContent(`
+                <div class="text-xs font-mono leading-tight">
+                    <span class="font-semibold">¡Destino alcanzado!</span>
+                </div>
+            `).openPopup();
 
-        this.destino = null;
-        this.ultimoDestino = null;
-        this.estado = "SIN_DESTINO";
+            setTimeout(() => {
+                this.marcadorD?.closePopup();
+                if (this.marcadorD) this.mapa?.removeLayer(this.marcadorD);
 
-        this.actualizarBoton();
+                this.marcadorD = null;
+                this.destino = null;
+                this.ultimoDestino = null;
+                this.estado = "SIN_DESTINO";
+
+                this.actualizarBoton();
+            }, 3000);
+
+        } else {
+            this.mapa?.removeLayer(this.marcadorD);
+            this.marcadorD = null;
+
+            this.destino = null;
+            this.ultimoDestino = null;
+            this.estado = "SIN_DESTINO";
+
+            this.actualizarBoton();
+        }
     },
 
     eliminar() {
         this.mapa?.off("click", this.mapaClickHandler);
+
+        this.marcadorD && this.mapa?.removeLayer(this.marcadorD);
+        this.marcadorSC && this.mapa?.removeLayer(this.marcadorSC);
+
+        this.layersControl?.remove();
+
         this.mapa?.remove();
+
         this.mapa = null;
+        this.layersControl = null;
+
         this.destino = null;
         this.ultimoDestino = null;
         this.marcadorD = null;
         this.marcadorSC = null;
-
-        this.layersControl?.remove();
-        this.layersControl = null;
-        
-        this.contenedor = null;
 
         this.btnNavegacion?.removeEventListener("click", this.btnClick);
         this.btnNavegacion = null;
         this.divDistancia = null;
         this.divRumbo = null;
         this.divSatelites = null;
+
+        this.contenedor = null;
 
         this.mapaClickHandler = null;
         this.btnClick = null;
