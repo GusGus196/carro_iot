@@ -54,19 +54,19 @@ const navegacion = {
                 <div class="absolute bottom-6 left-1/2 -translate-x-1/2 w-full max-w-md px-4 flex flex-col gap-3 z-10">
                     <div class="grid grid-cols-3 bg-base-200/95 backdrop-blur-md rounded-2xl shadow-xl border border-base-300 overflow-hidden">
                         <div class="flex flex-col items-center py-3">
-                            <span class="text-[10px] uppercase opacity-50">Distancia</span>
-                            <span id="divDistancia" class="font-mono text-sm font-bold text-primary">0.0m</span>
+                            <span class="text-xs font-medium opacity-60">Distancia</span>
+                            <span id="divDistancia" class="font-sans text-base font-semibold text-primary">0.0m</span>
                         </div>
                         <div class="flex flex-col items-center py-3 border-x border-base-300">
-                            <span class="text-[10px] uppercase opacity-50">Rumbo</span>
-                            <span id="divRumbo" class="font-mono text-sm font-bold text-secondary">0°</span>
+                            <span class="text-xs font-medium opacity-60">Rumbo</span>
+                            <span id="divRumbo" class="font-sans text-base font-semibold text-primary">0°</span>
                         </div>
                         <div class="flex flex-col items-center py-3">
-                            <span class="text-[10px] uppercase opacity-50">Satélites</span>
-                            <span id="divSatelites" class="font-mono text-sm font-bold text-accent">0</span>
+                            <span class="text-xs font-medium opacity-60">Satélites</span>
+                            <span id="divSatelites" class="font-sans text-base font-semibold text-primary">0</span>
                         </div>
                     </div>
-                    <button id="btnNavegacion" class="btn btn-success w-full shadow-xl font-black uppercase tracking-widest">
+                    <button id="btnNavegacion" class="btn btn-success w-full shadow-xl font-semibold normal-case tracking-wide">
                         Enviar destino
                     </button>
                 </div>
@@ -165,24 +165,24 @@ const navegacion = {
             case "DESTINO_SELECCIONADO":
                 if (!this.destino) return notificar("NAVEGACIÓN GPS", "Selecciona un punto en el mapa.");
 
-                notificar("NAVEGACIÓN GPS", "¡Destino guardado! Iniciando navegación...");
-                this.estado = "NAVEGANDO";
                 this.enviarAccion("iniciar");
+                this.estado = "NAVEGANDO";
+                notificar("NAVEGACIÓN GPS", "¡Destino guardado! Iniciando navegación...");
                 break;
 
             case "NAVEGANDO":
                 notificar("NAVEGACIÓN GPS", "¡Navegación pausada! Esperando acción...")
-                this.estado = "PAUSADO";
                 this.enviarAccion("detener");
+                this.estado = "PAUSADO";
                 break;
 
             case "PAUSADO": {
                 if (!this.ultimoDestino || this.destino.distanceTo(this.ultimoDestino) > 1) {
-                    notificar("NAVEGACIÓN GPS", "¡Destino actualizado! Calculando nueva ruta...");
                     this.enviarAccion("iniciar");
+                    notificar("NAVEGACIÓN GPS", "¡Destino actualizado! Calculando nueva ruta...");
                 } else {
-                    notificar("NAVEGACIÓN GPS", "Reanudando navegación hacia el destino guardado.");
                     this.enviarAccion("reanudar");
+                    notificar("NAVEGACIÓN GPS", "Reanudando navegación hacia el destino guardado.");
                 }
 
                 this.estado = "NAVEGANDO";
@@ -241,25 +241,37 @@ const navegacion = {
     actualizarBoton() {
         if (!this.btnNavegacion) return;
 
-        this.btnNavegacion.className = "btn w-full shadow-xl font-black uppercase tracking-widest";
+        // reset total de clases dinámicas
+        this.btnNavegacion.classList.remove(
+            "btn-success",
+            "btn-error",
+            "btn-info"
+        );
+
+        let texto = "";
 
         if (this.estado === "SIN_DESTINO" || this.estado === "DESTINO_SELECCIONADO") {
             this.btnNavegacion.classList.add("btn-success");
-            this.btnNavegacion.textContent = "Enviar destino";
-            
+            texto = "Enviar destino";
+
         } else if (this.estado === "NAVEGANDO") {
             this.btnNavegacion.classList.add("btn-error");
-            this.btnNavegacion.textContent = "Detener navegación";
-            
-        } else { // PAUSADO
+            texto = "Detener navegación";
+
+        } else if (this.estado === "PAUSADO") {
             if (!this.destino || !this.ultimoDestino || this.destino.distanceTo(this.ultimoDestino) > 1) {
-                this.btnNavegacion.textContent = "Enviar nuevo destino";
                 this.btnNavegacion.classList.add("btn-success");
+                texto = "Enviar nuevo destino";
             } else {
-                this.btnNavegacion.textContent = "Reanudar navegación";
                 this.btnNavegacion.classList.add("btn-info");
+                texto = "Reanudar navegación";
             }
+        } else {
+            this.btnNavegacion.classList.add("btn-success");
+            texto = "Enviar destino";
         }
+
+        this.btnNavegacion.textContent = texto;
     },
 
     reiniciar() {
