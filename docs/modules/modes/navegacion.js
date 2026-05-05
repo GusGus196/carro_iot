@@ -48,9 +48,9 @@ const navegacion = {
         this.contenedor = contenedor;
 
         contenedor.innerHTML = `
-            <div class="mode-wrapper-full animate-fade-in relative">
+            <div class="mode-wrapper-full relative">
                 <div id="mapa" class="absolute inset-0 z-0"></div>
-                <div class="absolute bottom-6 left-1/2 -translate-x-1/2 w-full max-w-md px-4 flex flex-col gap-3 z-10">
+                <div class="absolute bottom-6 left-1/2 -translate-x-1/2 w-full max-w-md px-4 flex flex-col gap-3 z-20">
                     <div class="grid grid-cols-3 bg-base-200/95 backdrop-blur-md rounded-2xl shadow-xl border border-base-300 overflow-hidden">
                         <div class="flex flex-col items-center py-3">
                             <span class="text-xs font-medium opacity-60">Distancia</span>
@@ -134,21 +134,21 @@ const navegacion = {
 
         if (!this.marcadorD) {
             this.marcadorD = L.marker(latlng, {icon: this.iconos.destino}).addTo(this.mapa).bindPopup(`
-                <div class="text-xs font-mono">
-                    <b>Destino</b><br>
-                    <b>lat: ${latlng.lat.toFixed(5)}</b><br>
-                    <b>lon: ${latlng.lng.toFixed(5)}</b><br>
+                <div class="text-xs font-mono leading-tight">
+                    <span class="font-semibold">Destino</span><br>
+                    lat: <span class="font-semibold">${latlng.lat.toFixed(5)}</span><br>
+                    lon: <span class="font-semibold">${latlng.lng.toFixed(5)}</span>
                 </div>
             `);
             
-            this.marcadorD.openPopup(); // Abrir la ventana emergente solo al crear el marcador
+            this.marcadorD.openPopup();
 
         } else {
             this.marcadorD.setLatLng(latlng).setPopupContent(`
-                <div class="text-xs font-mono">
-                    <b>Destino</b><br>
-                    <b>lat: ${latlng.lat.toFixed(5)}</b><br>
-                    <b>lon: ${latlng.lng.toFixed(5)}</b><br>
+                <div class="text-xs font-mono leading-tight">
+                    <span class="font-semibold">Destino</span><br>
+                    lat: <span class="font-semibold">${latlng.lat.toFixed(5)}</span><br>
+                    lon: <span class="font-semibold">${latlng.lng.toFixed(5)}</span>
                 </div>
             `);
         }
@@ -213,10 +213,10 @@ const navegacion = {
         
         // Inicializar el marcador del Smart Car y su ventana emergente
         const popup = `
-            <div class="text-xs font-mono">
-                <b>Smart Car</b><br>
-                <b>lat: ${lat.toFixed(5)}</b><br>
-                <b>lon: ${lon.toFixed(5)}</b><br>
+            <div class="text-xs font-mono leading-tight">
+                <span class="font-semibold">Smart Car</span><br>
+                lat: <span class="font-semibold">${lat.toFixed(5)}</span><br>
+                lon: <span class="font-semibold">${lon.toFixed(5)}</span>
             </div>
         `;
         
