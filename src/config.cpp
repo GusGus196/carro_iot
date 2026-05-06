@@ -1,8 +1,8 @@
 #include "config.h"
 
 // Variables de configuración WIFI y MQTT
-const char* ssid = "ssid";
-const char* password = "password";
+const char* ssid = "";
+const char* password = "";
 const char* mqtt_server = "broker.hivemq.com";
 const int port = 1883;
 
