@@ -22,50 +22,6 @@
   @apply flex items-center justify-center;
 }
 
-/* ------------------------- Joystick ------------------------- */
-#joystick-container {
-  @apply relative w-56 h-56 rounded-full border-4 border-base-300 shadow-inner;
-  background: radial-gradient(circle at center, #2a2f36 0%, #111418 100%);
-}
-
-#joystick-container::before {
-  content: '';
-  @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-base-content/10 rounded-full;
-}
-
-#joystick-puck {
-  @apply absolute w-16 h-16 bg-primary rounded-full shadow-2xl;
-  background: radial-gradient(circle at 30% 30%, var(--color-primary) 0%, #000 150%);
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  touch-action: none;
-  cursor: grab;
-}
-
-/* ------------------------- Stats ------------------------- */
-.stats {
-  @apply flex justify-around items-center text-xs font-mono bg-base-200/50 backdrop-blur-md p-2 rounded-xl border border-base-300 w-full max-w-70 shadow-sm;
-}
-
-.stats span {
-  @apply text-primary font-black text-sm;
-}
-
-/* ------------------------- Botones ------------------------- */
-.btn-action {
-  @apply btn btn-primary w-full;
-}
-
-/* ------------------------- Luces ------------------------- */
-.btn-light {
-  @apply btn btn-circle;
-}
-
-.btn-light.btn-state-on {
-  @apply animate-pulse;
-}
-
 /* ------------------------- Mapa de Leaflet ------------------------- */
 #mapa {
   @apply absolute inset-0;

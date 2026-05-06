@@ -29,26 +29,29 @@ const manual = {
         this.contenedor = contenedor;
 
         contenedor.innerHTML = `
-            <div class="mode-wrapper gap-6">
-                <div id="joystick-container" class="relative w-56 h-56 rounded-full border-4 border-base-300 shadow-inner shrink-0">
-                    <div id="joystick-puck" class="absolute w-16 h-16 bg-primary rounded-full shadow-2xl top-1/2 left-1/2 cursor-grab" style="transform: translate(-50%, -50%); touch-action: none;"></div>
+            <div class="mode-wrapper gap-8">
+                <div id="joystick-container" class="relative w-52 h-52 rounded-full border-4 border-base-300 shadow-inner shrink-0" style="background: radial-gradient(circle at center, #2a2f36 0%, #111418 100%)">
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-base-content/10 rounded-full pointer-events-none"></div>
+                    <div id="joystick-puck" class="absolute w-16 h-16 rounded-full shadow-2xl top-1/2 left-1/2 cursor-grab" style="background: radial-gradient(circle at 30% 30%, var(--color-success) 0%, #000 150%); transform: translate(-50%, -50%); touch-action: none; z-index: 10;"></div>
                 </div>
-                <div class="stats">
-                    <p>X: <span id="valX">0.00</span></p>
-                    <p>Y: <span id="valY">0.00</span></p>
+                <div class="flex justify-center gap-8 text-xs font-mono opacity-70">
+                    <p>X: <span id="valX" class="font-black text-success text-sm">0.00</span></p>
+                    <p>Y: <span id="valY" class="font-black text-success text-sm">0.00</span></p>
                 </div>
-                <div class="flex gap-4 w-full max-w-xs">
-                    <button id="btnDirIzq" class="btn-light btn btn-outline btn-sm btn-circle">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
-                    </button>
-                    <button id="btnClaxon" class="btn btn-action btn-sm flex-1">Claxon</button>
-                    <button id="btnDirDer" class="btn-light btn btn-outline btn-sm btn-circle">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
-                    </button>
+                <div class="flex flex-col items-center gap-3 w-full max-w-xs">
+                    <div class="flex gap-3">
+                        <button id="btnDirIzq" class="btn btn-outline btn-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                        </button>
+                        <button id="btnPrev" class="btn btn-outline btn-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L1 21h22L12 2zm0 5.5L19.5 19h-15L12 7.5z"/></svg>
+                        </button>
+                        <button id="btnDirDer" class="btn btn-outline btn-circle">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                        </button>
+                    </div>
+                    <button id="btnClaxon" class="btn btn-success w-2/3">Claxon</button>
                 </div>
-                <button id="btnPrev" class="btn-light btn btn-outline btn-sm w-full max-w-xs">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L1 21h22L12 2zm0 5.5L19.5 19h-15L12 7.5z"/></svg>
-                </button>
             </div>
         `;
 
@@ -177,14 +180,15 @@ const manual = {
     actualizarLuces() {
         if(!this.btnDirIzq || !this.btnDirDer || !this.btnPrev) return;
 
-        this.btnDirIzq.classList.toggle("btn-state-on", this.estadoLuces.izq);
-        this.btnDirIzq.classList.toggle("btn-state-off", !this.estadoLuces.izq);
+        const activar = (btn, activo) => {
+            btn.classList.toggle("btn-success", activo);
+            btn.classList.toggle("btn-outline", !activo);
+            btn.classList.toggle("animate-pulse", activo);
+        };
 
-        this.btnPrev.classList.toggle("btn-state-on", this.estadoLuces.prev);
-        this.btnPrev.classList.toggle("btn-state-off", !this.estadoLuces.prev);
-
-        this.btnDirDer.classList.toggle("btn-state-on", this.estadoLuces.der);
-        this.btnDirDer.classList.toggle("btn-state-off", !this.estadoLuces.der);
+        activar(this.btnDirIzq, this.estadoLuces.izq);
+        activar(this.btnPrev, this.estadoLuces.prev);
+        activar(this.btnDirDer, this.estadoLuces.der);
     },
 
     eliminar() {
