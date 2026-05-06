@@ -59,9 +59,12 @@ extern double destinoLat;
 extern double destinoLon;
 extern bool hayDestino;
 
+extern const char* accionNavegacion;
+
 extern double destinoDistancia;
 extern double destinoRumbo;
 extern double actualRumbo;
+extern double errorRumbo;
 
 extern String modo;
 extern unsigned long ultimaVezRecibido;

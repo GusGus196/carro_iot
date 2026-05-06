@@ -64,9 +64,12 @@ double destinoLat = 0.0;
 double destinoLon = 0.0;
 bool hayDestino = false;
 
+const char* accionNavegacion = "";
+
 double destinoDistancia = 0.0;
 double destinoRumbo = 0.0;
 double actualRumbo = 0.0;
+double errorRumbo = 0.0;
 
 float momentum = 0;
 

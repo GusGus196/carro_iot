@@ -29,6 +29,8 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
       modo = String(nuevoModo);
       velocidadConstante = 0.0;
       hayDestino = false;
+      accionNavegacion = "";
+      errorRumbo = 0.0;
       sonarConfirmacion();
       ledModo(nuevoModo);
       tipo = "off";
@@ -44,7 +46,24 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
       obstaculos();
     }
   } else if (strcmp(topic, topics.navegacion) == 0) {
+    const char* accion = doc["accion"];
     
+    if (accion) {
+      accionNavegacion = accion;
+
+      if (strcmp(accion, "iniciar") == 0) {
+        destinoLat = doc["lat"] | 0.0;
+        destinoLon = doc["lon"] | 0.0;
+        hayDestino = (destinoLat != 0.0 || destinoLon != 0.0);
+
+      } else if (strcmp(accion, "detener") == 0) {
+        hayDestino = false;
+        driver(0, 0);
+
+      } else if (strcmp(accion, "reanudar") == 0) {
+        hayDestino = true;
+      }
+    }
   } else if (strcmp(topic, topics.luces) == 0) {
     tipo = doc["luces"];
   } else if (strcmp(topic, topics.claxon) == 0) {

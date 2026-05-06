@@ -16,32 +16,31 @@ void iniciarGPS() {
 void enviarUbicacion() {
     while (SerialGPS.available() > 0) {
         if (gps.encode(SerialGPS.read())) {
-            // Publicar la localización solo si ha pasado 1 segundo desde la última publicación y si es válida
             if (gps.location.isValid() && (millis() - ultimaPublicacion > 1000)) {
                 
-                /*
-                    Declaramos un arreglo de 40 caracteres llamado posición,
-                    y con snprintf almacenamos la latitud y longitud actual
-                */
-                char posicion[40];
-                snprintf(posicion, sizeof(posicion), "%.6f,%.6f", gps.location.lat(), gps.location.lng());
-
-                client.publish(topics.ubicacion, posicion); // Publicar la posición en el TOPIC ubicación
-                ultimaPublicacion = millis();
+                char payload[120];
+                int satelites = gps.satellites.isValid() ? gps.satellites.value() : 0;
                 
-                // Test: Serial.print("Ubicación enviada: "); Serial.println(posicion);
+                snprintf(payload, sizeof(payload),
+                    "{\"lat\":%.6f,\"lon\":%.6f,\"rumbo\":%.1f,\"sat\":%d,\"destino\":false}",
+                    gps.location.lat(),
+                    gps.location.lng(),
+                    errorRumbo,
+                    satelites
+                );
+
+                client.publish(topics.ubicacion, payload);
+                ultimaPublicacion = millis();
             }
         }
     }
 }
 
 void actualizarNavegacion() {   
-    // Solo si ya tenemos un destino definido en el callback
     if (!hayDestino) return;
     
-    calcularMetricasGPS(); // Calcular distancia y rumbo
+    calcularMetricasGPS();
 
-    // Radio de llegada: 5 metros
     if (destinoDistancia < 5.0) {
         procesarLlegada();
     } else {
@@ -68,46 +67,52 @@ void calcularMetricasGPS() {
 }
 
 void procesarLlegada() {
-    hayDestino = false; // Esperar por un nuevo destino
-    driver(0, 0); // Parar el motor al estar en el radio de llegada
+    hayDestino = false;
+    accionNavegacion = "";
+    errorRumbo = 0.0;
+    driver(0, 0);
     if(client.connected()) {
-        client.publish(topics.ubicacion, "1"); // Publicar alerta de llegada al broker MQTT
+        char payload[80];
+        int satelites = gps.satellites.isValid() ? gps.satellites.value() : 0;
+
+        snprintf(payload, sizeof(payload),
+            "{\"lat\":%.6f,\"lon\":%.6f,\"rumbo\":%.1f,\"sat\":%d,\"destino\":true}",
+            gps.location.isValid() ? gps.location.lat() : 0.0,
+            gps.location.isValid() ? gps.location.lng() : 0.0,
+            gps.course.isValid() ? gps.course.deg() : 0.0,
+            satelites
+        );
+
+        client.publish(topics.ubicacion, payload);
     }
-    claxon(); // Sonido de llegada 
+    claxon();
 }
 
 void conducirHaciaDestino() {
-    // Cada 5 segundos calculamos el rumbo entre el punto anterior A (lat, lon) y el actual B
     if ( millis() - ultimoRumboCalculado > 5000) {
         ultimoRumboCalculado = millis();
         
         if (gps.location.isValid()) {
             
-            // Solo si la primer lectura ya fue realizada
             if (primeraLecturaRealizada) {
-                /* 
-                   Calculamos el rumbo basándonos en el desplazamiento real 
-                   desde el punto A (anterior) hasta el punto B (actual)
-                */
                 actualRumbo = gps.courseTo(latAnterior, lonAnterior, gps.location.lat(), gps.location.lng());
             }
 
-            // Actualizamos el Punto A para el próximo intervalo de 5 segundos
             latAnterior = gps.location.lat();
             lonAnterior = gps.location.lng();
             primeraLecturaRealizada = true;
 
         } else {
-            driver(0.0, 0.4); // Si no hay GPS, avanzamos para buscar señal
+            driver(0.0, 0.45);
         }
     } else if ( millis() - ultimoRumboCalculado < 1000) {
         if (primeraLecturaRealizada) {
             corregirOrientacion(actualRumbo, destinoRumbo);
         } else {
-            driver(0.0, 0.4); // Primer arranque del carro
+            driver(0.0, 0.45);
         }
     } else {
-        driver(0.0, 0.4);
+        driver(0.0, 0.45);
     }
 }
 
@@ -128,19 +133,13 @@ void obtenerOrientacion() {
 }
 
 void corregirOrientacion(double actual, double destino) {
-    double error = destino - actual; // Diferencia entre los dos rumbos
-    /*
-        Ej. Si el rumbo actual es 0 grados (Norte) y el rumbo entre el smart car y el destino
-        es igual a 180 grados (Sur), al hacer la resta obtenemos +180, por lo que debemos a la derecha
-        hasta que nuestro rumbo actual sea igual a 180 grados para poder avanzar recto hacia el destino
-    */
+    errorRumbo = destino - actual;
 
-    // Esto asegura que siempre se tome el giro más corto
-    if (error > 180) error -= 360; // Si el error es mayor a 180, giramos a la izquierda (-)
-    else if (error < -180) error += 360; // Si el error es menor a 180, giramos a la derecha (+)
+    if (errorRumbo > 180) errorRumbo -= 360;
+    else if (errorRumbo < -180) errorRumbo += 360;
     
-    float giro = (abs(error) < 30) ? 0.0 : constrain(error / 90.0, -0.4, 0.4); // Si el error es pequeño, vamos en dirección al destino
-    float velocidad = (abs(error) > 45) ? 0.2 : 0.3;
+    float giro = (abs(errorRumbo) < 30) ? 0.0 : constrain(errorRumbo / 90.0, -0.20, 0.20);
+    float velocidad = (abs(errorRumbo) > 45) ? 0.25 : 0.45;
     
     driver(giro, velocidad);
 }
