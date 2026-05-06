@@ -53,15 +53,15 @@ const navegacion = {
                 <div class="grid grid-cols-3 bg-base-200/95 backdrop-blur-md rounded-2xl shadow-xl border border-base-300 overflow-hidden">
                     <div class="flex flex-col items-center py-3">
                         <span class="text-xs font-medium opacity-60">Distancia</span>
-                        <span id="divDistancia" class="font-sans text-base font-semibold text-primary">0.0m</span>
+                        <span id="divDistancia" class="font-sans text-base font-semibold text-success">0.0m</span>
                     </div>
                     <div class="flex flex-col items-center py-3 border-x border-base-300">
                         <span class="text-xs font-medium opacity-60">Rumbo</span>
-                        <span id="divRumbo" class="font-sans text-base font-semibold text-primary">0°</span>
+                        <span id="divRumbo" class="font-sans text-base font-semibold text-success">0°</span>
                     </div>
                     <div class="flex flex-col items-center py-3">
                         <span class="text-xs font-medium opacity-60">Satélites</span>
-                        <span id="divSatelites" class="font-sans text-base font-semibold text-primary">0</span>
+                        <span id="divSatelites" class="font-sans text-base font-semibold text-success">0</span>
                     </div>
                 </div>
                 <button id="btnNavegacion" class="btn btn-success w-full shadow-lg font-semibold normal-case tracking-wide active:scale-95 transition-transform duration-100">
