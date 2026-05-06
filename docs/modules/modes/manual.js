@@ -50,7 +50,7 @@ const manual = {
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                         </button>
                     </div>
-                    <button id="btnClaxon" class="btn btn-success w-2/3 mt-2">Claxon</button>
+                    <button id="btnClaxon" class="btn btn-success w-2/3 mt-2 active:scale-98 transition-transform duration-100">Claxon</button>
                 </div>
             </div>
         `;

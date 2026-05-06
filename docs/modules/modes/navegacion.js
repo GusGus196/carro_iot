@@ -64,7 +64,7 @@ const navegacion = {
                         <span id="divSatelites" class="font-sans text-base font-semibold text-primary">0</span>
                     </div>
                 </div>
-                <button id="btnNavegacion" class="btn btn-success w-full shadow-xl font-semibold normal-case tracking-wide">
+                <button id="btnNavegacion" class="btn btn-success w-full shadow-lg font-semibold normal-case tracking-wide active:scale-95 transition-transform duration-100">
                     Selecciona un destino
                 </button>
             </div>
@@ -85,6 +85,8 @@ const navegacion = {
         this.btnClick = () => this.controlarDestino();
 
         this.btnNavegacion?.addEventListener("click", this.btnClick);
+        this.btnNavegacion?.addEventListener("touchstart", () => this.btnNavegacion.classList.add("scale-95"), {passive: true});
+        this.btnNavegacion?.addEventListener("touchend", () => this.btnNavegacion.classList.remove("scale-95"), {passive: true});
     },
 
     iniciarMapa() {
