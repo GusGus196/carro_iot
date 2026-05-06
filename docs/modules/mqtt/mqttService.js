@@ -38,7 +38,7 @@ const mqttService = {
     // Eventos
     configurar() {
         this.cliente.on("connect", () => {
-            actualizar("CONECTADO", "connected");
+            actualizar("Conectado", "connected");
             if (isDev) {
                 console.info(`[MQTT] conectado`, {
                     url: URL, 
@@ -52,17 +52,17 @@ const mqttService = {
         });
 
         this.cliente.on("reconnect", () => {
-            actualizar("RECONECTANDO", "reconnecting");
+            actualizar("Reconectando", "reconnecting");
             if (isDev) console.warn(`[MQTT] reconectando...`);
         });
 
         this.cliente.on("offline", () => {
-            actualizar("DESCONECTADO", "disconnected");
+            actualizar("Desconectado", "disconnected");
             if (isDev) console.warn(`[MQTT] desconectado`);
         });
 
         this.cliente.on("error", (err) => {
-            actualizar("ERROR", "error");
+            actualizar("Error", "error");
             console.error(`[MQTT] error: ${err.message}`);
 
             if (isDev && err.stack) console.error(err.stack);
