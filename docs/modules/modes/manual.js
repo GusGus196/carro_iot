@@ -29,10 +29,10 @@ const manual = {
         this.contenedor = contenedor;
 
         contenedor.innerHTML = `
-            <div class="mode-wrapper gap-8">
+            <div class="mode-wrapper mode-center gap-8">
                 <div id="joystick-container" class="relative w-52 h-52 rounded-full border-4 border-base-300 shadow-inner shrink-0 bg-base-200/50">
                     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-base-content/10 rounded-full pointer-events-none"></div>
-                    <div id="joystick-puck" class="absolute w-16 h-16 rounded-full shadow-2xl top-1/2 left-1/2 cursor-grab" style="background: radial-gradient(circle at 30% 30%, var(--color-success) 0%, var(--color-base-100) 150%); transform: translate(-50%, -50%); touch-action: none; z-index: 10;"></div>
+                    <div id="joystick-puck" class="absolute w-16 h-16 rounded-full shadow-2xl top-1/2 left-1/2 cursor-grab" style="background: var(--color-success); transform: translate(-50%, -50%); touch-action: none; z-index: 10;"></div>
                 </div>
                 <div class="flex justify-center gap-8 text-xs font-mono opacity-70">
                     <p>X: <span id="valX" class="font-black text-success text-sm">0.00</span></p>
