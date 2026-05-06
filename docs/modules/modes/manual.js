@@ -30,9 +30,9 @@ const manual = {
 
         contenedor.innerHTML = `
             <div class="mode-wrapper gap-8">
-                <div id="joystick-container" class="relative w-52 h-52 rounded-full border-4 border-base-300 shadow-inner shrink-0" style="background: radial-gradient(circle at center, #2a2f36 0%, #111418 100%)">
+                <div id="joystick-container" class="relative w-52 h-52 rounded-full border-4 border-base-300 shadow-inner shrink-0 bg-base-200/50">
                     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-base-content/10 rounded-full pointer-events-none"></div>
-                    <div id="joystick-puck" class="absolute w-16 h-16 rounded-full shadow-2xl top-1/2 left-1/2 cursor-grab" style="background: radial-gradient(circle at 30% 30%, var(--color-success) 0%, #000 150%); transform: translate(-50%, -50%); touch-action: none; z-index: 10;"></div>
+                    <div id="joystick-puck" class="absolute w-16 h-16 rounded-full shadow-2xl top-1/2 left-1/2 cursor-grab" style="background: radial-gradient(circle at 30% 30%, var(--color-success) 0%, var(--color-base-100) 150%); transform: translate(-50%, -50%); touch-action: none; z-index: 10;"></div>
                 </div>
                 <div class="flex justify-center gap-8 text-xs font-mono opacity-70">
                     <p>X: <span id="valX" class="font-black text-success text-sm">0.00</span></p>
@@ -50,7 +50,7 @@ const manual = {
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
                         </button>
                     </div>
-                    <button id="btnClaxon" class="btn btn-success w-2/3">Claxon</button>
+                    <button id="btnClaxon" class="btn btn-success w-2/3 mt-2">Claxon</button>
                 </div>
             </div>
         `;
