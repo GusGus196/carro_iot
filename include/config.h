@@ -67,6 +67,25 @@ extern String modo;
 extern unsigned long ultimaVezRecibido;
 extern float velocidadConstante;
 
-extern float momentum; 
+extern float momentum;
 
+extern const char* tipo;
+
+struct ConfigLuces { 
+    int pinR;
+    int pinG;
+    int pinB;
+    int pinLedDer;
+    int pinLedIzq;
+    int pinFrenoDer;
+    int pinFrenoIzq;
+   
+    int colorManual[3];
+    int colorSeguidor[3];
+    int colorObstaculos[3];
+    int colorNavegacion[3];
+    int colorNull[3];
+};
+
+extern const ConfigLuces lucesConf;
 #endif

@@ -3,7 +3,7 @@
 // Variables de configuración WIFI y MQTT
 const char* ssid = "";
 const char* password = "";
-const char* mqtt_server = "";
+const char* mqtt_server = "broker.hivemq.com";
 const int port = 1883;
 
 const Topics topics = {
@@ -74,3 +74,20 @@ float momentum = 0;
 String modo = "indefinido"; // Modo seleccionado (control, linea o gps)
 unsigned long ultimaVezRecibido = 0; // Última vez recibido un mensaje MQTT para joystick
 float velocidadConstante = 0.00; // Velocidad constante para modo 'seguidor de línea'
+
+const char* tipo = "";
+//pines LEDS
+const ConfigLuces lucesConf { 
+    .pinR = 0,
+    .pinG = 1,
+    .pinB = 2,
+    .pinLedDer = 4,
+    .pinLedIzq = 3,
+    .pinFrenoDer = 5,
+    .pinFrenoIzq = 6,
+    .colorManual = {0, 1, 0},
+    .colorSeguidor = {0, 1, 0},
+    .colorObstaculos = {1, 0, 1},
+    .colorNavegacion = {1, 1, 1},
+    .colorNull = {1,0,0}
+};

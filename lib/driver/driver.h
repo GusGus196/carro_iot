@@ -5,7 +5,7 @@
 
 #include "config.h"
 #include "sensor_velocidad.h"
-
+#include "buzzer.h"
 // Compensación utilizada para igualar potencia de los motores DC
 extern const float compensacionIzquierda;
 extern const float compensacionDerecha;

@@ -13,39 +13,40 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
   }
 
   // Filtrar por topic
-  if (strcmp(topic, topics.modo) == 0) {
-    const char* nuevoModo = doc["modo"];
-    if (nuevoModo) {
-      modo = String(nuevoModo);
-      velocidadConstante = 0.0;
-      hayDestino = false;
-      sonarConfirmacion();
-    }
 
-  } else if (strcmp(topic, topics.manual) == 0) {
+  if (strcmp(topic, topics.manual) == 0) {
     ultimaVezRecibido = millis();
 
     float valorX = doc["x"] | 0.0f;
     float valorY = doc["y"] | 0.0f;
 
     driver(valorX, valorY);
-     
-  } else if (strcmp(topic, topics.seguidor) == 0 || strcmp(topic, topics.obstaculos) == 0) {
+
+  } else if (strcmp(topic, topics.modo) == 0) {
+    const char* nuevoModo = doc["modo"];
+    
+    if (nuevoModo) {
+      modo = String(nuevoModo);
+      velocidadConstante = 0.0;
+      hayDestino = false;
+      sonarConfirmacion();
+      ledModo(nuevoModo);
+      tipo = "off";
+    }
+}
+   else if (strcmp(topic, topics.seguidor) == 0 || strcmp(topic, topics.obstaculos) == 0) {
     bool activo = (doc["accion"] == "activar");
     
     if (strcmp(topic, topics.seguidor) == 0) {
         velocidadConstante = activo ? 0.42 : 0.0;
         momentum = 0;
-
     } else {
       obstaculos();
     }
   } else if (strcmp(topic, topics.navegacion) == 0) {
-
+    
   } else if (strcmp(topic, topics.luces) == 0) {
-    const char* tipo = doc["luces"];
-    // procesar(tipo);
-
+    tipo = doc["luces"];
   } else if (strcmp(topic, topics.claxon) == 0) {
     claxon();
   
