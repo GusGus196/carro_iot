@@ -2,8 +2,9 @@ import mqttService from "../mqtt/mqttService.js";
 import {topics} from "../mqtt/topics.js";
 
 const manual = {
+    // Elementos de la interfaz
     contenedor: null,
-    container: null,
+    joystick: null,
     puck: null,
     valX: null,
     valY: null,
@@ -12,14 +13,15 @@ const manual = {
     btnPrev: null,
     btnDirDer: null,
 
+    // Estado interno
     dragging: false,
     latestMsg: {x: 0, y: 0},
     sendInterval: null,
     estadoLuces: {izq: false, prev: false, der: false},
     abortController: null,
 
-    FRECUENCIA_MS: 50,
-    DEADZONE: 0.10,
+    FRECUENCIA_MS: 50, // 20Hz para publicaciones MQTT
+    DEADZONE: 0.10, // Zona muerta del joystick
 
     montar(contenedor) {
         if (this.abortController) {
@@ -58,11 +60,12 @@ const manual = {
         this.enlazar();
     },
 
+    // Asignar eventos (mouse/touch) y botones
     enlazar() {
         this.abortController = new AbortController();
         const {signal} = this.abortController;
 
-        this.container = this.contenedor.querySelector("#joystick-container");
+        this.joystick = this.contenedor.querySelector("#joystick-container");
         this.puck = this.contenedor.querySelector("#joystick-puck");
         this.valX = this.contenedor.querySelector("#valX");
         this.valY = this.contenedor.querySelector("#valY");
@@ -71,7 +74,7 @@ const manual = {
         this.btnPrev = this.contenedor.querySelector("#btnPrev");
         this.btnDirDer = this.contenedor.querySelector("#btnDirDer");
 
-        if (!this.puck || !this.container) return;
+        if (!this.puck || !this.joystick) return;
 
         this.puck.addEventListener("mousedown", () => this.iniciarJoystick(), {signal});
         window.addEventListener("mousemove", (event) => this.moverJoystick(event), {signal});
@@ -112,11 +115,12 @@ const manual = {
         }
     },
 
+    // Calcula posición del joystick
     moverJoystick(evento) {
         if (!this.dragging) return;
 
-        const rect = this.container.getBoundingClientRect();
-        const radius = this.container.offsetWidth / 2;
+        const rect = this.joystick.getBoundingClientRect();
+        const radius = this.joystick.offsetWidth / 2;
 
         const clientX = evento.touches ? evento.touches[0].clientX : evento.clientX;
         const clientY = evento.touches ? evento.touches[0].clientY : evento.clientY;
@@ -126,6 +130,7 @@ const manual = {
 
         const distance = Math.sqrt(dx * dx + dy * dy);
 
+        // Limita el movimiento al radio del joystick
         if (distance > radius) {
             dx *= radius / distance;
             dy *= radius / distance;
@@ -134,8 +139,9 @@ const manual = {
         this.puck.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
 
         const rawX = dx / radius;
-        const rawY = (dy / radius) * -1;
+        const rawY = (dy / radius) * -1; // invertir eje Y (arriba positivo)
 
+        // Aplica zona muerta
         const x = Math.abs(rawX) < this.DEADZONE ? 0 : parseFloat(rawX.toFixed(2));
         const y = Math.abs(rawY) < this.DEADZONE ? 0 : parseFloat(rawY.toFixed(2));
 
@@ -145,6 +151,7 @@ const manual = {
         if (this.valY) this.valY.innerText = y.toFixed(2);
     },
 
+    // Detener el joystick y reiniciar valores
     detenerJoystick() {
         if (!this.dragging) return;
         this.dragging = false;
@@ -163,6 +170,7 @@ const manual = {
         mqttService.publicar(topics.modo.manual, {x: 0, y: 0});
     },
 
+    // Manejo de luces: solo una activa a la vez
     controlarLuces(tipo) {
         if(this.estadoLuces[tipo]) {
             this.estadoLuces[tipo] = false;
@@ -177,6 +185,7 @@ const manual = {
         mqttService.publicar(topics.accion.luces, {luces: estado});
     },
 
+    // Actualiza estilo visual de los botones de luces
     actualizarLuces() {
         if(!this.btnDirIzq || !this.btnDirDer || !this.btnPrev) return;
 
@@ -202,7 +211,7 @@ const manual = {
         this.detenerJoystick();
 
         this.contenedor = null;
-        this.container = null;
+        this.joystick = null;
         this.puck = null;
         this.valX = null;
         this.valY = null;
