@@ -17,9 +17,9 @@ void enviarUbicacion(); // Envia la ubicación del smart car para actualizar el 
 
 // Funciones principales y de soporte para la navegación
 void actualizarNavegacion(); // Obtiene la distancia y el ángulo entre el smart car y el destino, publica la alerta cuando se alcance el destino y detiene el driver
-void calcularMetricasGPS(); // Calcula la distancia y el rumbo hacia el destino una vez por segundo para ahorrar procesamiento
-void procesarLlegada(); // Detiene el motor, publica la alerta en MQTT y emite el sonido de meta alcanzada (claxon)
-void conducirHaciaDestino(); // Evalúa los tiempos para decidir si se debe obtener una nueva orientación o seguir corrigiendo el rumbo
+void calcularMetricas(); // Calcula la distancia y el rumbo hacia el destino una vez por segundo para ahorrar procesamiento
+void terminar(); // Detiene el motor, publica la alerta en MQTT y emite el sonido de meta alcanzada (claxon)
+void navegar(); // Evalúa los tiempos para decidir si se debe obtener una nueva orientación o seguir corrigiendo el rumbo
 
 // Funciones de cálculo y movimiento físico
 void obtenerOrientacion(); // Obtiene el ángulo de orientación actual del smart car e invoca la correción de orientación en dirección al destino

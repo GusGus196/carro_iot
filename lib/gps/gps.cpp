@@ -4,10 +4,14 @@ TinyGPSPlus gps;
 HardwareSerial SerialGPS(2);
 
 static unsigned long ultimaPublicacion = 0;
-static unsigned long ultimoRumboCalculado = 0; // Controlar el calculo de rumbo cada 5 segundos
+static unsigned long ultimoRumboCalculado = 0;
 
 double latAnterior, lonAnterior; // Variables para punto A (anterior)
-bool primeraLecturaRealizada = false; // Bandera para omitir la primer lectura
+bool primeraLecturaRealizada = false; // Omitir la primer lectura
+
+static double destinoDist = 0.0;
+static double destinoRumbo = 0.0;
+static double actualRumbo = 0.0;
 
 void iniciarGPS() {
     SerialGPS.begin(9600, SERIAL_8N1, gpsRX, gpsTX);
@@ -22,7 +26,7 @@ void enviarUbicacion() {
                 int satelites = gps.satellites.isValid() ? gps.satellites.value() : 0;
                 
                 snprintf(payload, sizeof(payload),
-                    "{\"lat\":%.6f,\"lon\":%.6f,\"rumbo\":%.1f,\"sat\":%d,\"destino\":false}",
+                    "{\"lat\":%.6f,\"lon\":%.6f,\"error\":%.1f,\"sat\":%d,\"destino\":false}",
                     gps.location.lat(),
                     gps.location.lng(),
                     errorRumbo,
@@ -37,27 +41,27 @@ void enviarUbicacion() {
 }
 
 void actualizarNavegacion() {   
-    if (!hayDestino) return;
+    if (!estadoNav) return;
     
-    calcularMetricasGPS();
+    calcularMetricas();
 
-    if (destinoDistancia < 5.0) {
-        procesarLlegada();
+    if (destinoDist <= 2.0) {
+        terminar();
     } else {
-        conducirHaciaDestino();
+        navegar();
     }
 }
 
-void calcularMetricasGPS() {
+void calcularMetricas() {
     static unsigned long ultimoCalculo = 0;
     
     /*
-        Calculamos la distancia en metros entre el smart car y el destino cada 1 segundo,
+        Calculamos la distancia en metros entre el Smart car y el destino cada 1 segundo,
         devuelve un valor tipo double, Se usa la fórmula de Haversine para el cálculo
     */
     if (millis() - ultimoCalculo > 1000) {
         if (gps.location.isValid()) {
-            destinoDistancia = gps.distanceBetween(gps.location.lat(), gps.location.lng(), destinoLat, destinoLon);
+            destinoDist = gps.distanceBetween(gps.location.lat(), gps.location.lng(), destinoLat, destinoLon);
             destinoRumbo = gps.courseTo(gps.location.lat(), gps.location.lng(), destinoLat, destinoLon);
 
         }
@@ -66,20 +70,21 @@ void calcularMetricasGPS() {
     }
 }
 
-void procesarLlegada() {
-    hayDestino = false;
-    accionNavegacion = "";
+void terminar() {
+    estadoNav = false;
+    accionNav = "";
     errorRumbo = 0.0;
     driver(0, 0);
+    
     if(client.connected()) {
         char payload[80];
         int satelites = gps.satellites.isValid() ? gps.satellites.value() : 0;
 
         snprintf(payload, sizeof(payload),
-            "{\"lat\":%.6f,\"lon\":%.6f,\"rumbo\":%.1f,\"sat\":%d,\"destino\":true}",
+            "{\"lat\":%.6f,\"lon\":%.6f,\"error\":%.1f,\"sat\":%d,\"destino\":true}",
             gps.location.isValid() ? gps.location.lat() : 0.0,
             gps.location.isValid() ? gps.location.lng() : 0.0,
-            gps.course.isValid() ? gps.course.deg() : 0.0,
+            errorRumbo,
             satelites
         );
 
@@ -88,12 +93,14 @@ void procesarLlegada() {
     claxon();
 }
 
-void conducirHaciaDestino() {
-    if ( millis() - ultimoRumboCalculado > 5000) {
+void navegar() {
+    unsigned long tiempoTranscurrido = millis() - ultimoRumboCalculado;
+    
+    // Cada 6 segundos, actualizar posición y rumbo
+    if (tiempoTranscurrido >= 6000) {
         ultimoRumboCalculado = millis();
         
         if (gps.location.isValid()) {
-            
             if (primeraLecturaRealizada) {
                 actualRumbo = gps.courseTo(latAnterior, lonAnterior, gps.location.lat(), gps.location.lng());
             }
@@ -105,14 +112,19 @@ void conducirHaciaDestino() {
         } else {
             driver(0.0, 0.45);
         }
-    } else if ( millis() - ultimoRumboCalculado < 1000) {
+    }
+    
+    // Primer segundo: corregir orientación
+    // Resto (5 segundos): avanzar para recalcular posición
+    if (tiempoTranscurrido < 1000) {
         if (primeraLecturaRealizada) {
             corregirOrientacion(actualRumbo, destinoRumbo);
         } else {
             driver(0.0, 0.45);
         }
+
     } else {
-        driver(0.0, 0.45);
+        driver(0.0, 0.45); // Avanzar el resto del tiempo
     }
 }
 
@@ -129,7 +141,7 @@ void obtenerOrientacion() {
         hacer que el smart car gire en dirección al destino
     */
     actualRumbo = gps.course.deg();
-    corregirOrientacion(actualRumbo, destinoRumbo); // Manipular el driver para corregir la orientación
+    corregirOrientacion(actualRumbo, destinoRumbo); // Utiliza el driver para corregir la orientación
 }
 
 void corregirOrientacion(double actual, double destino) {
