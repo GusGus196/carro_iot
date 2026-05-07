@@ -69,6 +69,12 @@ void loop() {
           
         Cuando se completa el destino, la bandera hayDestino vuelve a false y se espera un nuevo destino del controlador web
       */
+    } else if(modo == "obstaculos"){
+      if (velocidadConstante > 0.0) {
+        obstaculos();
+      } else {
+        driver(0, 0);
+      }
     } else {
       driver(0, 0);
     }

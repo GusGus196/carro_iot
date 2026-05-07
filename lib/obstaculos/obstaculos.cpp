@@ -21,7 +21,7 @@ void esquivarObstaculo() {
 }
 
 void obstaculos() {
-    driver(0, 0.45);
+    driver(0, velocidadConstante);
 
     float obstaculo = leerDistanciaFiltrada();
     
