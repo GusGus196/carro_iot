@@ -45,7 +45,7 @@ void actualizarNavegacion() {
     
     calcularMetricas();
 
-    if (destinoDist <= 2.0) {
+    if (destinoDist < 5.0) {
         terminar();
     } else {
         navegar();
@@ -97,7 +97,7 @@ void navegar() {
     unsigned long tiempoTranscurrido = millis() - ultimoRumboCalculado;
     
     // Cada 6 segundos, actualizar posición y rumbo
-    if (tiempoTranscurrido >= 6000) {
+    if (tiempoTranscurrido >= 5000) {
         ultimoRumboCalculado = millis();
         
         if (gps.location.isValid()) {
@@ -151,7 +151,7 @@ void corregirOrientacion(double actual, double destino) {
     else if (errorRumbo < -180) errorRumbo += 360;
     
     float giro = (abs(errorRumbo) < 30) ? 0.0 : constrain(errorRumbo / 90.0, -0.20, 0.20);
-    float velocidad = (abs(errorRumbo) > 45) ? 0.25 : 0.45;
+    float velocidad = (abs(errorRumbo) > 45) ? 0.30 : 0.45;
     
     driver(giro, velocidad);
 }
