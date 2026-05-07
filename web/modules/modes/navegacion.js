@@ -15,7 +15,7 @@ const navegacion = {
     // Elementos de la interfaz
     btnNavegacion: null,
     divDistancia: null,
-    divRumbo: null,
+    divError: null,
     divSatelites: null,
 
     /*
@@ -56,8 +56,8 @@ const navegacion = {
                         <span id="divDistancia" class="font-sans text-base font-semibold text-success">0.0m</span>
                     </div>
                     <div class="flex flex-col items-center py-3 border-x border-base-300">
-                        <span class="text-xs font-medium opacity-60">Rumbo</span>
-                        <span id="divRumbo" class="font-sans text-base font-semibold text-success">0°</span>
+                        <span class="text-xs font-medium opacity-60">Error</span>
+                        <span id="divError" class="font-sans text-base font-semibold text-success">0°</span>
                     </div>
                     <div class="flex flex-col items-center py-3">
                         <span class="text-xs font-medium opacity-60">Satélites</span>
@@ -78,7 +78,7 @@ const navegacion = {
     enlazar() {
         this.btnNavegacion = this.contenedor.querySelector("#btnNavegacion");
         this.divDistancia = this.contenedor.querySelector("#divDistancia");
-        this.divRumbo = this.contenedor.querySelector("#divRumbo");
+        this.divError = this.contenedor.querySelector("#divError");
         this.divSatelites = this.contenedor.querySelector("#divSatelites");
 
         this.mapaClickHandler = (event) => this.seleccionarDestino(event.latlng);
@@ -199,10 +199,10 @@ const navegacion = {
         this.ultimoDestino = L.latLng(this.destino);
     },
 
-    actualizarInterfaz(lat, lon, rumbo, sat) {
+    actualizarInterfaz(lat, lon, error, sat) {
         if (!this.mapa) return;
 
-        if (this.divRumbo) this.divRumbo.textContent = `${Math.round(rumbo)}°`;
+        if (this.divError) this.divError.textContent = `${Math.round(error)}°`;
         if (this.divSatelites) this.divSatelites.textContent = sat;
 
         const pos = L.latLng(lat, lon);
@@ -327,7 +327,7 @@ const navegacion = {
         this.btnNavegacion?.removeEventListener("click", this.btnClick);
         this.btnNavegacion = null;
         this.divDistancia = null;
-        this.divRumbo = null;
+        this.divError = null;
         this.divSatelites = null;
 
         this.contenedor = null;
