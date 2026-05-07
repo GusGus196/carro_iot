@@ -49,7 +49,8 @@ void loop() {
     }
 
     direccionales(tipo);
-
+    verificarTimeoutLuces();
+    
   } else if (modo == "seguidor") {
     if (velocidadConstante > 0.0) {
       ejecutarSeguidorLinea();
