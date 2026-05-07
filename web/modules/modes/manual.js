@@ -17,6 +17,7 @@ const manual = {
     dragging: false,
     latestMsg: {x: 0, y: 0},
     sendInterval: null,
+    lucesInterval: null,
     estadoLuces: {izq: false, prev: false, der: false},
     abortController: null,
 
@@ -172,7 +173,9 @@ const manual = {
 
     // Manejo de luces: solo una activa a la vez
     controlarLuces(tipo) {
-        if(this.estadoLuces[tipo]) {
+        const activaAnterior = this.estadoLuces.izq || this.estadoLuces.prev || this.estadoLuces.der;
+
+        if (this.estadoLuces[tipo]) {
             this.estadoLuces[tipo] = false;
         } else {
             this.estadoLuces = {izq: false, prev: false, der: false};
@@ -181,8 +184,27 @@ const manual = {
 
         this.actualizarLuces();
 
-        const estado = this.estadoLuces[tipo] ? tipo : "off";
-        mqttService.publicar(topics.accion.luces, {luces: estado});
+        if (!this.estadoLuces.izq && !this.estadoLuces.prev && !this.estadoLuces.der) {
+            // Todo off: limpiar intervalo
+            this.limpiarIntervaloLuces();
+            return;
+        }
+
+        // Si cambió el tipo de luz activa, reiniciar el intervalo
+        if (!activaAnterior || !this.lucesInterval) {
+            this.limpiarIntervaloLuces();
+            this.lucesInterval = setInterval(() => {
+                const activo = Object.keys(this.estadoLuces).find(k => this.estadoLuces[k]);
+                mqttService.publicar(topics.accion.luces, {tipo: activo});
+            }, 500);
+        }
+    },
+
+    limpiarIntervaloLuces() {
+        if (this.lucesInterval) {
+            clearInterval(this.lucesInterval);
+            this.lucesInterval = null;
+        }
     },
 
     // Actualiza estilo visual de los botones de luces
@@ -209,6 +231,7 @@ const manual = {
         }
 
         this.detenerJoystick();
+        this.limpiarIntervaloLuces();
 
         this.contenedor = null;
         this.joystick = null;
