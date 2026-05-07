@@ -1,4 +1,5 @@
 #include "feedback.h"
+
 bool preventivasActivas = false;
 bool direccionalDerActiva = false;
 bool direccionalIzqActiva = false;
