@@ -171,12 +171,13 @@ const manual = {
         mqttService.publicar(topics.modo.manual, {x: 0, y: 0});
     },
 
-    // Manejo de luces: solo una activa a la vez
     controlarLuces(tipo) {
-        const activaAnterior = this.estadoLuces.izq || this.estadoLuces.prev || this.estadoLuces.der;
+        const activaAnterior = Object.keys(this.estadoLuces).find(k => this.estadoLuces[k]);
 
+         // Solo una activa a la vez
         if (this.estadoLuces[tipo]) {
             this.estadoLuces[tipo] = false;
+
         } else {
             this.estadoLuces = {izq: false, prev: false, der: false};
             this.estadoLuces[tipo] = true;
@@ -184,18 +185,22 @@ const manual = {
 
         this.actualizarLuces();
 
-        if (!this.estadoLuces.izq && !this.estadoLuces.prev && !this.estadoLuces.der) {
-            // Todo off: limpiar intervalo
+        // Obtener la nueva luz activa después del cambio
+        const activaActual = Object.keys(this.estadoLuces).find(k => this.estadoLuces[k]);
+
+        // Si ninguna luz quedó activa se detienen las publicaciones
+        if (!activaActual) {
             this.limpiarIntervaloLuces();
             return;
         }
 
-        // Si cambió el tipo de luz activa, reiniciar el intervalo
-        if (!activaAnterior || !this.lucesInterval) {
+         // Reiniciar el intervalo solo si: cambió la luz activa o no existe intervalo aún
+        if (activaAnterior !== activaActual || !this.lucesInterval) {
             this.limpiarIntervaloLuces();
+
+            // Publicar la luz activa cada 500ms
             this.lucesInterval = setInterval(() => {
-                const activo = Object.keys(this.estadoLuces).find(k => this.estadoLuces[k]);
-                mqttService.publicar(topics.accion.luces, {tipo: activo});
+                mqttService.publicar(topics.accion.luces,{tipo: activaActual});
             }, 500);
         }
     },
