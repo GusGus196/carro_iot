@@ -1,0 +1,54 @@
+@import "tailwindcss";
+@plugin "daisyui/index.js" {
+  themes: dark --default, light;
+}
+
+@theme {
+  --font-sans: Inter, system-ui, sans-serif;
+}
+
+/* ------------------------- Interfaz del modo ------------------------- */
+#mode-interface {
+  @apply flex flex-col flex-1 relative overflow-hidden bg-base-300/10;
+  position: relative;
+  z-index: 1;
+}
+
+/* ------------------------- Wrapper de la interfaz del modo ------------------------- */
+.mode-wrapper {
+  @apply w-full max-w-4xl mx-auto h-full flex flex-col items-center p-6 md:p-10 transition-all duration-300;
+}
+
+/* Centrado vertical para modos: manual, seguidor y obstáculos */
+.mode-center {
+  @apply flex items-center justify-center;
+}
+
+/* ------------------------- Mapa de Leaflet ------------------------- */
+#mapa {
+  @apply absolute inset-0;
+}
+
+.leaflet-control-container {
+  z-index: 15 !important;
+}
+
+.leaflet-pane,
+.leaflet-tile,
+.leaflet-marker-icon,
+.leaflet-marker-shadow,
+.leaflet-zoom-box {
+  z-index: 0 !important;
+}
+
+.leaflet-marker-pane {
+  z-index: 1 !important;
+}
+
+.leaflet-popup-pane {
+  z-index: 2 !important;
+}
+
+.leaflet-control-pane {
+  z-index: 3 !important;
+}

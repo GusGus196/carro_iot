@@ -62,4 +62,47 @@
 > [!CAUTION]
 > Verificar que la suma de los amperajes de todos los componentes no supere el amperaje que proporciona la fuente de energía.
 
+## Comunicación MQTT
+
+### Tópicos de acción (Publicación)
+
+|Tópico|Payload|Descripción|
+|:---|:---|:---|
+|`smartcar/accion/modo`|`{"modo":"manual"}`|Cambia a control manual|
+|`smartcar/accion/modo`|`{"modo":"seguidor"}`|Cambia a modo seguidor de línea|
+|`smartcar/accion/modo`|`{"modo":"obstaculos"}`|Cambia a modo evasión de obstáculos|
+|`smartcar/accion/modo`|`{"modo":"navegacion"}`|Cambia a modo navegación GPS|
+|`smartcar/modo/manual`|`{"x":0.4,"y":0.2}`|Coordenadas x, y del joystick|
+|`smartcar/accion/luces`|`{"tipo":"izq"}`|Direccional izquierda|
+|`smartcar/accion/luces`|`{"tipo":"prev"}`|Luces preventivas|
+|`smartcar/accion/luces`|`{"tipo":"der"}`|Direccional derecha|
+|`smartcar/accion/claxon`|`{"estado":1}`|Activar claxon|
+|`smartcar/modo/seguidor`|`{"accion":"activar"}`|Iniciar seguimiento|
+|`smartcar/modo/seguidor`|`{"accion":"desactivar"}`|Detener seguimiento|
+|`smartcar/modo/obstaculos`|`{"accion":"activar"}`|Activar evasión|
+|`smartcar/modo/obstaculos`|`{"accion":"desactivar"}`|Desactivar evasión|
+|`smartcar/modo/navegacion`|`{"accion":"iniciar","lat":19.24,"lon":-103.69}`|Iniciar navegación|
+|`smartcar/modo/navegacion`|`{"accion":"detener","lat":19.24,"lon":-103.69}`|Detener navegación|
+|`smartcar/modo/navegacion`|`{"accion":"reanudar","lat":19.24,"lon":-103.69}`|Reanudar navegación|
+
+### Tópicos de estado (Suscripción)
+
+|Tópico|Payload|Descripción|
+|:---|:---|:---|
+|`smartcar/estado/ubicacion`|`{"lat":19.24,"lon":-103.69,"rumbo":40,"sat":4,"destino":true}`|Posición y estado del Smart Car|
+
+### Diagrama de comunicación
+
+```text
+   Control Web
+        ▲
+        │ MQTT sobre WebSockets
+        ▼
+   Broker MQTT
+        ▲
+        │ MQTT estándar
+        ▼
+    Smart Car
+```
+
 ## Licencia
