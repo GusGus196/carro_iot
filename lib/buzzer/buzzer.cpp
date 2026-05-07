@@ -76,13 +76,12 @@ void direccionales(const char* instruccion) {
     }
 }
 
-void ledFreno(float velocidadY, int zonaMuerta) {   
+void ledFreno(float velocidadY, float zonaMuerta) {   
     static float ultimaVelocidad = 0;
-    bool estadoFreno = false;
 
-    if ((abs(velocidadY) < abs(ultimaVelocidad) - 0.05) || (abs(velocidadY) < zonaMuerta)) {
-        estadoFreno = true;
-    }
+    bool frenando = abs(velocidadY) < abs(ultimaVelocidad) - 0.05f; 
+    bool detenido = abs(velocidadY) < zonaMuerta;                   
+    bool estadoFreno = frenando || detenido;
 
     static bool ultimoEstado = false;
     if (estadoFreno != ultimoEstado) {

@@ -14,7 +14,7 @@ void sonarError();
 
 //funciones Led
 void ledRGB(int color[3]);
-void ledFreno(float velocidadY, int zonaMuerta);
+void ledFreno(float velocidadY, float zonaMuerta);
 void direccionales(const char* instruccion);
 
 //Funciones auxiliares leds
