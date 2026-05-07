@@ -6,7 +6,7 @@
 #include "feedback.h" // Funciones para activar el buzzer pasivo
 #include "callback.h" // Función de callback para manejar mensajes MQTT entrantes
 #include "driver.h" // Función para configurar los valores PWM del driver
-#include "gps.h" // Funciones para utilizar el módulo GPS y establecer la ruta a un destino dado, publicar en TOPICS ubicación y llegada
+#include "navegacion.h" // Funciones para utilizar el modo navegacion
 #include "reconnect.h" // Función para reconectar al broker MQTT y suscripciones a TOPICS
 #include "seguidor_linea.h" // Funciones para configurar los pines del array de sensores reflectivos TCRT5000 y ejecutar el seguidor de línea
 #include "setup_wifi.h" // Función para configurar la conexión WiFi
@@ -60,21 +60,13 @@ void loop() {
   } else if (modo == "navegacion") {
     if(gps.location.isValid()) {
       actualizarNavegacion();
-      /*
-        Esta función solo se activa si se cumplen 4 condiciones:
-          1. El modo 'gps' fue seleccionado
-          2. El GPS está sincronizado y recibe la ubicación válida
-          3. El destino fue enviado y el callback actualizo las variables destinoLat, destinoLon y la bandera hayDestino como true
-          4. Dentro, comprueba que la bandera hayDestino sea true
-          
-        Cuando se completa el destino, la bandera hayDestino vuelve a false y se espera un nuevo destino del controlador web
-      */
-    } else if(modo == "obstaculos"){
-      if (velocidadConstante > 0.0) {
-        obstaculos();
-      } else {
-        driver(0, 0);
-      }
+    } else {
+      driver(0, 0);
+    }
+
+  } else if (modo == "obstaculos") {
+    if (velocidadConstante > 0.0) {
+      obstaculos();
     } else {
       driver(0, 0);
     }
