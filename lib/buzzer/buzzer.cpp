@@ -50,35 +50,44 @@ void ledRGB(const int color[3])
 }
 
 void direccionales(const char* instruccion) {
+    static bool estadoDer = false;
+    static bool estadoIzq = false;
+    static char ultimaInstruccion[8] = "";
 
-    if (instruccion == nullptr || strcmp(instruccion, "off") == 0) { 
-        pcf.write(lucesConf.pinLedDer, HIGH);
-        pcf.write(lucesConf.pinLedIzq, HIGH);
+    if (strcmp(instruccion, ultimaInstruccion) != 0) {
+        estadoDer = false;
+        estadoIzq = false;
+        strncpy(ultimaInstruccion, instruccion, sizeof(ultimaInstruccion) - 1);
+    }
 
-        toggleEstado = false;
-        ultimoMensajeLuces = 0;
-        return;
-    } 
-    
-    ultimoMensajeLuces = millis();
-    toggleEstado = !toggleEstado;
     if (strcmp(instruccion, "der") == 0) {
-        pcf.write(lucesConf.pinLedIzq, HIGH);      // Izquierda apagada
-        pcf.write(lucesConf.pinLedDer, toggleEstado ? LOW : HIGH); // Derecha parpadea
+        estadoIzq = false;
+        estadoDer = !estadoDer;
+
+    } else if (strcmp(instruccion, "izq") == 0) {
+        estadoDer = false;
+        estadoIzq = !estadoIzq;
+
+    } else if (strcmp(instruccion, "prev") == 0) {
+        if (estadoDer != estadoIzq) {
+            estadoDer = false;
+            estadoIzq = false;
+        }
+        estadoDer = !estadoDer;
+        estadoIzq = estadoDer;
+
+    } else {
+        estadoDer = false;
+        estadoIzq = false;
     }
-    else if (strcmp(instruccion, "izq") == 0) {
-        pcf.write(lucesConf.pinLedDer, HIGH);      // Derecha apagada
-        pcf.write(lucesConf.pinLedIzq, toggleEstado ? LOW : HIGH); // Izquierda parpadea
-    }
-    else if (strcmp(instruccion, "prev") == 0) {
-        pcf.write(lucesConf.pinLedDer, toggleEstado ? LOW : HIGH);
-        pcf.write(lucesConf.pinLedIzq, toggleEstado ? LOW : HIGH);
-    }
+
+    pcf.write(lucesConf.pinLedDer, estadoDer ? LOW : HIGH);
+    pcf.write(lucesConf.pinLedIzq, estadoIzq ? LOW : HIGH);
 }
 
 void ledFreno(float velocidadY, float zonaMuerta) {   
     static float ultimaVelocidad = 0;
-
+    
     bool frenando = abs(velocidadY) < abs(ultimaVelocidad) - 0.05f; 
     bool detenido = abs(velocidadY) < zonaMuerta;                   
     bool estadoFreno = frenando || detenido;
@@ -109,14 +118,5 @@ void ledModo(const String &modo)
         ledRGB(lucesConf.colorNavegacion);
     } else {
         ledRGB(lucesConf.colorNull);
-    }
-}
-
-void verificarTimeoutLuces() {
-    if (ultimoMensajeLuces != 0 && millis() - ultimoMensajeLuces > timeoutLuces) {
-        pcf.write(lucesConf.pinLedDer, HIGH);
-        pcf.write(lucesConf.pinLedIzq, HIGH);
-        toggleEstado = false;
-        ultimoMensajeLuces = 0;
     }
 }
