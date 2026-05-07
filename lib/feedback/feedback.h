@@ -1,5 +1,5 @@
-#ifndef BUZZER_H
-#define BUZZER_H
+#ifndef FEEDBACK_H
+#define FEEDBACK_H
 
 #include <Arduino.h>
 #include <PCF8574.h>

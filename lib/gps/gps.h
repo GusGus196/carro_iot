@@ -5,7 +5,7 @@
 #include <HardwareSerial.h> // Usar puertos serial del ESP32
 
 #include "config.h"
-#include "buzzer.h"
+#include "feedback.h"
 #include "reconnect.h" // Objeto cliente del MQTT para enviar posición al topic "smartcar/estado/ubicacion" y alerta a "smartcar/estado/llegada"
 #include "driver.h" // Incluir función driver()
 
