@@ -62,13 +62,10 @@ const int gpsTX = 17;
 // Variables del modo 'navegación GPS'
 double destinoLat = 0.0;
 double destinoLon = 0.0;
-bool hayDestino = false;
+bool estadoNav = false;
 
-const char* accionNavegacion = "";
+const char* accionNav = "";
 
-double destinoDistancia = 0.0;
-double destinoRumbo = 0.0;
-double actualRumbo = 0.0;
 double errorRumbo = 0.0;
 
 float momentum = 0;

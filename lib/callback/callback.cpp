@@ -28,8 +28,8 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
     if (nuevoModo) {
       modo = String(nuevoModo);
       velocidadConstante = 0.0;
-      hayDestino = false;
-      accionNavegacion = "";
+      estadoNav = false;
+      accionNav = "";
       errorRumbo = 0.0;
       sonarConfirmacion();
       ledModo(nuevoModo);
@@ -49,19 +49,19 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
     const char* accion = doc["accion"];
     
     if (accion) {
-      accionNavegacion = accion;
+      accionNav = accion;
 
       if (strcmp(accion, "iniciar") == 0) {
         destinoLat = doc["lat"] | 0.0;
         destinoLon = doc["lon"] | 0.0;
-        hayDestino = (destinoLat != 0.0 || destinoLon != 0.0);
+        estadoNav = (destinoLat != 0.0 || destinoLon != 0.0);
 
       } else if (strcmp(accion, "detener") == 0) {
-        hayDestino = false;
+        estadoNav = false;
         driver(0, 0);
 
       } else if (strcmp(accion, "reanudar") == 0) {
-        hayDestino = true;
+        estadoNav = true;
       }
     }
   } else if (strcmp(topic, topics.luces) == 0) {

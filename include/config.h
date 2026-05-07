@@ -57,13 +57,10 @@ extern const int gpsTX;
 
 extern double destinoLat;
 extern double destinoLon;
-extern bool hayDestino;
+extern bool estadoNav;
 
-extern const char* accionNavegacion;
+extern const char* accionNav;
 
-extern double destinoDistancia;
-extern double destinoRumbo;
-extern double actualRumbo;
 extern double errorRumbo;
 
 extern String modo;
