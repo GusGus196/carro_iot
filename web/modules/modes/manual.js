@@ -201,7 +201,7 @@ const manual = {
             // Publicar la luz activa cada 500ms
             this.lucesInterval = setInterval(() => {
                 mqttService.publicar(topics.accion.luces,{tipo: activaActual});
-            }, 1000);
+            }, 1500);
         }
     },
 
