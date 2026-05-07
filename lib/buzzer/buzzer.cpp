@@ -6,8 +6,6 @@ const int intervalo = 500;
 PCF8574 pcf(0x20);
 
 static bool toggleEstado = false;
-static unsigned long ultimoMensajeLuces = 0;
-const unsigned long timeoutLuces = 600;
 
 void iniciarBuzzer() {
     ledcSetup(canalBuzzer, freqBuzzer, resolucion);
@@ -87,21 +85,30 @@ void direccionales(const char* instruccion) {
 
 void ledFreno(float velocidadY, float zonaMuerta) {   
     static float ultimaVelocidad = 0;
-    
-    bool frenando = abs(velocidadY) < abs(ultimaVelocidad) - 0.05f; 
-    bool detenido = abs(velocidadY) < zonaMuerta;                   
-    bool estadoFreno = frenando || detenido;
-
     static bool ultimoEstado = false;
-    if (estadoFreno != ultimoEstado) {
-        pcf.write(lucesConf.pinFrenoDer, estadoFreno ? LOW : HIGH);
-        pcf.write(lucesConf.pinFrenoIzq, estadoFreno ? LOW : HIGH);
-        ultimoEstado = estadoFreno;
+    static unsigned long ultimaEscritura = 0;
+    static unsigned long tiempoFreno = 0;
+
+    bool frenando = abs(velocidadY) < abs(ultimaVelocidad) - 0.05f;
+    bool enMovimiento = abs(ultimaVelocidad) > zonaMuerta;
+    bool estadoFreno = frenando && enMovimiento;
+
+    if (estadoFreno) {
+        tiempoFreno = millis();
+    }
+
+    bool luzFreno = (millis() - tiempoFreno) < 1000;
+
+    unsigned long ahora = millis();
+    if (luzFreno != ultimoEstado && (ahora - ultimaEscritura) > 50) {
+        pcf.write(lucesConf.pinFrenoDer, luzFreno ? LOW : HIGH);
+        pcf.write(lucesConf.pinFrenoIzq, luzFreno ? LOW : HIGH);
+        ultimoEstado = luzFreno;
+        ultimaEscritura = ahora;
     }
 
     ultimaVelocidad = velocidadY;
 }
-
 void ledModo(const String &modo)
 {
     if(modo == "manual")

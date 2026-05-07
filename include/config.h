@@ -88,4 +88,7 @@ struct ConfigLuces {
 };
 
 extern const ConfigLuces lucesConf;
+
+extern unsigned long ultimaVezLuces;
+extern const unsigned long timeoutLuces; 
 #endif

@@ -23,8 +23,8 @@ const Topics topics = {
 const int motorA1 = 18; // Motor izquierdo
 const int motorA2 = 19;
 
-const int motorB1 = 21; // Motor derecho
-const int motorB2 = 22;
+const int motorB1 = 13; // Motor derecho
+const int motorB2 = 4;
 
 // Canales PWM del ESP32
 const int canalA1 = 0; 
@@ -91,3 +91,6 @@ const ConfigLuces lucesConf {
     .colorNavegacion = {1, 1, 1},
     .colorNull = {1,0,0}
 };
+
+unsigned long ultimaVezLuces = 0;
+const unsigned long timeoutLuces = 3000; 
