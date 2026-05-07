@@ -1,5 +1,5 @@
-#ifndef GPS_H
-#define GPS_H
+#ifndef NAVEGACION_H
+#define NAVEGACION_H
 
 #include <TinyGPS++.h> // Funciones para traducir el código NMEA del GPS, calcular distancia y rumbo entre dos coordenadas
 #include <HardwareSerial.h> // Usar puertos serial del ESP32
