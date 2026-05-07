@@ -85,11 +85,11 @@ const ConfigLuces lucesConf {
     .pinLedIzq = 3,
     .pinFrenoDer = 5,
     .pinFrenoIzq = 6,
-    .colorManual = {0, 1, 0},
+    .colorManual = {1, 0, 1},
     .colorSeguidor = {0, 1, 0},
-    .colorObstaculos = {1, 0, 1},
-    .colorNavegacion = {1, 1, 1},
-    .colorNull = {1,0,0}
+    .colorObstaculos = {1, 0, 0},
+    .colorNavegacion = {1, 1, 0},
+    .colorNull = {0,0,0}
 };
 
 unsigned long ultimaVezLuces = 0;
