@@ -11,14 +11,13 @@ void esquivarObstaculo() {
 
     // Retroceso hasta que la distancia sea mayor a 8
     while (obstaculo < 8 && obstaculo > 0) {
-        driver(0, -0.5); // Retroceder
+        driver(0, -0.45); // Retroceder
         obstaculo = leerDistanciaFiltrada();
         if (obstaculo == 0) obstaculo = 400;
-        delay(10);
     }
 
-    driver(0.8, 0); // Giro a la derecha
-    delay(500);     
+    driver(0.3, 0);
+    driver(0.3, 0);
 }
 
 void obstaculos() {
@@ -30,6 +29,7 @@ void obstaculos() {
     if (obstaculo == 0) {
         obstaculo = 400;
     }
+    Serial.println(obstaculo);
 
     if (obstaculo < 8 && obstaculo > 2) { // ! Este es el rango en el que carro detecta un obstaculo (ajustado a 8cm)
         esquivarObstaculo();
