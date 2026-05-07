@@ -102,6 +102,8 @@ La aplicación estará disponible en:
 │   │   ├── seguidor.js      # Modo seguidor
 │   │   ├── obstaculos.js    # Modo evasión de obstáculos
 │   │   └── navegacion.js    # Mapa con Leaflet e interfaz de control
+│   ├── theme/
+│   │   └── theme.js         # Control del tema y persistencia con localStorage
 │   └── mqtt/
 │       ├── mqttService.js   # Servicio de comunicación MQTT
 │       ├── mqttStatus.js    # Indicador visual del estado de la conexión
@@ -136,6 +138,7 @@ Este módulo se encarga de:
 * Comunicación en tiempo real mediante MQTT.
 * Gestión de estado de conexión.
 * Integración de mapas interactivos con Leaflet.
+* Persistencia de tema (claro/oscuro) con localStorage.
 
 ## Mapas
 
