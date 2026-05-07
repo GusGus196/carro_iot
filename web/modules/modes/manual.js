@@ -17,6 +17,7 @@ const manual = {
     dragging: false,
     latestMsg: {x: 0, y: 0},
     sendInterval: null,
+    lucesInterval: null,
     estadoLuces: {izq: false, prev: false, der: false},
     abortController: null,
 
@@ -170,10 +171,13 @@ const manual = {
         mqttService.publicar(topics.modo.manual, {x: 0, y: 0});
     },
 
-    // Manejo de luces: solo una activa a la vez
     controlarLuces(tipo) {
-        if(this.estadoLuces[tipo]) {
+        const activaAnterior = Object.keys(this.estadoLuces).find(k => this.estadoLuces[k]);
+
+         // Solo una activa a la vez
+        if (this.estadoLuces[tipo]) {
             this.estadoLuces[tipo] = false;
+
         } else {
             this.estadoLuces = {izq: false, prev: false, der: false};
             this.estadoLuces[tipo] = true;
@@ -181,8 +185,31 @@ const manual = {
 
         this.actualizarLuces();
 
-        const estado = this.estadoLuces[tipo] ? tipo : "off";
-        mqttService.publicar(topics.accion.luces, {luces: estado});
+        // Obtener la nueva luz activa después del cambio
+        const activaActual = Object.keys(this.estadoLuces).find(k => this.estadoLuces[k]);
+
+        // Si ninguna luz quedó activa se detienen las publicaciones
+        if (!activaActual) {
+            this.limpiarIntervaloLuces();
+            return;
+        }
+
+         // Reiniciar el intervalo solo si: cambió la luz activa o no existe intervalo aún
+        if (activaAnterior !== activaActual || !this.lucesInterval) {
+            this.limpiarIntervaloLuces();
+
+            // Publicar la luz activa cada 500ms
+            this.lucesInterval = setInterval(() => {
+                mqttService.publicar(topics.accion.luces,{tipo: activaActual});
+            }, 1200);
+        }
+    },
+
+    limpiarIntervaloLuces() {
+        if (this.lucesInterval) {
+            clearInterval(this.lucesInterval);
+            this.lucesInterval = null;
+        }
     },
 
     // Actualiza estilo visual de los botones de luces
@@ -209,6 +236,7 @@ const manual = {
         }
 
         this.detenerJoystick();
+        this.limpiarIntervaloLuces();
 
         this.contenedor = null;
         this.joystick = null;
