@@ -3,8 +3,8 @@
 // Variables de configuración WIFI y MQTT
 const char* ssid = "";
 const char* password = "";
-const char* mqtt_server = "broker.hivemq.com";
-const int port = 1883;
+const char* mqtt_server = "";
+const int port = 0;
 
 const Topics topics = {
     .manual = "smartcar/modo/manual",
