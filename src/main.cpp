@@ -6,7 +6,7 @@
 #include "feedback.h" // Funciones para activar el buzzer pasivo
 #include "callback.h" // Función de callback para manejar mensajes MQTT entrantes
 #include "driver.h" // Función para configurar los valores PWM del driver
-#include "navegacion.h" // Funciones para utilizar el modo navegacion
+#include "gps.h" // Funciones para utilizar el modo navegacion
 #include "reconnect.h" // Función para reconectar al broker MQTT y suscripciones a TOPICS
 #include "seguidor_linea.h" // Funciones para configurar los pines del array de sensores reflectivos TCRT5000 y ejecutar el seguidor de línea
 #include "setup_wifi.h" // Función para configurar la conexión WiFi
@@ -57,6 +57,13 @@ void loop() {
       driver(0, 0);
     }
 
+  } else if (modo == "obstaculos") {
+    if (velocidadConstante > 0.0) {
+      evitarObstaculos();
+    } else {
+      driver(0, 0);
+    }
+
   } else if (modo == "navegacion") {
     if(gps.location.isValid()) {
       actualizarNavegacion();
@@ -64,13 +71,6 @@ void loop() {
       driver(0, 0);
     }
 
-  } else if (modo == "obstaculos") {
-    if (velocidadConstante > 0.0) {
-      obstaculos();
-    } else {
-      driver(0, 0);
-    }
-  
   } else {
     driver(0, 0);
   }

@@ -3,7 +3,8 @@
 
 #include <Arduino.h> 
 
-void obstaculos();
-void esquivarObstaculo();
+#include "config.h"
+
+void evitarObstaculos();
 
 #endif

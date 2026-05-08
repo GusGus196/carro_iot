@@ -1,37 +1,50 @@
 #include "obstaculos.h"
-#include "ultrasonico.h" 
-#include "driver.h"      
+
+#include "ultrasonico.h"
+#include "driver.h"
 #include "config.h"
 
-void esquivarObstaculo() {
-    driver(0, 0); //Aqui se detiene
+enum {AVANZAR, RETROCEDER, GIRAR};
 
+static int estado = AVANZAR;
+static unsigned long tiempoEstado = 0;
+
+static const unsigned long TIEMPO_RETROCEDER = 600;
+static const unsigned long TIEMPO_GIRAR = 1000;
+static const float UMBRAL_DISTANCIA = 10.0;
+
+void evitarObstaculos() {
     float obstaculo = leerDistanciaFiltrada();
-    if (obstaculo == 0) obstaculo = 400; // Ajuste de ruido sugerido
 
-    // Retroceso hasta que la distancia sea mayor a 8
-    while (obstaculo < 8 && obstaculo > 0) {
-        driver(0, -0.45); // Retroceder
-        obstaculo = leerDistanciaFiltrada();
-        if (obstaculo == 0) obstaculo = 400;
-    }
+    if (obstaculo == 0) obstaculo = 400;
 
-    driver(0.3, 0);
-    driver(0.3, 0);
-}
+    unsigned long ahora = millis();
 
-void obstaculos() {
-    driver(0, velocidadConstante);
+    switch (estado) {
+        case AVANZAR:
+            driver(0, velocidadConstante);
 
-    float obstaculo = leerDistanciaFiltrada();
-    
-    // Si lee 0 lo toma como 400
-    if (obstaculo == 0) {
-        obstaculo = 400;
-    }
-    Serial.println(obstaculo);
+            if (obstaculo < UMBRAL_DISTANCIA && obstaculo > 2) {
+                estado = RETROCEDER;
+                tiempoEstado = ahora;
+            }
+            break;
 
-    if (obstaculo < 8 && obstaculo > 2) { // ! Este es el rango en el que carro detecta un obstaculo (ajustado a 8cm)
-        esquivarObstaculo();
+        case RETROCEDER:
+            driver(0, velocidadConstante * -1);
+
+            if (ahora - tiempoEstado > TIEMPO_RETROCEDER) {
+                estado = GIRAR;
+                tiempoEstado = ahora;
+            }
+            break;
+
+        case GIRAR:
+            driver(0.20, 0.25);
+
+            if (ahora - tiempoEstado > TIEMPO_GIRAR) {
+                estado = AVANZAR;
+            }
+            break;
     }
 }
