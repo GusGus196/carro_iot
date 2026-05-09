@@ -56,7 +56,7 @@ void calcularMetricas() {
     static unsigned long ultimoCalculo = 0;
     
     /*
-        Calculamos la distancia en metros entre el Smart car y el destino cada 1 segundo,
+        Calculamos la distancia en metros entre el Smart Car y el destino cada segundo,
         devuelve un valor tipo double, Se usa la fórmula de Haversine para el cálculo
     */
     if (millis() - ultimoCalculo > 1000) {
@@ -71,10 +71,10 @@ void calcularMetricas() {
 }
 
 void navegar() {
-    unsigned long tiempoTranscurrido = millis() - ultimoRumboCalculado;
+    unsigned long tiempoTranscurrido = millis() - ultimoRumboCalculado; // Intervalo de 5 segundos
     
-    // Cada 6 segundos, actualizar posición y rumbo
-    if (tiempoTranscurrido >= 5000) {
+    // Actualizar rumbo del Smart Car cada 5 segundos
+    if (tiempoTranscurrido > 5000) {
         ultimoRumboCalculado = millis();
         
         if (gps.location.isValid()) {
@@ -91,8 +91,10 @@ void navegar() {
         }
     }
     
-    // Primer segundo: corregir orientación
-    // Resto (5 segundos): avanzar para recalcular posición
+    /* 
+        En el primer segundo del intervalo se hace una correción, 
+        utilizando el error de rumbo entre el Smart Car y el destino
+    */
     if (tiempoTranscurrido < 1000) {
         if (primeraLecturaRealizada) {
             corregirOrientacion(actualRumbo, destinoRumbo);
@@ -101,7 +103,7 @@ void navegar() {
         }
 
     } else {
-        driver(0.0, 0.45); // Avanzar el resto del tiempo
+        driver(0.0, 0.45); // Avanzar el resto del tiempo del intervalo
     }
 }
 
