@@ -3,15 +3,15 @@
 // Librerías del proyecto
 #include "config.h" // Variables globales
 
-#include "feedback.h" // Funciones para activar el buzzer pasivo
-#include "callback.h" // Función de callback para manejar mensajes MQTT entrantes
-#include "driver.h" // Función para configurar los valores PWM del driver
-#include "navegacion.h" // Funciones para utilizar el modo navegación
-#include "reconnect.h" // Función para reconectar al broker MQTT y suscripciones a TOPICS
-#include "seguidor_linea.h" // Funciones para configurar los pines del array de sensores reflectivos TCRT5000 y ejecutar el seguidor de línea
-#include "setup_wifi.h" // Función para configurar la conexión WiFi
-#include "ultrasonico.h" // Funciones del sensor ultrasónico HC-SR04 (inicializar, distancia y distancia filtrada)
-#include "sensor_velocidad.h" // Funciones para los sensores de velocidad
+#include "feedback.h"
+#include "callback.h"
+#include "driver.h"
+#include "navegacion.h"
+#include "reconnect.h"
+#include "seguidor_linea.h"
+#include "setup_wifi.h"
+#include "ultrasonico.h"
+#include "sensor_velocidad.h"
 
 void setup() {
   Serial.begin(115200);
@@ -22,8 +22,10 @@ void setup() {
 
   client.setServer(mqtt_server, port);
   client.setCallback(callback);
+
   Wire.begin(21, 22);
   Wire.setClock(400000);
+  
   iniciarBuzzer(); // Configuración del canal PWM del buzzer pasivo
   iniciarGPS(); // Iniciar la comunicación serial con el módulo GY-GPS6MV2
   iniciarDriver(); // Iniciar los canales PWM de los motores del driver
@@ -39,7 +41,7 @@ void loop() {
   
   client.loop();
 
-  enviarUbicacion(); // Actualizar topic de estado ubicación siempre
+  enviarUbicacion(); // Actualizar topic de estado ubicación
   medirVelocidad();
   
   // Ejecutar lógica según el modo
@@ -60,7 +62,6 @@ void loop() {
   } else if (modo == "navegacion") {
     if(gps.location.isValid()) {
       actualizarNavegacion();
-  
     } else {
       driver(0, 0);
     }

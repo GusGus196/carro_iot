@@ -35,8 +35,7 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
       ledModo(nuevoModo);
       tipo = "off";
     }
-}
-   else if (strcmp(topic, topics.seguidor) == 0 || strcmp(topic, topics.obstaculos) == 0) {
+  } else if (strcmp(topic, topics.seguidor) == 0 || strcmp(topic, topics.obstaculos) == 0) {
     bool activo = (doc["accion"] == "activar");
     
     if (strcmp(topic, topics.seguidor) == 0) {
