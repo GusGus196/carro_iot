@@ -81,16 +81,16 @@ void navegar() {
     
     // Actualizar rumbo del Smart Car cada 5 segundos
     if (tiempoTranscurrido > 5000) {
-        ultimoRumboCalculado = millis();
         
         if (gps.location.isValid()) {
             if (primeraLecturaRealizada) {
                 /*
-                    El módulo NEO-6M no tiene brújula, por lo que debe avanzar para que TinyGPS++ calcule el rumbo.
-                    La librería compara la posición anterior y actual para obtener la trayectoria actual, 
-                    devuelve el ángulo en grados (0–360): Norte=0, Este=90, Sur=180 y Oeste=270.
+                El módulo NEO-6M no tiene brújula, por lo que debe avanzar para que TinyGPS++ calcule el rumbo.
+                La librería compara la posición anterior y actual para obtener la trayectoria actual, 
+                devuelve el ángulo en grados (0–360): Norte=0, Este=90, Sur=180 y Oeste=270.
                 */
-                actualRumbo = gps.courseTo(latAnterior, lonAnterior, latActual, lonActual);
+               actualRumbo = gps.courseTo(latAnterior, lonAnterior, latActual, lonActual);
+               ultimoRumboCalculado = millis();
             }
 
             latAnterior = gps.location.lat();
