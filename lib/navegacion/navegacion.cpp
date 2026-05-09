@@ -8,6 +8,9 @@ static unsigned long ultimoRumboCalculado = 0;
 
 double latAnterior, lonAnterior; // Variables para punto A (anterior)
 bool primeraLecturaRealizada = false; // Omitir la primer lectura
+
+double latActual = 0.0;
+double lonActual = 0.0;
 int satelites = 0;
 
 static double destinoDist = 0.0;
@@ -23,12 +26,14 @@ void enviarUbicacion() {
         if (gps.encode(SerialGPS.read())) {
             if (gps.location.isValid() && (millis() - ultimaPublicacion > 1000)) {
                 char payload[120];
+                latActual = gps.location.lat();
+                lonActual = gps.location.lng();
                 satelites = gps.satellites.isValid() ? gps.satellites.value() : 0;
                 
                 snprintf(payload, sizeof(payload),
                     "{\"lat\":%.6f,\"lon\":%.6f,\"error\":%.1f,\"sat\":%d,\"destino\":false}",
-                    gps.location.lat(),
-                    gps.location.lng(),
+                    latActual,
+                    lonActual,
                     errorRumbo,
                     satelites
                 );
@@ -62,8 +67,8 @@ void calcularMetricas() {
     */
     if (millis() - ultimoCalculo > 1000) {
         if (gps.location.isValid()) {
-            destinoDist = gps.distanceBetween(gps.location.lat(), gps.location.lng(), destinoLat, destinoLon);
-            destinoRumbo = gps.courseTo(gps.location.lat(), gps.location.lng(), destinoLat, destinoLon);
+            destinoDist = gps.distanceBetween(latActual, lonActual, destinoLat, destinoLon);
+            destinoRumbo = gps.courseTo(latActual, lonActual, destinoLat, destinoLon);
 
         }
 
@@ -80,7 +85,7 @@ void navegar() {
         
         if (gps.location.isValid()) {
             if (primeraLecturaRealizada) {
-                actualRumbo = gps.courseTo(latAnterior, lonAnterior, gps.location.lat(), gps.location.lng());
+                actualRumbo = gps.courseTo(latAnterior, lonAnterior, latActual, lonActual);
             }
 
             latAnterior = gps.location.lat();
@@ -120,28 +125,29 @@ void terminar() {
 
         snprintf(payload, sizeof(payload),
             "{\"lat\":%.6f,\"lon\":%.6f,\"error\":%.1f,\"sat\":%d,\"destino\":true}",
-            gps.location.isValid() ? gps.location.lat() : 0.0,
-            gps.location.isValid() ? gps.location.lng() : 0.0,
+            latActual,
+            lonActual,
             errorRumbo,
             satelites
         );
 
         client.publish(topics.ubicacion, payload);
     }
+
     claxon();
 }
 
 void obtenerOrientacion() {
     /*
         El smart car no cuenta con una brújula incluida, por lo que debemos hacerlo que avance 
-        para que el GPS pueda orientarse. Al avanzar, el objeto .course de la librería TinyGPS++ procesa 
-        los datos de desplazamiento, comparando la posición anterior con la nueva para trazar una línea de trayectoria. 
+        para que el GPS pueda orientarse. Al avanzar, el objeto course de la librería TinyGPS++ procesa 
+        los datos de desplazamiento, comparando la posición anterior con la actual para trazar una línea de trayectoria. 
         
-        Mediante el método .deg(), se extrae este ángulo en grados decimales (0 a 360), 
+        Mediante el método .deg(), se extrae este ángulo en grados decimales 0 a 360, 
         tomando el Norte como 0 y aumentando en sentido horario (Este 90, Sur 180, Oeste 270), 
         lo que permite al coche conocer su rumbo actual en grados (hacia donde se dirige) 
-        y como ya sabemos el rumbo hacia el destino, podemos calcular la diferencia de grados (error) y
-        hacer que el smart car gire en dirección al destino
+        y como ya sabemos el rumbo hacia el destino, podemos calcular la diferencia en grados denominado error y
+        hacer que el smart car gire en dirección al destino.
     */
     actualRumbo = gps.course.deg();
     corregirOrientacion(actualRumbo, destinoRumbo); // Utiliza el driver para corregir la orientación
