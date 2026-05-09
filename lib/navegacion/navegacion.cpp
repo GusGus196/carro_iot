@@ -85,6 +85,11 @@ void navegar() {
         
         if (gps.location.isValid()) {
             if (primeraLecturaRealizada) {
+                /*
+                    El módulo NEO-6M no tiene brújula, por lo que debe avanzar para que TinyGPS++ calcule el rumbo.
+                    La librería compara la posición anterior y actual para obtener la trayectoria actual, 
+                    devuelve el ángulo en grados (0–360): Norte=0, Este=90, Sur=180 y Oeste=270.
+                */
                 actualRumbo = gps.courseTo(latAnterior, lonAnterior, latActual, lonActual);
             }
 
@@ -99,7 +104,8 @@ void navegar() {
     
     /* 
         En el primer segundo del intervalo se hace una correción, 
-        utilizando el error de rumbo entre el Smart Car y el destino
+        Comparando el rumbo actual con el rumbo al destino se obtiene el error en grados,
+        permitiendo girar el coche hacia la dirección correcta.
     */
     if (tiempoTranscurrido < 1000) {
         if (primeraLecturaRealizada) {
@@ -135,22 +141,6 @@ void terminar() {
     }
 
     claxon();
-}
-
-void obtenerOrientacion() {
-    /*
-        El smart car no cuenta con una brújula incluida, por lo que debemos hacerlo que avance 
-        para que el GPS pueda orientarse. Al avanzar, el objeto course de la librería TinyGPS++ procesa 
-        los datos de desplazamiento, comparando la posición anterior con la actual para trazar una línea de trayectoria. 
-        
-        Mediante el método .deg(), se extrae este ángulo en grados decimales 0 a 360, 
-        tomando el Norte como 0 y aumentando en sentido horario (Este 90, Sur 180, Oeste 270), 
-        lo que permite al coche conocer su rumbo actual en grados (hacia donde se dirige) 
-        y como ya sabemos el rumbo hacia el destino, podemos calcular la diferencia en grados denominado error y
-        hacer que el smart car gire en dirección al destino.
-    */
-    actualRumbo = gps.course.deg();
-    corregirOrientacion(actualRumbo, destinoRumbo); // Utiliza el driver para corregir la orientación
 }
 
 void corregirOrientacion(double actual, double destino) {
