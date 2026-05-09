@@ -8,6 +8,7 @@ static unsigned long ultimoRumboCalculado = 0;
 
 double latAnterior, lonAnterior; // Variables para punto A (anterior)
 bool primeraLecturaRealizada = false; // Omitir la primer lectura
+static bool correccionAplicada = false; // Bandera para corrección de rumbo
 
 double latActual = 0.0;
 double lonActual = 0.0;
@@ -77,10 +78,10 @@ void calcularMetricas() {
 }
 
 void navegar() {
-    unsigned long tiempoTranscurrido = millis() - ultimoRumboCalculado; // Intervalo de 5 segundos
+    unsigned long tiempoTranscurrido = millis() - ultimoRumboCalculado; // Ciclo de 6 segundos
     
     // Actualizar rumbo del Smart Car cada 5 segundos
-    if (tiempoTranscurrido > 5000) {
+    if (tiempoTranscurrido > 6000) {
         
         if (gps.location.isValid()) {
             if (primeraLecturaRealizada) {
@@ -91,6 +92,7 @@ void navegar() {
                 */
                actualRumbo = gps.courseTo(latAnterior, lonAnterior, latActual, lonActual);
                ultimoRumboCalculado = millis();
+               correccionAplicada = false;
             }
 
             latAnterior = gps.location.lat();
@@ -103,19 +105,18 @@ void navegar() {
     }
     
     /* 
-        En el primer segundo del intervalo se hace una correción, 
+        Durante el segundo 1 del intervalo se hace una correción de rumbo, 
         Comparando el rumbo actual con el rumbo al destino se obtiene el error en grados,
         permitiendo girar el coche hacia la dirección correcta.
     */
-    if (tiempoTranscurrido < 1000) {
-        if (primeraLecturaRealizada) {
+    if (tiempoTranscurrido < 1000 && primeraLecturaRealizada) {
+        if (!correccionAplicada) {
             corregirOrientacion(actualRumbo, destinoRumbo);
-        } else {
-            driver(0.0, 0.45);
+            correccionAplicada = true;
         }
 
     } else {
-        driver(0.0, 0.45); // Avanzar el resto del tiempo del intervalo
+        driver(0.0, 0.45);
     }
 }
 
