@@ -8,6 +8,7 @@ static unsigned long ultimoRumboCalculado = 0;
 
 double latAnterior, lonAnterior; // Variables para punto A (anterior)
 bool primeraLecturaRealizada = false; // Omitir la primer lectura
+int satelites = 0;
 
 static double destinoDist = 0.0;
 static double destinoRumbo = 0.0;
@@ -22,7 +23,7 @@ void enviarUbicacion() {
         if (gps.encode(SerialGPS.read())) {
             if (gps.location.isValid() && (millis() - ultimaPublicacion > 1000)) {
                 char payload[120];
-                int satelites = gps.satellites.isValid() ? gps.satellites.value() : 0;
+                satelites = gps.satellites.isValid() ? gps.satellites.value() : 0;
                 
                 snprintf(payload, sizeof(payload),
                     "{\"lat\":%.6f,\"lon\":%.6f,\"error\":%.1f,\"sat\":%d,\"destino\":false}",
@@ -111,11 +112,11 @@ void terminar() {
     estadoNav = false;
     accionNav = "";
     errorRumbo = 0.0;
+    
     driver(0, 0);
     
     if(client.connected()) {
         char payload[80];
-        int satelites = gps.satellites.isValid() ? gps.satellites.value() : 0;
 
         snprintf(payload, sizeof(payload),
             "{\"lat\":%.6f,\"lon\":%.6f,\"error\":%.1f,\"sat\":%d,\"destino\":true}",
