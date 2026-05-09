@@ -101,6 +101,14 @@ const navegacion = {
             worldCopyJump: false // Evitar mapa infinito horizontalmente
         });
 
+        L.control.zoom({
+            position: 'topright'
+        }).addTo(this.mapa);
+
+        L.control.scale({
+            position: 'topleft'
+        }).addTo(this.mapa);
+
         const layerOutdoors = L.tileLayer("https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png", 
             {
                 minZoom: 3, // Evita salirse del mapa haciendo zoom

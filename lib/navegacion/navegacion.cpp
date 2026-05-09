@@ -114,7 +114,6 @@ void navegar() {
             corregirOrientacion(actualRumbo, destinoRumbo);
             correccionAplicada = true;
         }
-
     } else {
         driver(0.0, 0.45);
     }
@@ -151,7 +150,7 @@ void corregirOrientacion(double actual, double destino) {
     else if (errorRumbo < -180) errorRumbo += 360;
     
     float giro = (abs(errorRumbo) < 30) ? 0.0 : constrain(errorRumbo / 90.0, -0.20, 0.20);
-    float velocidad = (abs(errorRumbo) > 45) ? 0.30 : 0.45;
+    float velocidad = (abs(errorRumbo) > 45) ? 0.25 : 0.45;
     
     driver(giro, velocidad);
 }
