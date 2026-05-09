@@ -33,13 +33,6 @@ void sonarConfirmacion() {
     ledcWriteTone(canalBuzzer, 0);
 }
 
-// 180ms
-void sonarError() {
-    ledcWriteTone(canalBuzzer, 400);
-    delay(180);
-    ledcWriteTone(canalBuzzer, 0);
-}
-
 //Funcion que da color al led
 void ledRGB(const int color[3])
 {
