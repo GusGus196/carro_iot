@@ -49,6 +49,9 @@ extern const int pinS3;
 extern const int pinS4;
 extern const int pinS5;
 
+extern float velocidadConstante;
+extern float momentum;
+
 extern const int sensorVelDer;
 extern const int sensorVelIzq;
 
@@ -65,9 +68,7 @@ extern double errorRumbo;
 
 extern String modo;
 extern unsigned long ultimaVezRecibido;
-extern float velocidadConstante;
 
-extern float momentum;
 
 extern const char* tipo;
 

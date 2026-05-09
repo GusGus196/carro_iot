@@ -1,10 +1,10 @@
 #include "config.h"
 
 // Variables de configuración WIFI y MQTT
-const char* ssid = "gusgus";
-const char* password = "gusgus19++";
-const char* mqtt_server = "broker.hivemq.com";
-const int port = 1883;
+const char* ssid = "";
+const char* password = "";
+const char* mqtt_server = "";
+const int port = 0;
 
 const Topics topics = {
     .manual = "smartcar/modo/manual",
@@ -51,6 +51,9 @@ const int pinS3 = 25;
 const int pinS4 = 26;
 const int pinS5 = 27;
 
+float velocidadConstante = 0.00; // Velocidad constante
+float momentum = 0;
+
 // Sensores de velocidad
 const int sensorVelDer = 34;
 const int sensorVelIzq = 35;
@@ -64,19 +67,17 @@ double destinoLat = 0.0;
 double destinoLon = 0.0;
 bool estadoNav = false;
 
-const char* accionNav = "";
+const char* accionNav = ""; // Iniciar, detener o reanudar
 
 double errorRumbo = 0.0;
-
-float momentum = 0;
 
 // Variables de estado
 String modo = "indefinido"; // Modo seleccionado (control, linea o gps)
 unsigned long ultimaVezRecibido = 0; // Última vez recibido un mensaje MQTT para joystick
-float velocidadConstante = 0.00; // Velocidad constante para modo 'seguidor de línea'
 
 const char* tipo = "";
-//pines LEDS
+
+// Pines LEDS
 const ConfigLuces lucesConf { 
     .pinR = 0,
     .pinG = 1,
