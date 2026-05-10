@@ -6,17 +6,17 @@ HardwareSerial SerialGPS(2);
 static unsigned long ultimaPublicacion = 0;
 static unsigned long ultimoRumboCalculado = 0;
 
-double latAnterior, lonAnterior; // Variables para punto A (anterior)
 bool primeraLecturaRealizada = false; // Omitir la primer lectura
-static bool correccionAplicada = false; // Bandera para corrección de rumbo
+static bool correccionAplicada = false; // Bandera para aplicar corrección de rumbo una sola vez por ciclo
 
+double latAnterior, lonAnterior; // Variables para punto A (anterior)
 double latActual = 0.0;
 double lonActual = 0.0;
 int satelites = 0;
 
-static double destinoDist = 0.0;
-static double destinoRumbo = 0.0;
-static double actualRumbo = 0.0;
+static double distDestino = 0.0;
+static double rumboDestino = 0.0;
+static double rumboActual = 0.0;
 
 void iniciarGPS() {
     SerialGPS.begin(9600, SERIAL_8N1, gpsRX, gpsTX);
@@ -52,7 +52,7 @@ void actualizarNavegacion() {
     calcularMetricas();
 
     // Radio de 2.5 metros al destino
-    if (destinoDist > 2.5) {
+    if (distDestino > 2.5) {
         navegar();
     } else {
         terminar();
@@ -63,13 +63,14 @@ void calcularMetricas() {
     static unsigned long ultimoCalculo = 0;
     
     /*
-        Calculamos la distancia en metros entre el Smart Car y el destino cada segundo,
-        devuelve un valor tipo double, Se usa la fórmula de Haversine para el cálculo
+        Calculamos la distancia en metros y rumbo en grados entre el Smart Car y el destino cada segundo,
+        devuelve valores tipo double, Se usa la fórmula de Haversine para el cálculo de la distancia,
+        y Azimuth para el rumbo
     */
     if (millis() - ultimoCalculo > 1000) {
         if (gps.location.isValid()) {
-            destinoDist = gps.distanceBetween(latActual, lonActual, destinoLat, destinoLon);
-            destinoRumbo = gps.courseTo(latActual, lonActual, destinoLat, destinoLon);
+            distDestino = gps.distanceBetween(latActual, lonActual, destinoLat, destinoLon);
+            rumboDestino = gps.courseTo(latActual, lonActual, destinoLat, destinoLon);
 
         }
 
@@ -82,7 +83,6 @@ void navegar() {
     
     // Actualizar rumbo del Smart Car cada 5 segundos
     if (tiempoTranscurrido > 6000) {
-        
         if (gps.location.isValid()) {
             if (primeraLecturaRealizada) {
                 /*
@@ -90,28 +90,27 @@ void navegar() {
                 La librería compara la posición anterior y actual para obtener la trayectoria actual, 
                 devuelve el ángulo en grados (0–360): Norte=0, Este=90, Sur=180 y Oeste=270.
                 */
-               actualRumbo = gps.courseTo(latAnterior, lonAnterior, latActual, lonActual);
-               ultimoRumboCalculado = millis();
-               correccionAplicada = false;
+                rumboActual = gps.courseTo(latAnterior, lonAnterior, latActual, lonActual);
+                ultimoRumboCalculado = millis();
+                correccionAplicada = false;
             }
 
-            latAnterior = gps.location.lat();
-            lonAnterior = gps.location.lng();
+            latAnterior = latActual;
+            lonAnterior = lonActual;
             primeraLecturaRealizada = true;
-
         } else {
             driver(0.0, 0.45);
         }
     }
     
     /* 
-        Durante el segundo 1 del intervalo se hace una correción de rumbo, 
+        Durante el segundo 1 del ciclo se hace una correción de rumbo solo una vez, 
         Comparando el rumbo actual con el rumbo al destino se obtiene el error en grados,
         permitiendo girar el coche hacia la dirección correcta.
     */
     if (tiempoTranscurrido < 1000 && primeraLecturaRealizada) {
         if (!correccionAplicada) {
-            corregirOrientacion(actualRumbo, destinoRumbo);
+            corregirOrientacion(rumboActual, rumboDestino);
             correccionAplicada = true;
         }
     } else {
@@ -129,6 +128,7 @@ void terminar() {
     if(client.connected()) {
         char payload[80];
 
+        // La clave "destino" determina si el destino fue alcanzado o no con un booleano
         snprintf(payload, sizeof(payload),
             "{\"lat\":%.6f,\"lon\":%.6f,\"error\":%.1f,\"sat\":%d,\"destino\":true}",
             latActual,
