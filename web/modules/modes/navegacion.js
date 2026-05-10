@@ -9,7 +9,7 @@ const navegacion = {
     ultimoDestino: null,
     marcadorD: null, // Marcador dinámico del destino
     marcadorSC: null, // Marcador dinámico del Smart Car
-
+    
     contenedor: null, // Interfaz del modo
 
     // Elementos de la interfaz
@@ -107,11 +107,33 @@ const navegacion = {
             worldCopyJump: false // Evitar mapa infinito horizontalmente
         });
 
+        // Sigue el tema activo de DaisyUI
+        const themeCheckbox = document.querySelector(".theme-controller");
+        const temaUrl = themeCheckbox?.checked
+            ? "https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png"
+            : "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png";
+
+        const layerTema = L.tileLayer(temaUrl, {
+            minZoom: 3,
+            maxZoom: 21,
+            noWrap: true,
+            attribution: '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
+        }).addTo(this.mapa);
+
+        this.temaChangeHandler = () => {
+            const url = themeCheckbox?.checked
+                ? "https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png"
+                : "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png";
+            layerTema.setUrl(url);
+        };
+        
+        themeCheckbox?.addEventListener("change", this.temaChangeHandler);
+
         const layerOutdoors = L.tileLayer("https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png", 
             {
-                minZoom: 3, // Evita salirse del mapa haciendo zoom
+                minZoom: 3,
                 maxZoom: 21,
-                noWrap: true, // Evitar que las imágenes se repitan horizontalmente
+                noWrap: true,
                 attribution: '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>'
             }
         );
@@ -125,9 +147,8 @@ const navegacion = {
             }
         );
 
-        layerOutdoors.addTo(this.mapa);
-
         this.layersControl = L.control.layers({
+            "Tema": layerTema,
             Outdoors: layerOutdoors,
             Satélite: layerSatellite
         }).addTo(this.mapa);
@@ -315,15 +336,21 @@ const navegacion = {
     eliminar() {
         this.mapa?.off("click", this.mapaClickHandler);
 
+        const themeCheckbox = document.querySelector(".theme-controller");
+        themeCheckbox?.removeEventListener("change", this.temaChangeHandler);
+
         this.marcadorD && this.mapa?.removeLayer(this.marcadorD);
         this.marcadorSC && this.mapa?.removeLayer(this.marcadorSC);
 
         this.layersControl?.remove();
+        this.layerTema?.remove();
 
         this.mapa?.remove();
 
         this.mapa = null;
         this.layersControl = null;
+        this.layerTema = null;
+        this.temaChangeHandler = null;
 
         this.destino = null;
         this.ultimoDestino = null;
