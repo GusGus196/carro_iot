@@ -31,7 +31,7 @@ El sistema soporta múltiples modos:
 
 ```bash
 git clone https://github.com/GusGus196/carro_iot
-cd carro_iot/docs
+cd carro_iot/web
 npm install
 ```
 
@@ -94,22 +94,21 @@ La aplicación estará disponible en:
 ## Contenido
 
 ```text
-/docs
+/web
 ├── css/
 │   └── style.css            # Estilos globales (Tailwind + DaisyUI)
 ├── modules/
 │   ├── modes/               # Módulos de cada modo de operación
 │   │   ├── manual.js        # Joystick, luces y claxon
-│   │   ├── seguidor.js      # Modo seguidor
+│   │   ├── seguidor.js      # Modo seguidor de línea
 │   │   ├── obstaculos.js    # Modo evasión de obstáculos
-│   │   └── navegacion.js    # Mapa con Leaflet e interfaz de control
+│   │   └── navegacion.js    # Mapa Leaflet con capa Tema y control GPS
 │   └── mqtt/
 │       ├── mqttService.js   # Servicio de comunicación MQTT
 │       ├── mqttStatus.js    # Indicador visual del estado de la conexión
 │       └── topics.js        # Diccionario de tópicos MQTT
-├── public/                  # Recursos estáticos (Vite)
-│   ├── assets/              # Imágenes SVG (mapa, iconos)
-│   └── favicon.svg          # Icono de la página (https://favicons.beaubus.com/)
+├── public/
+│   └── favicon.svg          # Icono de la página
 ├── .env.example             # Ejemplo de configuración
 ├── index.html
 ├── main.js                  # Lógica principal y cambio de modos
@@ -142,6 +141,8 @@ Este módulo se encarga de:
 
 Este proyecto utiliza **Stadia Maps** y **Esri World Imagery** como proveedores de tiles para la visualización del mapa en el modo navegación GPS.
 
+El mapa incluye capas seleccionables: **Tema** (se adapta automáticamente al tema activo — `alidade_smooth` en claro, `alidade_smooth_dark` en oscuro), **Outdoors** y **Satélite** (Esri World Imagery).
+
 > [!NOTE]
 > En entorno de desarrollo, ambos proveedores permiten el uso de sus tiles sin restricciones de dominio, por lo que el mapa funciona correctamente sin configuración adicional.
 
@@ -155,10 +156,7 @@ Este proyecto utiliza **Stadia Maps** y **Esri World Imagery** como proveedores 
 
 ### Configuración recomendada para producción
 
-Para evitar problemas en despliegue:
-
-1. Registrar tu dominio en el proveedor de mapas (por ejemplo, Stadia Maps).
-2. Verificar que las restricciones de dominio (referer) coincidan con la URL final del proyecto.
+Para evitar problemas en despliegue registrar tu dominio en el proveedor de mapas (por ejemplo, Stadia Maps). Verificar que las restricciones de dominio (referer) coincidan con la URL final del proyecto.
 
 Consulta la documentación oficial:
 [https://docs.stadiamaps.com/authentication/](https://docs.stadiamaps.com/authentication/)
