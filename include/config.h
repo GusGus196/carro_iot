@@ -69,7 +69,6 @@ extern double errorRumbo;
 extern String modo;
 extern unsigned long ultimaVezRecibido;
 
-
 extern const char* tipo;
 
 struct ConfigLuces { 

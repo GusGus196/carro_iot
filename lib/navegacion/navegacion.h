@@ -19,9 +19,6 @@ void actualizarNavegacion();
 void calcularMetricas();
 void navegar();
 void terminar();
-
-
-void obtenerOrientacion();
 void corregirOrientacion(double actual, double destino);
 
 #endif
