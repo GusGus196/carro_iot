@@ -7,6 +7,19 @@
   --font-sans: Inter, system-ui, sans-serif;
 }
 
+/* Texto blanco en botones info/secondary para tema cmyk */
+:root:has(input.theme-controller[value=cmyk]:checked) {
+  --color-info-content: oklch(98% 0.01 217.284);
+  --color-secondary-content: oklch(98% 0.01 342.258);
+}
+
+/* Mismos radios redondeados que cmyk para tema dark */
+[data-theme="dark"] {
+  --radius-selector: 1rem;
+  --radius-field: 0.5rem;
+  --color-secondary-content: oklch(27% 0.028 342.258);
+}
+
 /* ------------------------- Interfaz del modo ------------------------- */
 #mode-interface {
   @apply flex flex-col flex-1 relative overflow-hidden bg-base-300/10;
