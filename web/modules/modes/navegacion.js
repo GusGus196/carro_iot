@@ -163,9 +163,9 @@ const navegacion = {
         if (!this.marcadorD) {
             this.marcadorD = L.marker(latlng, {icon: this.iconos.destino}).addTo(this.mapa).bindPopup(`
                 <div class="text-xs font-mono leading-tight">
-                    <span class="font-semibold">Destino</span><br>
-                    lat: <span class="font-semibold">${latlng.lat.toFixed(5)}</span><br>
-                    lon: <span class="font-semibold">${latlng.lng.toFixed(5)}</span>
+                    <div class="font-semibold tracking-wide mb-0.5">Destino</div>
+                    <div><span class="opacity-60">lat </span>${latlng.lat.toFixed(5)}</div>
+                    <div><span class="opacity-60">lon </span>${latlng.lng.toFixed(5)}</div>
                 </div>
             `);
             
@@ -174,9 +174,9 @@ const navegacion = {
         } else {
             this.marcadorD.setLatLng(latlng).setPopupContent(`
                 <div class="text-xs font-mono leading-tight">
-                    <span class="font-semibold">Destino</span><br>
-                    lat: <span class="font-semibold">${latlng.lat.toFixed(5)}</span><br>
-                    lon: <span class="font-semibold">${latlng.lng.toFixed(5)}</span>
+                    <div class="font-semibold tracking-wide mb-0.5">Destino</div>
+                    <div><span class="opacity-60">lat </span>${latlng.lat.toFixed(5)}</div>
+                    <div><span class="opacity-60">lon </span>${latlng.lng.toFixed(5)}</div>
                 </div>
             `);
         }
@@ -242,9 +242,9 @@ const navegacion = {
         // Inicializar el marcador del Smart Car y su ventana emergente
         const popup = `
             <div class="text-xs font-mono leading-tight">
-                <span class="font-semibold">Smart Car</span><br>
-                lat: <span class="font-semibold">${lat.toFixed(5)}</span><br>
-                lon: <span class="font-semibold">${lon.toFixed(5)}</span>
+                <div class="font-semibold tracking-wide mb-0.5">Smart Car</div>
+                <div><span class="opacity-60">lat </span>${lat.toFixed(5)}</div>
+                <div><span class="opacity-60">lon </span>${lon.toFixed(5)}</div>
             </div>
         `;
         
@@ -305,7 +305,7 @@ const navegacion = {
         if (this.marcadorD && this.destino) {
             this.marcadorD.setPopupContent(`
                 <div class="text-xs font-mono leading-tight">
-                    <span class="font-semibold">¡Destino alcanzado!</span>
+                    <span class="font-semibold tracking-wide">¡Destino alcanzado!</span>
                 </div>
             `).openPopup();
 
