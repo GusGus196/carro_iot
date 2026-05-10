@@ -16,6 +16,7 @@ Haciendo uso de este broker local, la configuración permite que dos clientes se
 Si utilizas este broker local en lugar de uno público, para que el sistema funcione, **todos los dispositivos** deben coexistir en la misma subred local. El Broker actúa como el nodo central, y los clientes (Web y ESP32) deben poder alcanzar su dirección IP.
 
 **Opciones de conexión:**
+
 - **Hotspot móvil:** crea un punto de acceso desde tu smartphone o laptop. Conecta tanto el ESP32 como los dispositivos que usarán la interfaz web a esta red. Es la opción más estable para evitar firewalls corporativos o de universidades.
 - **Router local:** conecta todos los dispositivos al mismo router WiFi.
 
@@ -51,7 +52,7 @@ Para ejecutar comandos de Mosquitto desde cualquier terminal sin navegar a la ca
 3. Debes añadir la ruta: `C:\Program Files\mosquitto`.
 4. Reinicie o cierra tu terminal para aplicar los cambios.
 
-## Configuración del servicio (`mosquitto.conf`)
+### Configuración del servicio (`mosquitto.conf`)
 
 El archivo de configuración de Eclipse Mosquitto define los puertos y protocolos utilizados. En este directorio se incluye un archivo preconfigurado [mosquitto.conf](./mosquitto.conf).
 
@@ -65,6 +66,32 @@ El archivo de configuración de Eclipse Mosquitto define los puertos y protocolo
 * **Windows:** `C:\Program Files\mosquitto\mosquitto.conf`
 * **Linux:** `/etc/mosquitto/mosquitto.conf`
 * **MacOS:** `/opt/homebrew/etc/mosquitto/mosquitto.conf`
+
+### Gestión del servicio
+
+Cada vez que modifique el archivo `.conf`, debe reiniciar el broker para aplicar los cambios.
+
+**Windows:**
+
+- Presione `Win + R`, escriba `services.msc` y presione Enter.
+- Busque el servicio llamado **Mosquitto Broker**.
+- Clic derecho y selecciona **Reiniciar**.
+
+O mediante **PowerShell** como administrador:
+
+```powershell
+Restart-Service -Name mosquitto
+```
+
+**Linux:**
+```bash
+sudo systemctl restart mosquitto
+```
+
+**MacOS:**
+```bash
+brew services restart mosquitto
+```
 
 ## Configuración de seguridad (Firewall)
 
@@ -116,33 +143,7 @@ Debido a que Mosquitto es un servicio de sistema y no una aplicación convencion
 > [!TIP]
 > Si después de esto el ESP32 sigue sin conectar, intenta desactivar el Firewall momentáneamente para descartar. Si funciona desactivado, es que el binario que agregamos no es el que `brew` está ejecutando realmente.
 
-## Gestión del servicio
-
-Cada vez que modifique el archivo `.conf`, debe reiniciar el broker para aplicar los cambios.
-
-**Windows:**
-
-- Presione `Win + R`, escriba `services.msc` y presione Enter.
-- Busque el servicio llamado **Mosquitto Broker**.
-- Clic derecho y selecciona **Reiniciar**.
-
-O mediante **PowerShell** como administrador:
-
-```powershell
-Restart-Service -Name mosquitto
-```
-
-**Linux:**
-```bash
-sudo systemctl restart mosquitto
-```
-
-**MacOS:**
-```bash
-brew services restart mosquitto
-```
-
-## Ejecución
+## Uso
 
 La variable `<IP_LOCAL>` deberá ser sustituida por la IPv4 de la máquina donde se ejecuta el broker.
 
