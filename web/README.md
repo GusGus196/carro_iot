@@ -16,6 +16,7 @@ El sistema soporta múltiples modos:
 * [Vite](https://vite.dev) — bundler y servidor de desarrollo.
 * [Tailwind CSS v4](https://tailwindcss.com) — estilos utility-first.
 * [DaisyUI v5](https://daisyui.com) — componentes UI y temas.
+* [Heroicons](https://heroicons.com) — iconos SVG.
 * [Leaflet](https://leafletjs.com/) — mapas interactivos.
 * [MQTT.js](https://github.com/mqttjs) — comunicación con el broker vía WebSockets.
 
