@@ -36,7 +36,6 @@
 .leaflet-pane,
 .leaflet-tile,
 .leaflet-marker-icon,
-.leaflet-marker-shadow,
 .leaflet-zoom-box {
   z-index: 0 !important;
 }
@@ -47,8 +46,4 @@
 
 .leaflet-popup-pane {
   z-index: 2 !important;
-}
-
-.leaflet-control-pane {
-  z-index: 3 !important;
 }
