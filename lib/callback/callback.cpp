@@ -35,15 +35,16 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
       ledModo(nuevoModo);
       tipo = "off";
     }
-  } else if (strcmp(topic, topics.seguidor) == 0 || strcmp(topic, topics.obstaculos) == 0) {
-    bool activo = (doc["accion"] == "activar");
+}
+   else if (strcmp(topic, topics.seguidor) == 0) {
+    bool activoSeguidor = (doc["accion"] == "activar");
+    velocidadConstante = activoSeguidor ? 0.42 : 0.0;
+    momentum = 0;
+
+  } else if (strcmp(topic, topics.obstaculos) == 0) {
+    bool activoObstaculos = (doc["accion"] == "activar");
+    velocidadConstante = activoObstaculos ? 0.45 : 0.0;
     
-    if (strcmp(topic, topics.seguidor) == 0) {
-        velocidadConstante = activo ? 0.42 : 0.0;
-        momentum = 0;
-    } else {
-      obstaculos();
-    }
   } else if (strcmp(topic, topics.navegacion) == 0) {
     const char* accion = doc["accion"];
     

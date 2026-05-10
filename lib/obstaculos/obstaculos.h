@@ -1,11 +1,10 @@
 #ifndef OBSTACULOS_H
-#define OBSTACUILOS_H
+#define OBSTACULOS_H
+
+#include <Arduino.h> 
 
 #include "config.h"
-#include "ultrasonico.h"
-#include "driver.h"
 
-extern void obstaculos();
-extern void esquivarObstaculo();
+void evitarObstaculos();
 
 #endif

@@ -1,23 +1,50 @@
 #include "obstaculos.h"
 
-/*
-La función leerDistanciaFiltrada regresa un valor entre 0 y 400. Suele tener ruido asi que se debe ajustar, solamente tienes que hace una condicional en la que si leer 0 lo tome como 400. 
+#include "ultrasonico.h"
+#include "driver.h"
+#include "config.h"
 
-El carrito se debe de detener cuando detecte un objeto a 8cm de el, despúes de que se detiene, hace un giro hacia cualquier lado (ti elige) y continua el linea recta.
+enum {AVANZAR, RETROCEDER, GIRAR};
 
-*/
+static int estado = AVANZAR;
+static unsigned long tiempoEstado = 0;
 
-void esquivarObstaculo(){
-    driver(0,0); //! Aqui se detiene
-    // El carro deberá de retroceder por lo menos hasta que la variable obstaculo tenga mas de 7cm para poder hacer el giro. También, si es que ya está, se podria mandar a llamar los leds de precausión.
-}
+static const unsigned long TIEMPO_RETROCEDER = 600;
+static const unsigned long TIEMPO_GIRAR = 1000;
+static const float UMBRAL_DISTANCIA = 10.0;
 
-void obstaculos(){
-    driver(0,0.45); // Esto hace que vaya en linea recta
-
+void evitarObstaculos() {
     float obstaculo = leerDistanciaFiltrada();
 
-    if(obstaculo < 7 && obstaculo > 2){ // ! Este es el rango en el que carro detecta un obstaculo
-        esquivarObstaculo();
+    if (obstaculo == 0) obstaculo = 400;
+
+    unsigned long ahora = millis();
+
+    switch (estado) {
+        case AVANZAR:
+            driver(0, velocidadConstante);
+
+            if (obstaculo < UMBRAL_DISTANCIA && obstaculo > 2) {
+                estado = RETROCEDER;
+                tiempoEstado = ahora;
+            }
+            break;
+
+        case RETROCEDER:
+            driver(0, velocidadConstante * -1);
+
+            if (ahora - tiempoEstado > TIEMPO_RETROCEDER) {
+                estado = GIRAR;
+                tiempoEstado = ahora;
+            }
+            break;
+
+        case GIRAR:
+            driver(0.20, 0.25);
+
+            if (ahora - tiempoEstado > TIEMPO_GIRAR) {
+                estado = AVANZAR;
+            }
+            break;
     }
 }

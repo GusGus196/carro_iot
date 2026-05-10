@@ -59,13 +59,20 @@ void loop() {
       driver(0, 0);
     }
 
+  } else if (modo == "obstaculos") {
+    if (velocidadConstante > 0.0) {
+      evitarObstaculos();
+    } else {
+      driver(0, 0);
+    }
+
   } else if (modo == "navegacion") {
     if(gps.location.isValid()) {
       actualizarNavegacion();
     } else {
       driver(0, 0);
     }
-  
+
   } else {
     driver(0, 0);
   }
