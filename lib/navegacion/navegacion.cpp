@@ -68,7 +68,7 @@ void calcularMetricas() {
     /*
         Calculamos la distancia en metros y rumbo en grados entre el Smart Car y el destino cada segundo,
         devuelve valores tipo double, Se usa la fórmula de Haversine para el cálculo de la distancia 
-        y Azimuth para el rumbo
+        y Azimuth para el rumbo.
     */
     if (millis() - ultimoCalculo > 1000) {
         if (gps.location.isValid()) {
@@ -94,6 +94,9 @@ void navegar() {
                     devuelve el ángulo en grados (0–360): Norte=0, Este=90, Sur=180 y Oeste=270.
                     
                     Se requiere al menos 0.5m de desplazamiento para obtener un rumbo fiable.
+                    En el primer ciclo (primeraLecturaRealizada pasa de false a true),
+                    el timer no se resetea hasta que llegue una nueva posición (~1s después),
+                    por lo que el primer ciclo puede durar entre 6 y 7 segundos.
                 */
                 double desplazamiento = gps.distanceBetween(latAnterior, lonAnterior, latActual, lonActual);
 
