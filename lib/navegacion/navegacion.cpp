@@ -25,22 +25,25 @@ void iniciarGPS() {
 void enviarUbicacion() {
     while (SerialGPS.available() > 0) {
         if (gps.encode(SerialGPS.read())) {
-            if (gps.location.isValid() && (millis() - ultimaPublicacion > 1000)) {
-                char payload[120];
+            if (gps.location.isValid()) {
                 latActual = gps.location.lat();
                 lonActual = gps.location.lng();
                 satelites = gps.satellites.isValid() ? gps.satellites.value() : 0;
-                
-                snprintf(payload, sizeof(payload),
-                    "{\"lat\":%.6f,\"lon\":%.6f,\"error\":%.1f,\"sat\":%d,\"destino\":false}",
-                    latActual,
-                    lonActual,
-                    errorRumbo,
-                    satelites
-                );
 
-                client.publish(topics.ubicacion, payload);
-                ultimaPublicacion = millis();
+                if (millis() - ultimaPublicacion > 1000) {
+                    char payload[120];
+
+                    snprintf(payload, sizeof(payload),
+                        "{\"lat\":%.6f,\"lon\":%.6f,\"error\":%.1f,\"sat\":%d,\"destino\":false}",
+                        latActual,
+                        lonActual,
+                        errorRumbo,
+                        satelites
+                    );
+
+                    client.publish(topics.ubicacion, payload);
+                    ultimaPublicacion = millis();
+                }
             }
         }
     }
@@ -89,10 +92,16 @@ void navegar() {
                     El módulo NEO-6M no tiene brújula, por lo que debe avanzar para que TinyGPS++ calcule el rumbo.
                     La librería compara la posición anterior y actual para obtener la trayectoria actual, 
                     devuelve el ángulo en grados (0–360): Norte=0, Este=90, Sur=180 y Oeste=270.
+                    
+                    Se requiere al menos 0.5m de desplazamiento para obtener un rumbo fiable.
                 */
-                rumboActual = gps.courseTo(latAnterior, lonAnterior, latActual, lonActual);
-                ultimoRumboCalculado = millis();
-                correccionAplicada = false;
+                double desplazamiento = gps.distanceBetween(latAnterior, lonAnterior, latActual, lonActual);
+
+                if (desplazamiento > 0.5) {
+                    rumboActual = gps.courseTo(latAnterior, lonAnterior, latActual, lonActual);
+                    ultimoRumboCalculado = millis();
+                    correccionAplicada = false;
+                }
             }
 
             latAnterior = latActual;
