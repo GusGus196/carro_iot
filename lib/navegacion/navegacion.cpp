@@ -52,6 +52,21 @@ void enviarUbicacion() {
 void actualizarNavegacion() {   
     if (!estadoNav) return;
     
+    static double ultimoLatDestino = 0.0;
+    static double ultimoLonDestino = 0.0;
+    
+    if (latDestino != ultimoLatDestino || lonDestino != ultimoLonDestino) {
+        ultimoRumboCalculado = 0;
+        correccionAplicada = false;
+        ultimoLatDestino = latDestino;
+        ultimoLonDestino = lonDestino;
+        
+        if (gps.location.isValid()) {
+            distDestino = gps.distanceBetween(latActual, lonActual, latDestino, lonDestino);
+            rumboDestino = gps.courseTo(latActual, lonActual, latDestino, lonDestino);
+        }
+    }
+    
     calcularMetricas();
 
     // Radio de 2.5 metros al destino
