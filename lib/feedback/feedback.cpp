@@ -91,7 +91,7 @@ void ledFreno(float velocidadY, float zonaMuerta) {
         tiempoFreno = millis();
     }
 
-    bool luzFreno = (millis() - tiempoFreno) < 1000;
+    bool luzFreno = (millis() - tiempoFreno) < 500;
 
     unsigned long ahora = millis();
     if (luzFreno != ultimoEstado && (ahora - ultimaEscritura) > 50) {
@@ -103,19 +103,15 @@ void ledFreno(float velocidadY, float zonaMuerta) {
 
     ultimaVelocidad = velocidadY;
 }
-void ledModo(const String &modo)
-{
-    if(modo == "manual")
-    {
+
+void ledModo(const String &modo) {
+    if (modo == "manual") {
         ledRGB(lucesConf.colorManual);
-    } else if(modo == "seguidor")
-    {
+    } else if (modo == "seguidor") {
         ledRGB(lucesConf.colorSeguidor);
-    } else if(modo == "obstaculos")
-    {
+    } else if (modo == "obstaculos") {
         ledRGB(lucesConf.colorObstaculos);
-    } else if (modo == "navegacion")
-    {
+    } else if (modo == "navegacion") {
         ledRGB(lucesConf.colorNavegacion);
     } else {
         ledRGB(lucesConf.colorNull);
