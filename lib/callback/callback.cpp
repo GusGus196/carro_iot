@@ -58,6 +58,7 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
 
       } else if (strcmp(accion, "detener") == 0) {
         estadoNav = false;
+        accionNav = "";
         driver(0, 0);
 
       } else if (strcmp(accion, "reanudar") == 0) {

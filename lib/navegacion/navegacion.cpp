@@ -50,8 +50,6 @@ void enviarUbicacion() {
 }
 
 void actualizarNavegacion() {   
-    if (!estadoNav) return;
-    
     static double ultimoLatDestino = 0.0;
     static double ultimoLonDestino = 0.0;
     
