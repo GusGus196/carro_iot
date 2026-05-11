@@ -163,7 +163,7 @@ void terminar() {
     driver(0, 0);
     
     if(client.connected()) {
-        char payload[80];
+        char payload[120];
 
         // La clave "destino" determina si el destino fue alcanzado o no con un booleano
         snprintf(payload, sizeof(payload),
