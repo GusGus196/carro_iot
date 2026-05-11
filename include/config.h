@@ -58,8 +58,8 @@ extern const int sensorVelIzq;
 extern const int gpsRX;
 extern const int gpsTX;
 
-extern double destinoLat;
-extern double destinoLon;
+extern double latDestino;
+extern double lonDestino;
 extern bool estadoNav;
 
 extern const char* accionNav;

@@ -52,9 +52,9 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
       accionNav = accion;
 
       if (strcmp(accion, "iniciar") == 0) {
-        destinoLat = doc["lat"] | 0.0;
-        destinoLon = doc["lon"] | 0.0;
-        estadoNav = (destinoLat != 0.0 || destinoLon != 0.0);
+        latDestino = doc["lat"] | 0.0;
+        lonDestino = doc["lon"] | 0.0;
+        estadoNav = (latDestino != 0.0 || lonDestino != 0.0);
 
       } else if (strcmp(accion, "detener") == 0) {
         estadoNav = false;

@@ -63,8 +63,8 @@ const int gpsRX = 16;
 const int gpsTX = 17;
 
 // Variables del modo 'navegación GPS'
-double destinoLat = 0.0;
-double destinoLon = 0.0;
+double latDestino = 0.0;
+double lonDestino = 0.0;
 bool estadoNav = false;
 
 const char* accionNav = ""; // Iniciar, detener o reanudar

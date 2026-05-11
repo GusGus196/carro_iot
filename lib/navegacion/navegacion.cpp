@@ -64,13 +64,13 @@ void calcularMetricas() {
     
     /*
         Calculamos la distancia en metros y rumbo en grados entre el Smart Car y el destino cada segundo,
-        devuelve valores tipo double, Se usa la fórmula de Haversine para el cálculo de la distancia,
+        devuelve valores tipo double, Se usa la fórmula de Haversine para el cálculo de la distancia 
         y Azimuth para el rumbo
     */
     if (millis() - ultimoCalculo > 1000) {
         if (gps.location.isValid()) {
-            distDestino = gps.distanceBetween(latActual, lonActual, destinoLat, destinoLon);
-            rumboDestino = gps.courseTo(latActual, lonActual, destinoLat, destinoLon);
+            distDestino = gps.distanceBetween(latActual, lonActual, latDestino, lonDestino);
+            rumboDestino = gps.courseTo(latActual, lonActual, latDestino, lonDestino);
 
         }
 
@@ -86,9 +86,9 @@ void navegar() {
         if (gps.location.isValid()) {
             if (primeraLecturaRealizada) {
                 /*
-                El módulo NEO-6M no tiene brújula, por lo que debe avanzar para que TinyGPS++ calcule el rumbo.
-                La librería compara la posición anterior y actual para obtener la trayectoria actual, 
-                devuelve el ángulo en grados (0–360): Norte=0, Este=90, Sur=180 y Oeste=270.
+                    El módulo NEO-6M no tiene brújula, por lo que debe avanzar para que TinyGPS++ calcule el rumbo.
+                    La librería compara la posición anterior y actual para obtener la trayectoria actual, 
+                    devuelve el ángulo en grados (0–360): Norte=0, Este=90, Sur=180 y Oeste=270.
                 */
                 rumboActual = gps.courseTo(latAnterior, lonAnterior, latActual, lonActual);
                 ultimoRumboCalculado = millis();
