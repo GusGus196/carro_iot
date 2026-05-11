@@ -127,6 +127,18 @@ void navegar() {
     }
 }
 
+void corregirOrientacion(double actual, double destino) {
+    errorRumbo = destino - actual;
+
+    if (errorRumbo > 180) errorRumbo -= 360;
+    else if (errorRumbo < -180) errorRumbo += 360;
+    
+    float giro = (abs(errorRumbo) < 30) ? 0.0 : constrain(errorRumbo / 90.0, -0.20, 0.20);
+    float velocidad = (abs(errorRumbo) > 45) ? 0.25 : 0.45;
+    
+    driver(giro, velocidad);
+}
+
 void terminar() {
     estadoNav = false;
     accionNav = "";
@@ -150,16 +162,4 @@ void terminar() {
     }
 
     claxon();
-}
-
-void corregirOrientacion(double actual, double destino) {
-    errorRumbo = destino - actual;
-
-    if (errorRumbo > 180) errorRumbo -= 360;
-    else if (errorRumbo < -180) errorRumbo += 360;
-    
-    float giro = (abs(errorRumbo) < 30) ? 0.0 : constrain(errorRumbo / 90.0, -0.20, 0.20);
-    float velocidad = (abs(errorRumbo) > 45) ? 0.25 : 0.45;
-    
-    driver(giro, velocidad);
 }
