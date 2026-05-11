@@ -65,7 +65,7 @@ void loop() {
       driver(0, 0);
     }
   } else if (modo == "navegacion") {
-    if(gps.location.isValid()) {
+    if(gps.location.isValid() && estadoNav) {
       actualizarNavegacion();
     } else {
       driver(0, 0);
