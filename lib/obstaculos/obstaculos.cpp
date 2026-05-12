@@ -11,7 +11,7 @@ static unsigned long tiempoEstado = 0;
 
 static const unsigned long TIEMPO_RETROCEDER = 600;
 static const unsigned long TIEMPO_GIRAR = 1000;
-static const float UMBRAL_DISTANCIA = 10.0;
+static const float OBSTACULO_DISTANCIA = 20.0;
 
 void evitarObstaculos() {
     float obstaculo = leerDistanciaFiltrada();
@@ -22,7 +22,7 @@ void evitarObstaculos() {
 
     switch (estado) {
         case AVANZAR:
-            if (obstaculo < UMBRAL_DISTANCIA && obstaculo > 2) {
+            if (obstaculo < OBSTACULO_DISTANCIA && obstaculo > 2) {
                 estado = RETROCEDER;
                 tiempoEstado = ahora;
             }
