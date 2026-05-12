@@ -198,10 +198,10 @@ const manual = {
         if (activaAnterior !== activaActual || !this.lucesInterval) {
             this.limpiarIntervaloLuces();
 
-            // Publicar la luz activa cada 1200ms
+            // Publicar la luz activa cada 500ms
             this.lucesInterval = setInterval(() => {
                 mqttService.publicar(topics.accion.luces,{tipo: activaActual});
-            }, 1200);
+            }, 500);
         }
     },
 
