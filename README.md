@@ -89,7 +89,7 @@
 
 |Tópico|Payload|Descripción|
 |:---|:---|:---|
-|`smartcar/estado/ubicacion`|`{"lat":19.24,"lon":-103.69,"rumbo":40,"sat":4,"destino":true}`|Posición y estado del Smart Car|
+|`smartcar/estado/ubicacion`|`{"lat":19.24,"lon":-103.69,"error":40,"sat":4,"destino":true}`|Posición y estado del Smart Car|
 
 ### Diagrama de comunicación
 

@@ -102,11 +102,13 @@ La aplicación estará disponible en:
 │   │   ├── manual.js        # Joystick, luces y claxon
 │   │   ├── seguidor.js      # Modo seguidor de línea
 │   │   ├── obstaculos.js    # Modo evasión de obstáculos
-│   │   └── navegacion.js    # Mapa Leaflet con capa Tema y control GPS
-│   └── mqtt/
-│       ├── mqttService.js   # Servicio de comunicación MQTT
-│       ├── mqttStatus.js    # Indicador visual del estado de la conexión
-│       └── topics.js        # Diccionario de tópicos MQTT
+│   │   └── navegacion.js    # Mapa con Leaflet e interfaz de control
+│   ├── mqtt/
+│   │   ├── mqttService.js   # Servicio de comunicación MQTT
+│   │   ├── mqttStatus.js    # Indicador visual del estado de la conexión
+│   │   └── topics.js        # Diccionario de tópicos MQTT
+│   └── theme/
+│       └── theme.js         # Control del tema y persistencia con localStorage
 ├── public/
 │   └── favicon.svg          # Icono de la página
 ├── .env.example             # Ejemplo de configuración
@@ -136,6 +138,7 @@ Este módulo se encarga de:
 * Comunicación en tiempo real mediante MQTT.
 * Gestión de estado de conexión.
 * Integración de mapas interactivos con Leaflet.
+* Persistencia de tema (claro/oscuro) con localStorage.
 
 ## Mapas
 

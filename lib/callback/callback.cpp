@@ -28,7 +28,9 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
     if (nuevoModo) {
       modo = String(nuevoModo);
       velocidadConstante = 0.0;
-      hayDestino = false;
+      estadoNav = false;
+      accionNav = "";
+      errorRumbo = 0.0;
       sonarConfirmacion();
       ledModo(nuevoModo);
       tipo = "off";
@@ -44,7 +46,25 @@ void callback(char* topic, uint8_t* payload, unsigned int length) {
     velocidadConstante = activoObstaculos ? 0.45 : 0.0;
     
   } else if (strcmp(topic, topics.navegacion) == 0) {
+    const char* accion = doc["accion"];
     
+    if (accion) {
+      accionNav = accion;
+
+      if (strcmp(accion, "iniciar") == 0) {
+        latDestino = doc["lat"] | 0.0;
+        lonDestino = doc["lon"] | 0.0;
+        estadoNav = (latDestino != 0.0 || lonDestino != 0.0);
+
+      } else if (strcmp(accion, "detener") == 0) {
+        estadoNav = false;
+        accionNav = "";
+        driver(0, 0);
+
+      } else if (strcmp(accion, "reanudar") == 0) {
+        estadoNav = true;
+      }
+    }
   } else if (strcmp(topic, topics.luces) == 0) {
     tipo = doc["tipo"] | "off";
     ultimaVezLuces = millis();

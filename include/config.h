@@ -49,25 +49,25 @@ extern const int pinS3;
 extern const int pinS4;
 extern const int pinS5;
 
+extern float velocidadConstante;
+extern float momentum;
+
 extern const int sensorVelDer;
 extern const int sensorVelIzq;
 
 extern const int gpsRX;
 extern const int gpsTX;
 
-extern double destinoLat;
-extern double destinoLon;
-extern bool hayDestino;
+extern double latDestino;
+extern double lonDestino;
+extern bool estadoNav;
 
-extern double destinoDistancia;
-extern double destinoRumbo;
-extern double actualRumbo;
+extern const char* accionNav;
+
+extern double errorRumbo;
 
 extern String modo;
 extern unsigned long ultimaVezRecibido;
-extern float velocidadConstante;
-
-extern float momentum;
 
 extern const char* tipo;
 

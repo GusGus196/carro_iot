@@ -51,6 +51,9 @@ const int pinS3 = 25;
 const int pinS4 = 26;
 const int pinS5 = 27;
 
+float velocidadConstante = 0.00; // Velocidad constante
+float momentum = 0;
+
 // Sensores de velocidad
 const int sensorVelDer = 34;
 const int sensorVelIzq = 35;
@@ -60,23 +63,21 @@ const int gpsRX = 16;
 const int gpsTX = 17;
 
 // Variables del modo 'navegación GPS'
-double destinoLat = 0.0;
-double destinoLon = 0.0;
-bool hayDestino = false;
+double latDestino = 0.0;
+double lonDestino = 0.0;
+bool estadoNav = false;
 
-double destinoDistancia = 0.0;
-double destinoRumbo = 0.0;
-double actualRumbo = 0.0;
+const char* accionNav = ""; // Iniciar, detener o reanudar
 
-float momentum = 0;
+double errorRumbo = 0.0;
 
 // Variables de estado
 String modo = "indefinido"; // Modo seleccionado (control, linea o gps)
 unsigned long ultimaVezRecibido = 0; // Última vez recibido un mensaje MQTT para joystick
-float velocidadConstante = 0.00; // Velocidad constante para modo 'seguidor de línea'
 
 const char* tipo = "";
-//pines LEDS
+
+// Pines LEDS
 const ConfigLuces lucesConf { 
     .pinR = 0,
     .pinG = 1,

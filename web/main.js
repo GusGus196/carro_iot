@@ -1,4 +1,5 @@
 import './css/style.css';
+import {initTheme} from "./modules/theme/theme.js"; // Cargar tema guardado en localStorage
 import mqttService from "./modules/mqtt/mqttService.js"; // Objeto para el servicio MQTT
 import {topics} from "./modules/mqtt/topics.js"; // Diccionario de tópicos MQTT
 
@@ -8,6 +9,7 @@ import seguidor from "./modules/modes/seguidor.js";
 import obstaculos from "./modules/modes/obstaculos.js";
 import navegacion from "./modules/modes/navegacion.js";
 
+initTheme();
 mqttService.conectar();
 
 const modeSelect = document.getElementById("mode-select");
@@ -42,10 +44,10 @@ mqttService.recibir((topic, payload) => {
     if (!payload) return;
 
     if (topic === topics.estado.ubicacion && currentMode === navegacion) {
-        const {lat, lon, rumbo, sat, destino} = payload;
+        const {lat, lon, error, sat, destino} = payload;
         
         if (typeof lat === "number" && typeof lon === "number") {
-            navegacion.actualizarInterfaz(lat, lon, rumbo, sat);
+            navegacion.actualizarInterfaz(lat, lon, error, sat);
         }
 
         if (destino === true) {
