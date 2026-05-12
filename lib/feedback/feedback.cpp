@@ -83,7 +83,7 @@ void ledFreno(float velocidadY, float zonaMuerta) {
     static unsigned long ultimaEscritura = 0;
     static unsigned long tiempoFreno = 0;
 
-    bool frenando = abs(velocidadY) < abs(ultimaVelocidad) - 0.05f;
+    bool frenando = abs(velocidadY) < abs(ultimaVelocidad) - 0.05f || (ultimaVelocidad > 0 && velocidadY < 0);
     bool enMovimiento = abs(ultimaVelocidad) > zonaMuerta;
     bool estadoFreno = frenando && enMovimiento;
 
