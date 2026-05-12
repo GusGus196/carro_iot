@@ -1,6 +1,6 @@
 #include "seguidor_linea.h"
 
-const float kP = 0.9f;
+const float kP = 1.00f;
 const float kD = 0.55f;
 
 const float kTiempoDecay_ms   = 120.0f;
@@ -57,7 +57,7 @@ void ejecutarSeguidorLinea() {
         momentum = momentum * factorDecay + correccion * (1.0f - factorDecay);
 
         // Velocidad variable: Reducir velocidad si el giro es brusco
-        float reduccionVelocidad = 1.0f - (fabsf(error) * 0.43f); // Reduce hasta un 40%
+        float reduccionVelocidad = 1.0f - (fabsf(error) * 0.45f); // Reduce hasta un 40%
         float velActual = velocidadConstante * reduccionVelocidad;
 
         errorAnterior = error;
