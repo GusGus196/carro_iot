@@ -22,8 +22,6 @@ void evitarObstaculos() {
 
     switch (estado) {
         case AVANZAR:
-            driver(0, velocidadConstante);
-
             if (obstaculo < UMBRAL_DISTANCIA && obstaculo > 2) {
                 estado = RETROCEDER;
                 tiempoEstado = ahora;
@@ -31,8 +29,6 @@ void evitarObstaculos() {
             break;
 
         case RETROCEDER:
-            driver(0, velocidadConstante * -1);
-
             if (ahora - tiempoEstado > TIEMPO_RETROCEDER) {
                 estado = GIRAR;
                 tiempoEstado = ahora;
@@ -40,11 +36,23 @@ void evitarObstaculos() {
             break;
 
         case GIRAR:
-            driver(0.20, 0.25);
-
             if (ahora - tiempoEstado > TIEMPO_GIRAR) {
                 estado = AVANZAR;
             }
+            break;
+    }
+
+    switch (estado) {
+        case AVANZAR:
+            driver(0, velocidadConstante);
+            break;
+
+        case RETROCEDER:
+            driver(0, velocidadConstante * -1);
+            break;
+
+        case GIRAR:
+            driver(0.20, 0.25);
             break;
     }
 }
