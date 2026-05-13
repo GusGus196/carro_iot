@@ -101,19 +101,10 @@ const navegacion = {
         this.mapa = L.map("mapa", {
             center: [19.248216, -103.700332],
             zoom: 17,
-            zoomControl: false,
             maxBounds: [[-90, -180], [90, 180]], // Límite para evitar mapa en el vacío
             maxBoundsViscosity: 1.0,
             worldCopyJump: false // Evitar mapa infinito horizontalmente
         });
-
-        L.control.zoom({
-            position: 'topright'
-        }).addTo(this.mapa);
-
-        L.control.scale({
-            position: 'topleft'
-        }).addTo(this.mapa);
         
         // Sigue el tema activo de DaisyUI
         const themeCheckbox = document.querySelector(".theme-controller");
