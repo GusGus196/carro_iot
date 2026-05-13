@@ -9,9 +9,10 @@ import seguidor from "./modules/modes/seguidor.js";
 import obstaculos from "./modules/modes/obstaculos.js";
 import navegacion from "./modules/modes/navegacion.js";
 
-initTheme();
+initTheme(); // Tema guardado en localStorage
 mqttService.conectar();
 
+// Elementos de la interfaz
 const modeSelect = document.getElementById("mode-select");
 const modeInterface = document.getElementById("mode-interface");
 

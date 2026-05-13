@@ -11,7 +11,7 @@ const seguidor = {
 
         contenedor.innerHTML = `
             <div class="mode-wrapper mode-center">
-                <input type="checkbox" class="toggle toggle-success toggle-lg md:toggle-xl"/>
+                <input type="checkbox" class="toggle toggle-success toggle-xl"/>
             </div>
         `;
 
