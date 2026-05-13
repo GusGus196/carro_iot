@@ -24,6 +24,12 @@ const manual = {
     FRECUENCIA_MS: 50, // 20Hz para publicaciones MQTT
     DEADZONE: 0.10, // Zona muerta del joystick
 
+    // Filtrado y suavizado de valores x, y
+    CURVA_POTENCIA: 1.8, // Curva de potencia desde el centro a los extremos
+    FILTRO_ALPHA: 0.3, // 0-1: 0 = muy filtrado, 1 = sin filtro
+    ultimoX: 0,
+    ultimoY: 0,
+
     montar(contenedor) {
         if (this.abortController) {
             this.abortController.abort();
@@ -116,6 +122,20 @@ const manual = {
         }
     },
 
+    // Aplica curva de respuesta y filtro paso bajo
+    suavizar(valor) {
+        const signo = Math.sign(valor);
+        let abs = Math.abs(valor);
+
+        if (abs <= this.DEADZONE) return 0;
+
+        const normalizado = (abs - this.DEADZONE) / (1 - this.DEADZONE);
+        const conCurva = Math.pow(normalizado, this.CURVA_POTENCIA);
+        const resultado = this.DEADZONE + conCurva * (1 - this.DEADZONE);
+
+        return signo * resultado;
+    },
+
     // Calcula posición del joystick
     moverJoystick(evento) {
         if (!this.dragging) return;
@@ -142,14 +162,24 @@ const manual = {
         const rawX = dx / radius;
         const rawY = (dy / radius) * -1; // invertir eje Y (arriba positivo)
 
-        // Aplica zona muerta
-        const x = Math.abs(rawX) < this.DEADZONE ? 0 : parseFloat(rawX.toFixed(2));
-        const y = Math.abs(rawY) < this.DEADZONE ? 0 : parseFloat(rawY.toFixed(2));
+        // Aplica curva de respuesta
+        const xCurva = this.suavizar(rawX);
+        const yCurva = this.suavizar(rawY);
 
-        this.latestMsg = {x, y};
+        // Filtro paso bajo (EMA)
+        const xFiltrado = this.FILTRO_ALPHA * xCurva + (1 - this.FILTRO_ALPHA) * this.ultimoX;
+        const yFiltrado = this.FILTRO_ALPHA * yCurva + (1 - this.FILTRO_ALPHA) * this.ultimoY;
 
-        if (this.valX) this.valX.innerText = x.toFixed(2);
-        if (this.valY) this.valY.innerText = y.toFixed(2);
+        this.ultimoX = xFiltrado;
+        this.ultimoY = yFiltrado;
+
+        this.latestMsg = {
+            x: parseFloat(xFiltrado.toFixed(2)),
+            y: parseFloat(yFiltrado.toFixed(2))
+        };
+
+        if (this.valX) this.valX.innerText = this.latestMsg.x.toFixed(2);
+        if (this.valY) this.valY.innerText = this.latestMsg.y.toFixed(2);
     },
 
     // Detener el joystick y reiniciar valores
@@ -163,6 +193,8 @@ const manual = {
         }
 
         this.puck.style.transform = `translate(-50%, -50%)`;
+        this.ultimoX = 0;
+        this.ultimoY = 0;
         this.latestMsg = {x: 0, y: 0};
 
         if (this.valX) this.valX.innerText = "0.00";
