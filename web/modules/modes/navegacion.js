@@ -189,6 +189,12 @@ const navegacion = {
             `);
         }
         
+        // Actualizar la distancia al seleccionar un nuevo destino solo si el marcador del Smart Car ya existe
+        if (this.marcadorSC) {
+            const dist = latlng.distanceTo(this.marcadorSC.getLatLng());
+            if (this.divDistancia) this.divDistancia.textContent = `${dist.toFixed(2)}m`;
+        }
+
         if (this.estado === "SIN_DESTINO") this.estado = "DESTINO_SELECCIONADO";
 
         this.actualizarBoton();
