@@ -1,6 +1,6 @@
 # Smart Car
 
-Establece el control a través de un interfaz web, todo sincronizado mediante una arquitectura distribuida basada en el protocolo MQTT. Sin aplicaciones móviles, sin servicios propietarios y compatible con brokers públicos o locales.
+Sistema de vehículo autónomo basado en ESP32 con Control Web en tiempo real y comunicación distribuida mediante el protocolo MQTT. Compatible con brokers públicos o locales, sin dependencias de aplicaciones móviles ni servicios propietarios.
 
 ## Modos de control
 
@@ -72,14 +72,15 @@ Definidas en [`platformio.ini`](./platformio.ini) — PlatformIO las instala aut
 
 1. Clona el repositorio y ábrelo en VS Code.
 2. Abre `src/config.cpp` y configura:
+
    ```cpp
    const char* ssid = "YOUR_SSID";
    const char* password = "YOUR_PASSWORD";
    const char* mqtt_server = "BROKER_HOST";
-   const int port = "BROKER_PORT";
-   const
+   const int port = BROKER_PORT;
    ```
-   El ESP32 se conecta al broker mediante MQTT TCP (puerto 1883). El control web se conecta al mismo broker pero por WebSockets. Si usas un broker local, reemplaza `mqtt_server` por la IP correspondiente.
+   
+   El ESP32 se conecta al broker mediante MQTT sobre TCP. El navegador se conecta al mismo broker pero por WebSockets. Si usas un broker local, reemplaza `mqtt_server` por la IP correspondiente.
 3. Conecta el ESP32 por USB y haz clic en la opción **Upload** de PlatformIO.
 4. Abre el **Monitor Serial** para verificar la conexión WiFi y MQTT.
 
@@ -119,7 +120,7 @@ Desde el Control Web.
 |`smartcar/accion/claxon`|`{"estado":1}`|
 |`smartcar/modo/seguidor`|`{"accion":"activar"}`|
 |`smartcar/modo/obstaculos`|`{"accion":"activar"}`|
-|`smartcar/modo/navegacion` |`{"accion":"iniciar","lat":19.244267,"lon":-103.694263}`|
+|`smartcar/modo/navegacion`|`{"accion":"iniciar","lat":19.244267,"lon":-103.694263}`|
 
 ### Suscripción
 
@@ -132,7 +133,7 @@ Desde el Control Web.
 |Campo|Valores|
 |:---|:---|
 |`modo`|`manual`, `seguidor`, `obstaculos`, `navegacion`|
-|`tipo` |`izq`, `der`, `prev`|
+|`tipo`|`izq`, `der`, `prev`|
 |`accion`|`activar`, `desactivar`, `iniciar`, `detener`, `reanudar`|
 |`estado`|`1`|
 |`x`, `y`|`-1.0` a `1.0`|
