@@ -2,14 +2,8 @@
 
 Interfaz web para controlar un Smart Car en tiempo real mediante MQTT sobre WebSockets desde el navegador.
 
-## Modos de control
-
-El sistema soporta múltiples modos:
-
-* **Control manual:** control directo con joystick virtual, luces direccionales, preventivas y claxon.
-* **Seguidor de línea:** navegación autónoma basada en sensores infrarrojos.
-* **Evasión de obstáculos:** detección y evasión automática de obstáculos.
-* **Navegación GPS:** envío de coordenadas con visualización en tiempo real sobre mapa interactivo (Leaflet).
+> [!NOTE]
+> Los modos de operación y el diagrama de comunicación están documentados en el [README principal](../README.md). En este documento solo se indica dónde se definen los tópicos y quién gestiona la comunicación MQTT del Control Web.
 
 ## Tecnologías utilizadas
 
@@ -122,12 +116,9 @@ La aplicación estará disponible en:
 
 La comunicación con el broker se realiza mediante WebSockets y se centraliza en `mqtt/mqttService.js`, utilizando los tópicos definidos en `mqtt/topics.js`.
 
-> [!IMPORTANT]
-> La documentación completa de los tópicos MQTT, estructura de payloads y diagrama de comunicación se encuentra en el README principal del proyecto.
-
 Este módulo se encarga de:
 
-- Publicar comandos según el modo activo.
+- Publicar comandos según el modo activo o elemento de la interfaz.
 - Suscribirse a los tópicos de estado del Smart Car.
 - Gestionar el estado de conexión mediante `mqttStatus.js`.
 
