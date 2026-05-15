@@ -1,4 +1,5 @@
 #include "navegacion.h"
+#include <ArduinoJson.h>
 
 TinyGPSPlus gps;
 HardwareSerial SerialGPS(2);
@@ -31,16 +32,15 @@ void enviarUbicacion() {
                 satelites = gps.satellites.isValid() ? gps.satellites.value() : 0;
 
                 if (millis() - ultimaPublicacion > 1000) {
+                    JsonDocument doc;
+                    doc["lat"] = latActual;
+                    doc["lon"] = lonActual;
+                    doc["error"] = errorRumbo;
+                    doc["sat"] = satelites;
+                    doc["destino"] = false;
+
                     char payload[120];
-
-                    snprintf(payload, sizeof(payload),
-                        "{\"lat\":%.6f,\"lon\":%.6f,\"error\":%.1f,\"sat\":%d,\"destino\":false}",
-                        latActual,
-                        lonActual,
-                        errorRumbo,
-                        satelites
-                    );
-
+                    serializeJson(doc, payload);
                     client.publish(topics.ubicacion, payload);
                     ultimaPublicacion = millis();
                 }
@@ -163,17 +163,15 @@ void terminar() {
     driver(0, 0);
     
     if(client.connected()) {
+        JsonDocument doc;
+        doc["lat"] = latActual;
+        doc["lon"] = lonActual;
+        doc["error"] = errorRumbo;
+        doc["sat"] = satelites;
+        doc["destino"] = true; // Determina la llegada en el Control Web
+
         char payload[120];
-
-        // La clave "destino" determina si el destino fue alcanzado o no con un booleano
-        snprintf(payload, sizeof(payload),
-            "{\"lat\":%.6f,\"lon\":%.6f,\"error\":%.1f,\"sat\":%d,\"destino\":true}",
-            latActual,
-            lonActual,
-            errorRumbo,
-            satelites
-        );
-
+        serializeJson(doc, payload);
         client.publish(topics.ubicacion, payload);
     }
 
