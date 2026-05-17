@@ -13,7 +13,8 @@ initTheme(); // Tema guardado en localStorage
 mqttService.conectar();
 
 // Elementos de la interfaz
-const modeSelect = document.getElementById("mode-select");
+const modeSelectBtn = document.getElementById("mode-select-btn");
+const modeSelectMenu = document.getElementById("mode-select-menu");
 const modeInterface = document.getElementById("mode-interface");
 
 // Modo seleccionado
@@ -58,23 +59,33 @@ mqttService.recibir((topic, payload) => {
 });
 
 // Selector de modos
-modeSelect.addEventListener("change", () => {
-    const value = modeSelect.value;
+modeSelectMenu.addEventListener("click", (event) => {
+    const item = event.target.closest("[data-value]");
+    if (!item) return;
+
+    const value = item.dataset.value;
+
+    modeSelectBtn.blur();
+    document.activeElement?.blur();
 
     switch (value) {
         case "1":
+            modeSelectBtn.textContent = "Manual";
             setMode(manual, "manual");
             break;
 
         case "2":
+            modeSelectBtn.textContent = "Seguidor";
             setMode(seguidor, "seguidor");
             break;
 
         case "3":
+            modeSelectBtn.textContent = "Obstáculos";
             setMode(obstaculos, "obstaculos");
             break;
 
         case "4":
+            modeSelectBtn.textContent = "Navegación";
             setMode(navegacion, "navegacion");
             break;
     }
