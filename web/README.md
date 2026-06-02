@@ -24,8 +24,8 @@ Interfaz web para controlar un Smart Car en tiempo real mediante MQTT sobre WebS
 ### 1. Clonar e instalar dependencias
 
 ```bash
-git clone https://github.com/GusGus196/carro_iot
-cd carro_iot/web
+git clone https://github.com/rene-nunez/smart-car
+cd smart-car/web
 npm install
 ```
 
