@@ -5,10 +5,22 @@ Sistema de vehículo autónomo basado en ESP32 con Control Web en tiempo real y 
 ## Arquitectura
 
 ```
-  ┌─────────────┐    WebSockets     ┌──────────────┐    TCP/1883     ┌─────────────┐
-  │ Control Web │──────────────────►│ Broker MQTT  │────────────────►│ Smart Car   │
-  │ (navegador) │◄──────────────────│              │◄────────────────│ (ESP32)     │
-  └─────────────┘                   └──────────────┘                 └─────────────┘
+┌─────────────┐
+│ Control Web │
+└─────────────┘
+       ⇅
+  WebSockets
+       ⇅
+┌─────────────┐
+│ Broker MQTT │
+└─────────────┘
+       ⇅
+   TCP/1883
+       ⇅
+┌─────────────┐
+│ Smart Car   │
+│   (ESP32)   │
+└─────────────┘
 ```
 
 ## Modos
@@ -131,9 +143,9 @@ Los posibles valores contenidos en el payload de un tópico son los siguientes:
 
 ```
 src/         Código fuente del firmware
-lib/         Librerías propias del ESP32
+lib/         Librerías propias
 web/         Control Web
-mosquitto/   Configuración del broker local (opcional)
+mosquitto/   Configuración del broker local Eclipse Mosquitto (opcional)
 ```
 
 ## Licencia
