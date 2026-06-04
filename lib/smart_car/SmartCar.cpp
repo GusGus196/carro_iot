@@ -13,6 +13,7 @@ SmartCar::SmartCar()
     , _obstacleAvoidance(_motor, _ultrasonic)
     , _gpsNavigation(_motor, _mqtt, gpsRX, gpsTX)
 {
+    // Instancia estática para que la callback libre de PubSubClient pueda reenviar el mensaje a handleMessage()
     _instance = this;
     _motor.asignarSensorVelocidad(&_speedSensor);
 }
@@ -39,16 +40,19 @@ void SmartCar::setup() {
 }
 
 void SmartCar::loop() {
+    // Reconexión automática (limitada internamente a 1 intento cada 5 segundos para no saturar el broker)
     if (!_mqtt.estaConectado()) {
         _mqtt.conectar();
     }
     
     _mqtt.procesar();
 
+    // GPS y encoders se actualizan continuamente independientemente del modo
     _gpsNavigation.actualizar();
     _speedSensor.medir();
 
     if (_modo == "manual") {
+        // Timeout de seguridad: si no llega comando manual en 500 ms, detener el auto
         if (millis() - _ultimaVezRecibido > 500) {
             _motor.conducir(0, 0);
         }
@@ -56,6 +60,7 @@ void SmartCar::loop() {
             _feedback.apagar();
         }
     } else if (_modo == "seguidor") {
+        // _velocidadConstante > 0 es la señal de que el web habilitó el modo (evita arranques no intencionados)
         if (_velocidadConstante > 0.0) {
             _lineFollower.ejecutar(_velocidadConstante);
         } else {

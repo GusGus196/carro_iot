@@ -8,6 +8,7 @@ void UltrasonicSensor::iniciar() {
     pinMode(_echo, INPUT);
 }
 
+// 25000µs de timeout = ~425 cm máximo; pulseIn retorna 0 si no hay eco, se interpreta como "sin obstáculo"
 float UltrasonicSensor::leer() {
     digitalWrite(_trig, LOW);
     delayMicroseconds(2);
@@ -20,6 +21,7 @@ float UltrasonicSensor::leer() {
     return (tiempo * 0.0343) / 2.0;
 }
 
+// Promedio de 3 lecturas con 5ms de separación: el HC-SR04 tiene más o menos 1 cm de jitter, el promediado lo suaviza sin agregar latencia significativa
 float UltrasonicSensor::leerFiltrado() {
     float suma = 0;
     for (int i = 0; i < 3; i++) {

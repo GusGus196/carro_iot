@@ -7,6 +7,7 @@ MQTTManager::MQTTManager(const char* server, int port)
     _client.setServer(server, port);
 }
 
+// PubSubClient requiere una callback de estilo C (función libre); _instance es el puente hacia el método miembro
 void MQTTManager::iniciar() {
     _instance = this;
     _client.setCallback(onMessage);
@@ -17,12 +18,15 @@ void MQTTManager::conectar() {
 
     if (!_client.connected()) {
         unsigned long ahora = millis();
+        // Delay de 5 segundos entre reintentos para no saturar el broker con CONNECT packets
         if (ahora - ultimaReconexion > 5000) {
             ultimaReconexion = ahora;
 
+            // ID único por dispositivo basado en la MAC; evita conflictos si hay múltiples smart-cars en el mismo broker
             String clientId = "smartcar-" + String((uint32_t)ESP.getEfuseMac(), HEX);
 
             if (_client.connect(clientId.c_str())) {
+                // Se resuscriben todos los tópicos en cada conexión porque no usamos sesiones persistentes
                 _client.subscribe(topics.manual);
                 _client.subscribe(topics.seguidor);
                 _client.subscribe(topics.obstaculos);

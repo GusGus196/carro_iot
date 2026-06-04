@@ -32,6 +32,8 @@ void GPSNavigation::actualizar() {
     }
 }
 
+// El GPS tiene una tasa de actualización de ~1 Hz y ruido de posición de ~2.5 m o más depende el día.
+// La navegación se divide en dos fases: corregir orientación un segundo y avanzar 5 segundos, un ciclo de 6 segundos continuo.
 void GPSNavigation::navegar() {
     if (_latDestino != _ultimoLatDestino || _lonDestino != _ultimoLonDestino) {
         _ultimoRumboCalculado = 0;
@@ -50,6 +52,7 @@ void GPSNavigation::navegar() {
     if (_distDestino > RADIO_LLEGADA) {
         unsigned long tiempoTranscurrido = millis() - _ultimoRumboCalculado;
 
+        // Cada 6 segundos se calcula el rumbo real recorrido; se requiere > 0.5 metros de desplazamiento para filtrar ruido GPS estacionario
         if (tiempoTranscurrido > 6000) {
             if (_gps.location.isValid()) {
                 if (_primeraLecturaRealizada) {
@@ -65,10 +68,12 @@ void GPSNavigation::navegar() {
                 _lonAnterior = _lonActual;
                 _primeraLecturaRealizada = true;
             } else {
+                // Sin señal GPS, avanzar lentamente a la espera de recuperar la señal
                 _motor.conducir(0.0, 0.45);
             }
         }
 
+        // Durante el primer segundo tras calcular el rumbo, aplicar corrección de orientación; el resto del tiempo avanzar
         if (tiempoTranscurrido < 1000 && _primeraLecturaRealizada) {
             if (!_correccionAplicada) {
                 corregirOrientacion(_rumboActual, _rumboDestino);
@@ -94,6 +99,8 @@ void GPSNavigation::calcularMetricas() {
     }
 }
 
+// Normaliza el error de rumbo al rango [-180, 180] y lo mapea a una corrección de dirección proporcional
+// Errores < 30° se ignoran (la presición del GPS no da para más); errores > 45° reducen velocidad para facilitar el giro
 void GPSNavigation::corregirOrientacion(double actual, double destino) {
     _errorRumbo = destino - actual;
 
