@@ -24,8 +24,8 @@ Interfaz web para controlar un Smart Car en tiempo real mediante MQTT sobre WebS
 ### 1. Clonar e instalar dependencias
 
 ```bash
-git clone https://github.com/GusGus196/carro_iot
-cd carro_iot/web
+git clone https://github.com/rene-nunez/smart-car
+cd smart-car/web
 npm install
 ```
 
@@ -84,33 +84,6 @@ La aplicación estará disponible en:
    ```bash
    npm run preview
    ```
-
-## Contenido
-
-```text
-/web
-├── css/
-│   └── style.css            # Estilos globales (Tailwind + DaisyUI)
-├── modules/
-│   ├── modes/               # Módulos de cada modo de operación
-│   │   ├── manual.js        # Joystick, luces y claxon
-│   │   ├── seguidor.js      # Modo seguidor de línea
-│   │   ├── obstaculos.js    # Modo evasión de obstáculos
-│   │   └── navegacion.js    # Mapa con Leaflet e interfaz de control
-│   ├── mqtt/
-│   │   ├── mqttService.js   # Servicio de comunicación MQTT
-│   │   ├── mqttStatus.js    # Indicador visual del estado de la conexión
-│   │   └── topics.js        # Diccionario de tópicos MQTT
-│   └── theme/
-│       └── theme.js         # Control del tema y persistencia con localStorage
-├── public/
-│   └── favicon.svg          # Icono de la página
-├── .env.example             # Ejemplo de configuración
-├── index.html
-├── main.js                  # Lógica principal y cambio de modos
-├── package.json             # Dependencias y scripts
-└── vite.config.js           # Configuración de Vite + Tailwind
-```
 
 ## Comunicación MQTT
 
